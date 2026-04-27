@@ -1,0 +1,98 @@
+:root {
+  --font-family-ui: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+
+  --panel-bg: #0b1220;
+  --panel-border: #243041;
+  --panel-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+
+  --section-bg: #0f1726;
+  --section-border: #253247;
+
+  --text-main: #e6eef8;
+  --text-muted: #93a4b8;
+  --text-soft: #6f8298;
+  --text-on-accent: #f8fbff;
+
+  --button-hover: #1d2a40;
+  --button-active: #1f3a5f;
+  --button-active-border: #4da3ff;
+
+  --input-accent: #59a8ff;
+  --checkbox-border: #314158;
+
+  --focus-ring: rgba(89, 168, 255, 0.18);
+  --focus-ring-soft: rgba(89, 168, 255, 0.08);
+
+  --slider-thumb-border: #9fd0ff;
+  --slider-thumb-highlight: #dff1ff;
+  --slider-thumb-core: #59a8ff;
+  --slider-thumb-shadow: rgba(89, 168, 255, 0.16);
+
+  --canvas-bg: #050a14;
+  --curve-button-group-bg: #0b1422;
+  --curve-button-active-top: #1d3554;
+  --curve-button-active-bottom: #182b45;
+
+  --surface-border-soft: rgba(255, 255, 255, 0.04);
+  --surface-border-medium: rgba(255, 255, 255, 0.06);
+  --surface-overlay-strong: rgba(255, 255, 255, 0.03);
+  --surface-overlay-mid: rgba(255, 255, 255, 0.025);
+  --surface-overlay-soft: rgba(255, 255, 255, 0.02);
+  --surface-overlay-faint: rgba(255, 255, 255, 0.015);
+  --surface-overlay-min: rgba(255, 255, 255, 0.01);
+  --surface-overlay-bg-soft: rgba(255, 255, 255, 0.005);
+
+  --slider-track-top: #2a3a52;
+  --slider-track-bottom: #1b2638;
+  --checkbox-bg-top: #0f1724;
+  --checkbox-bg-bottom: #0c1420;
+  --checkbox-checked-top: #21406a;
+  --checkbox-checked-bottom: #173252;
+
+  --shadow-inset-soft: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  --shadow-inset-strong: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --shadow-card: 0 12px 32px rgba(0, 0, 0, 0.35);
+  --shadow-float: 0 6px 18px rgba(0, 0, 0, 0.22);
+  --shadow-control: 0 2px 10px rgba(0, 0, 0, 0.35);
+  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.35);
+
+  --radius-panel: 18px;
+  --radius-section: 14px;
+  --radius-control: 10px;
+  --radius-pill: 999px;
+
+  --space-1: 8px;
+  --space-2: 12px;
+  --space-3: 16px;
+  --space-4: 20px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  --title-size: 1rem;
+  --label-size: 0.95rem;
+  --value-size: 0.9rem;
+
+  --transition-fast: 120ms ease;
+  --transition-medium: 180ms ease;
+}
+
+.controls-panel {
+  --slider-fill-top: #4de2ff;
+  --slider-fill-bottom: #00bcd4;
+}
+
+.controls-panel[data-curve-type="lissajous"] {
+  --slider-fill-top: #ff4de2;
+  --slider-fill-bottom: #d400b0;
+}
+
+.controls-panel[data-curve-type="epicycloid"] {
+  --slider-fill-top: #4dff9a;
+  --slider-fill-bottom: #00c96b;
+}
+
+.controls-panel[data-curve-type="hypocycloid"] {
+  --slider-fill-top: #ffb84d;
+  --slider-fill-bottom: #ff7a00;
+}

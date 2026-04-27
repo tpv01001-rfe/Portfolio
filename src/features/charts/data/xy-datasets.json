@@ -1,0 +1,133 @@
+{
+  "datasets": [
+    {
+      "id": "baseline",
+      "label": "Baseline",
+      "data": [
+        { "X": 0, "Y": 25, "ID": 0 },
+        { "X": 1, "Y": 10, "ID": 1 },
+        { "X": 2, "Y": 25, "ID": 2 },
+        { "X": 3.5, "Y": 33, "ID": 3 },
+        { "X": 4, "Y": 25, "ID": 4 },
+        { "X": 5, "Y": 36, "ID": 5 },
+        { "X": 6.5, "Y": 48, "ID": 6 },
+        { "X": 8, "Y": 55, "ID": 7 },
+        { "X": 10.5, "Y": 50, "ID": 8 },
+        { "X": 13.3, "Y": 70, "ID": 9 },
+        { "X": 15, "Y": 77, "ID": 10 },
+        { "X": 17, "Y": 63, "ID": 11 },
+        { "X": 19, "Y": 80, "ID": 12 }
+      ]
+    },
+    {
+      "id": "wave",
+      "label": "Wave Pattern",
+      "data": [
+        { "X": 0, "Y": 20, "ID": 0 },
+        { "X": 2, "Y": 35, "ID": 1 },
+        { "X": 4, "Y": 15, "ID": 2 },
+        { "X": 6, "Y": 45, "ID": 3 },
+        { "X": 8, "Y": 30, "ID": 4 },
+        { "X": 10, "Y": 60, "ID": 5 },
+        { "X": 12, "Y": 40, "ID": 6 },
+        { "X": 15, "Y": 77, "ID": 7 },
+        { "X": 16, "Y": 55, "ID": 8 },
+        { "X": 18, "Y": 85, "ID": 9 }
+      ]
+    },
+    {
+      "id": "negative",
+      "label": "Negative Values",
+      "data": [
+        { "X": -10, "Y": -20, "ID": 0 },
+        { "X": -8, "Y": -10, "ID": 1 },
+        { "X": -5, "Y": 5, "ID": 2 },
+        { "X": -2, "Y": 15, "ID": 3 },
+        { "X": 0, "Y": 0, "ID": 4 },
+        { "X": 2, "Y": -5, "ID": 5 },
+        { "X": 5, "Y": 20, "ID": 6 },
+        { "X": 8, "Y": 35, "ID": 7 },
+        { "X": 10, "Y": -15, "ID": 8 },
+        { "X": 12, "Y": 25, "ID": 9 },
+        { "X": 15, "Y": 77, "ID": 10 }
+      ]
+    },
+    {
+  "id": "multi",
+  "label": "Multi Series Demo",
+  "series": [
+    {
+      "id": "s1",
+      "label": "Serie 1",
+      "color": "#e74c3c",
+      "markerShape": "square",
+      "data": [
+        { "X": 0, "Y": 25, "ID": 1 },
+        { "X": 2, "Y": 40, "ID": 2 },
+        { "X": 4, "Y": 35, "ID": 3 },
+        { "X": 6, "Y": 60, "ID": 4 }
+      ]
+    },
+    {
+      "id": "s2",
+      "label": "Serie 2",
+      "color": "#3498db",
+      "markerShape": "circle",
+      "data": [
+        { "X": 0, "Y": 20, "ID": 5 },
+        { "X": 2, "Y": 30, "ID": 6 },
+        { "X": 4, "Y": 50, "ID": 7 },
+        { "X": 6, "Y": 45, "ID": 8 }
+      ]
+    },
+    {
+      "id": "s3",
+      "label": "Serie 3",
+      "color": "#9b59b6",
+      "markerShape": "triangle",
+      "data": [
+        { "X": 0, "Y": 25, "ID": 9 },
+        { "X": 2, "Y": 40, "ID": 10 },
+        { "X": 4, "Y": 35, "ID": 11 },
+        { "X": 6, "Y": 60, "ID": 12 }
+      ]
+    }
+  ]
+},
+{
+  "id": "overlap",
+  "label": "Overlap Test",
+  "series": [
+    {
+      "id": "s1",
+      "label": "Serie 1",
+      "color": "#e74c3c",
+      "markerShape": "square",
+      "data": [
+        { "X": 2, "Y": 40, "ID": 1 }
+      ]
+    },
+    {
+      "id": "s2",
+      "label": "Serie 2",
+      "color": "#3498db",
+      "markerShape": "circle",
+      "data": [
+        { "X": 0, "Y": 10, "ID": 2 },
+        { "X": 2, "Y": 40, "ID": 3 }
+      ]
+    },
+    {
+      "id": "s3",
+      "label": "Serie 3",
+      "color": "#2ecc71",
+      "markerShape": "diamond",
+      "data": [
+        { "X": 2, "Y": 40, "ID": 4 },
+        { "X": 4, "Y": 40, "ID": 5 }
+      ]
+    }
+  ]
+}
+  ]
+}
