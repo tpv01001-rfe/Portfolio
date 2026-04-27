@@ -55,9 +55,9 @@ export function DashboardPage({
     <div className="dashboard-page">
       <section className="dashboard-hero">
         <p className="dashboard-hero__eyebrow">Overview</p>
-        <h1 className="dashboard-hero__title">Visual Math Workspace</h1>
+        <h1 className="dashboard-hero__title">Portfolio</h1>
         <p className="dashboard-hero__description">
-          A modular environment for interactive curves, diagrams, and graphical experiments.
+          A modular environment for various experiments.
         </p>
       </section>
 

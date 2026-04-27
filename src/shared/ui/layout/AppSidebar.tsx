@@ -26,8 +26,8 @@ export function AppSidebar({
       <div className="dashboard-sidebar__header">
         {!isSidebarCollapsed && (
           <div className="dashboard-sidebar__brand">
-            <p className="dashboard-sidebar__eyebrow">Visual Workspace</p>
-            <h1 className="dashboard-sidebar__title">Math Tools</h1>
+            <p className="dashboard-sidebar__eyebrow">Portfolio</p>
+            <h1 className="dashboard-sidebar__title">Rickard</h1>
           </div>
         )}
 
@@ -85,7 +85,7 @@ export function AppSidebar({
         <div className="dashboard-sidebar__footer">
           <p className="dashboard-sidebar__footer-label">Current direction</p>
           <p className="dashboard-sidebar__footer-text">
-            Building a modular workspace for curves, diagrams, and interactive visual tools.
+            Adding moor tools.
           </p>
         </div>
       )}

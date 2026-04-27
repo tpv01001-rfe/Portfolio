@@ -17,7 +17,7 @@ export function AppTopbar({ activeView }: AppTopbarProps) {
   return (
     <header className="dashboard-topbar">
       <div>
-        <p className="dashboard-topbar__eyebrow">Tool Workspace</p>
+        <p className="dashboard-topbar__eyebrow">Portfolio</p>
         <h2 className="dashboard-topbar__title">{title}</h2>
         <p className="dashboard-topbar__subtitle">
           {subtitleMap[activeView]}
