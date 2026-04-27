@@ -34,7 +34,7 @@ export default function XYChart({
   yTickCount = 4,
   markerSize = 7,
   className,
-  title,
+  //title,
   markerStyle = {
     mode: "thresholds",
     defaultColor: "#7FFF00",
@@ -44,7 +44,7 @@ export default function XYChart({
     ],
   },
   onPointSelect,
-  onPointHover,
+  //onPointHover,
 }: XYChartProps) {
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -118,10 +118,6 @@ const sortedData = useMemo(() => {
   return [...allPoints].sort((a, b) => a.X - b.X);
 }, [allPoints]);
 
-
-const sortedData2 = useMemo(() => {
-  return [...allPoints].sort((a, b) => a.X - b.X);
-}, [allPoints]);
 
 //flera serier
 
@@ -275,24 +271,6 @@ const sortedData2 = useMemo(() => {
       cancelAnimationFrame(frameId);
     };
   }, []);
-
-const normalizedSeries2 = useMemo<XYSeries[]>(() => {
-  if (series.length > 0) {
-    return series;
-  }
-
-  return [
-    {
-      id: "default",
-      label: "Serie 1",
-      color: markerStyle.defaultColor,
-      markerShape: "square",
-      data,
-    },
-  ];
-}, [data, series, markerStyle.defaultColor]);
-
-
 
 
   useEffect(() => {

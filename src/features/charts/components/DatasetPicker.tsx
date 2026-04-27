@@ -12,7 +12,7 @@ export default function DatasetPicker({
   datasets,
   value,
   onChange,
-  label = "Dataset",
+  //label = "Dataset",
 }: DatasetPickerProps) {
 
   const [open, setOpen] = useState(false);

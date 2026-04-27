@@ -39,7 +39,7 @@ export function ChartsLabPage() {
     normalizedDatasets.find((dataset) => dataset.id === selectedDatasetId) ??
     normalizedDatasets[0];
 
-  const [hoveredPoint, setHoveredPoint] = useState<XYPoint | null>(null);
+  //const [hoveredPoint, setHoveredPoint] = useState<XYPoint | null>(null);
   const [selectedPoint, setSelectedPoint] = useState<XYPoint | null>(null);
   const [isInfoCollapsed, setIsInfoCollapsed] = useState(false);
 
@@ -77,7 +77,7 @@ export function ChartsLabPage() {
                 data={activeDataset.data}
                 series={activeDataset.series}
                 title={activeDataset.label}
-                onPointHover={setHoveredPoint}
+                //onPointHover={setHoveredPoint}
                 onPointSelect={setSelectedPoint}
                 markerStyle={{
                   mode: "thresholds",

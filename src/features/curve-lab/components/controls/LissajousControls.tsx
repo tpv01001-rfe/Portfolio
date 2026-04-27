@@ -3,16 +3,6 @@ import SliderControl from "../../../../shared/ui/controls/SliderControl";
 import CheckboxControl from "../../../../shared/ui/controls/CheckboxControl";
 
 
-type LissajousControlsProps2 = {
-  drawFullLissajous: boolean;
-  setDrawFullLissajous: (value: boolean) => void;
-  lissajousSpeed: number;
-  setLissajousSpeed: (value: number) => void;
-  lissajousParams: LissajousParams;
-  setLissajousParams: (value: LissajousParams) => void;
-  patchLissajousParams: (patch: Partial<LissajousParams>) => void;
-};
-
 
 type LissajousControlsProps = {
   drawFull: boolean;

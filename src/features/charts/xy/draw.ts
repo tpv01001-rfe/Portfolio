@@ -121,7 +121,7 @@ export function drawChart(args: {
   drawXAxisTicks(ctx, scale, plotArea, xTicks);
   drawYAxisTicks(ctx, scale, plotArea, yTicks);
 
-  drawAxisTitles(ctx, width, height, plotArea);
+  drawAxisTitles(ctx, height, plotArea);
 
   const safeSeries = Array.isArray(series) ? series : [];
 
@@ -197,7 +197,7 @@ export function drawChart2(args: {
   drawXAxisTicks(ctx, scale, plotArea, xTicks);
   drawYAxisTicks(ctx, scale, plotArea, yTicks);
 
-  drawAxisTitles(ctx, width, height, plotArea);
+  drawAxisTitles(ctx, height, plotArea);
 
   for (const currentSeries of series) {
     drawSeriesLine(ctx, currentSeries.data, scale, currentSeries.color);
@@ -369,7 +369,7 @@ function drawYAxisTicks(
 
 function drawAxisTitles(
   ctx: CanvasRenderingContext2D,
-  width: number,
+  //width: number,
   height: number,
   plotArea: PlotArea
 ) {
