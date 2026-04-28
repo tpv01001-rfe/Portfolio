@@ -268,17 +268,16 @@ body,
   .canvas-hud__rows {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 3px 5px;
+    gap: 3px;
     margin-top: 3px;
   }
 
-.canvas-hud__row {
-  display: flex;
-  align-items: baseline;
-  gap: 4px;
-  font-size: 0.64rem;
-}
-
+  .canvas-hud__row {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    font-size: 0.64rem;
+  }
 
   .canvas-hud__row-label {
     white-space: nowrap;
@@ -294,7 +293,6 @@ body,
     content: ":";
     margin-right: 2px;
   }
-
 
   .canvas-hud--collapsed {
     width: 28px;
