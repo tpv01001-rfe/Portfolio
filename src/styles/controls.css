@@ -242,54 +242,53 @@ body,
 
 @media (max-width: 600px) {
   .canvas-hud:not(.canvas-hud--collapsed) {
-    width: min(260px, calc(100% - 16px));
+    width: min(280px, calc(100% - 16px));
     height: auto;
-    min-height: 0;
-    padding: 8px;
+    padding: 6px 8px;
   }
 
   .canvas-hud__header {
-    margin-top: 4px;
+    margin-top: 2px;
+  }
+
+  .canvas-hud__title {
+    font-size: 0.62rem;
+  }
+
+  .canvas-hud__badge {
+    min-height: 16px;
+    padding: 0 6px;
+    font-size: 0.56rem;
   }
 
   .canvas-hud__live {
-    margin-top: 6px;
+    display: none;
   }
 
   .canvas-hud__rows {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 4px 10px;
+    gap: 3px 10px;
     margin-top: 6px;
   }
 
   .canvas-hud__row {
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
     align-items: baseline;
-    gap: 8px;
-    font-size: 0.66rem;
+    gap: 6px;
+    font-size: 0.62rem;
     min-width: 0;
   }
 
-  .canvas-hud__row-label {
-    color: rgba(150, 170, 190, 0.85);
-    white-space: nowrap;
-  }
-
+  .canvas-hud__row-label,
   .canvas-hud__row-value {
-    color: #e8f2fc;
-    text-align: right;
     white-space: nowrap;
-    min-width: 0;
   }
 
   .canvas-hud--collapsed {
     width: 28px;
     height: 64px;
-    min-height: 0;
-    max-height: none;
     padding: 6px 4px;
     overflow: visible;
   }
