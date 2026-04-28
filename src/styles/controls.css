@@ -2,7 +2,25 @@
    Otherwise body background can show through on the right side,
    especially when sidebar width changes. */
 
-.app-layout {
+/*
+height: 100vh;
+overflow-y: auto;
+overflow: hidden;
+overflow: auto;
+transform: ...
+contain: ...
+filter: ...
+   */
+   /* html,
+body,
+#root {
+  height: auto;
+  min-height: 100%;
+  overflow: visible;
+} */
+
+
+.app-layout22 {
   display: flex;
   align-items: stretch;
   justify-content: center;
@@ -15,19 +33,19 @@
   box-sizing: border-box;
 }
 
-.app-layout__canvas {
+.app-layout2:canvas2 {
   flex: 1 1 700px;
   min-width: 0;
   max-width: 960px;
 
-  position: sticky;
+  /* position: sticky; */
   top: 24px;
   align-self: flex-start; /*canvas följer med vid scroll*/
   /* align-items: flex-start; */
   
 }
 
-.app-layout__controls {
+.app-layout2__controls2 {
   flex: 0 0 360px;
   width: 360px;
   min-width: 320px;
@@ -69,18 +87,6 @@
 
   opacity: 0.15;
 }
-
-/*
-.canvas-wrapper {
-  position: relative;
-}
- .canvas {
-  display: block;
-  width: 100%;
-  height: auto;
-} */
-
-
 
 .canvas-wrapper {
   position: relative;
@@ -235,27 +241,70 @@
 }
 
 
-
-
-
 /* Mobiler och små skärmar*/
 @media (max-width: 980px) {
-  .app-layout {
+  .app-layout2 {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .app-layout__canvas,
-  .app-layout__controls {
+  .app-layout2:canvas2,
+  .app-layout2__controls2 {
     width: 100%;
     max-width: 100%;
     min-width: 0;
     flex: none;
   }
 
-  .app-layout__canvas {
+  .app-layout2:canvas2 {
     position: static;
   }
+}
+
+.dashboard-shell,
+.dashboard-main,
+.dashboard-content,
+.curve-lab-page,
+.curve-lab-page__layout {
+  /* overflow: visible; */
+} 
+
+
+/* tmp tmp */
+
+
+
+.dashboard-shell,
+.dashboard-main,
+.dashboard-content,
+.curve-lab-page {
+  /* height: auto; */
+  /* min-height: 0; */
+  /* overflow: visible;
+  transform: none; */
+  /* contain: none; */
+}
+
+/* tmp tmp */
+
+.curve-lab-page__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) 420px;
+  gap: 24px;
+  align-items: start;
+  min-height: 150vh;
+}
+
+.curve-lab-page__canvas {
+  min-width: 0;
+  align-self: start;
+  position: sticky;
+  top: 120px;
+  z-index: 5;
+}
+
+.curve-lab-page__canvas .canvas-wrapper {
+  position: relative;
 }
 
 .dashboard-sidebar,
@@ -264,6 +313,19 @@
 .canvas {
   transition: none !important;
 }
+
+@media (max-width: 1200px) {
+  .curve-lab-page__layout {
+    grid-template-columns: 1fr;
+  }
+}
+/* Om topbar känns för stor på mobil */
+/* @media (max-width: 900px) {
+  .curve-lab-page__canvas {
+    position: sticky;
+    top: 80px;
+  }
+} */
 
 @keyframes badgePulse {
   0% {
@@ -1033,7 +1095,7 @@
 
 body {
   margin: 0;
-  min-height: 100vh;
+  /* min-height: 100vh; */
   color: var(--text-main);
 
   background:
@@ -1519,16 +1581,24 @@ body[data-curve-type="lissajous"] {
 }
 
 /* 
-html { background: red !important; }
-body { background: rgb(111, 4, 127) !important; }
-#root { background: green !important; }
+.sticky-test {
+  position: sticky !important;
+  top: 120px !important;
+  z-index: 99999 !important;
+  background: red !important;
+  color: white !important;
+  padding: 12px !important;
+}
 
-.dashboard-shell { background: purple !important; }
-.dashboard-main { background: orange !important; }
-.dashboard-content { background: yellow !important; }
-
-.charts-lab-section { background: pink !important; }
-.charts-lab-panel { background: brown !important; }
-.xy-chart { background: cyan !important; }
-.xy-chart__wrapper { background: lime !important; }
-.xy-chart__stage { background: black !important; } */
+html,
+body,
+#root,
+.dashboard-shell,
+.dashboard-main,
+.dashboard-content,
+.curve-lab-page {
+  overflow: visible !important;
+  transform: none !important;
+  contain: none !important;
+  filter: none !important;
+} */
