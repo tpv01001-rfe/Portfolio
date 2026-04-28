@@ -240,7 +240,7 @@ body,
   color: #e8f2fc;
 }
 
-/* @media (max-width: 600px) {
+@media (max-width: 600px) {
   .canvas-hud {
     top: 8px;
     left: 8px;
@@ -270,9 +270,9 @@ body,
     overflow: hidden;
     text-overflow: ellipsis;
   }
-} */
+} 
 
-@media (max-width: 600px) {
+/* @media (max-width: 600px) {
   .canvas-hud:not(.canvas-hud--collapsed) {
     width: 260px;
     max-width: calc(100% - 16px);
@@ -301,7 +301,7 @@ body,
     width: 28px;
     height: 190px;
   }
-}
+} */
 
 /* Mobiler och små skärmar*/
 /* @media (max-width: 980px) {
