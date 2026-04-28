@@ -245,6 +245,10 @@ body,
     width: min(280px, calc(100% - 16px));
     height: auto;
     padding: 6px 8px;
+
+    background: rgba(8, 13, 22, 0.42);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(10px);
   }
 
   .canvas-hud__header {
@@ -299,6 +303,10 @@ body,
     height: 64px;
     padding: 6px 4px;
     overflow: visible;
+
+    background: rgba(8, 13, 22, 0.22);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(10px);
   }
 }
 
