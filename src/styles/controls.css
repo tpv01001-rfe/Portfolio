@@ -272,19 +272,29 @@ body,
     margin-top: 3px;
   }
 
-  .canvas-hud__row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 6px;
-    font-size: 0.62rem;
-    min-width: 0;
-  }
+.canvas-hud__row {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  font-size: 0.64rem;
+}
 
-  .canvas-hud__row-label,
-  .canvas-hud__row-value {
+
+  .canvas-hud__row-label {
     white-space: nowrap;
   }
+
+  .canvas-hud__row-value {
+    white-space: nowrap;
+    font-weight: 500;
+    text-overflow: ellipsis;
+  }
+
+  .canvas-hud__row-label::after {
+    content: ":";
+    margin-right: 2px;
+  }
+
 
   .canvas-hud--collapsed {
     width: 28px;
