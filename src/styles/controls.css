@@ -256,7 +256,7 @@ body,
   }
 
   .canvas-hud__badge {
-    min-height: 16px;
+    min-height: 12px;
     padding: 0 6px;
     font-size: 0.56rem;
   }
@@ -268,8 +268,8 @@ body,
   .canvas-hud__rows {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 3px 10px;
-    margin-top: 6px;
+    gap: 3px 5px;
+    margin-top: 3px;
   }
 
   .canvas-hud__row {
