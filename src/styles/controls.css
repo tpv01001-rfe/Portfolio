@@ -240,9 +240,40 @@ body,
   color: #e8f2fc;
 }
 
+@media (max-width: 600px) {
+  .canvas-hud {
+    top: 8px;
+    left: 8px;
+    width: min(180px, calc(100% - 16px));
+    padding: 8px;
+  }
+
+  .canvas-hud--collapsed {
+    width: 28px;
+    height: auto;
+    min-height: 32px;
+    padding: 6px 4px;
+  }
+
+  .canvas-hud__header,
+  .canvas-hud__rows {
+    gap: 6px;
+  }
+
+  .canvas-hud__row {
+    gap: 8px;
+    font-size: 0.68rem;
+  }
+
+  .canvas-hud__badge {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
 
 /* Mobiler och små skärmar*/
-@media (max-width: 980px) {
+/* @media (max-width: 980px) {
   .app-layout2 {
     flex-direction: column;
     align-items: stretch;
@@ -259,7 +290,7 @@ body,
   .app-layout2:canvas2 {
     position: static;
   }
-}
+} */
 
 .dashboard-shell,
 .dashboard-main,
