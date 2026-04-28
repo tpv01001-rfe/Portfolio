@@ -265,6 +265,13 @@ body,
     font-size: 0.68rem;
   } */
 
+  .canvas-hud__row {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 0.66rem;
+  }
+
   .canvas-hud__rows {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
