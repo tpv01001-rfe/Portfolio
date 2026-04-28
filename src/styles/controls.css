@@ -272,8 +272,9 @@ body,
   }
 } */
 
+
 @media (max-width: 600px) {
-  .canvas-hud {
+  .canvas-hud:not(.canvas-hud--collapsed) {
     top: 8px;
     left: 8px;
     right: 8px;
@@ -283,18 +284,16 @@ body,
     padding: 8px;
   }
 
-  .canvas-hud__rows {
-    gap: 6px;
-    margin-top: 8px;
-  }
-
-  .canvas-hud__row {
-    font-size: 0.68rem;
-    gap: 8px;
-  }
-
-  .canvas-hud__header {
-    margin-top: 6px;
+  .canvas-hud--collapsed {
+    top: 8px;
+    left: 8px;
+    right: auto;
+    width: 28px;
+    height: auto;
+    min-height: 32px;
+    max-height: none;
+    overflow: visible;
+    padding: 6px 4px;
   }
 }
 /* Mobiler och små skärmar*/
