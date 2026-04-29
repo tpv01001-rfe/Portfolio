@@ -1,0 +1,325 @@
+
+.canvas-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  min-height: 240px;
+}
+
+.canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  border-radius: var(--radius-section);
+  border: 1px solid var(--input-accent);
+  background: var(--canvas-bg);
+  box-shadow:
+    0 0 0 1px var(--surface-overlay-strong) inset,
+    var(--shadow-card);
+}
+
+.canvas-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: var(--radius-section);
+
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.02) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+
+  opacity: 0.15;
+}
+
+.canvas-wrapper {
+  position: relative;
+
+  --hud-accent-bg: rgba(77, 227, 195, 0.16);
+  --hud-accent-border: rgba(77, 227, 195, 0.3);
+  --hud-accent-glow: rgba(77, 227, 195, 0.75);
+}
+
+.canvas-wrapper[data-curve-type="lissajous"] {
+  --hud-accent-bg: rgba(227, 152, 255, 0.14);
+  --hud-accent-border: rgba(227, 152, 255, 0.28);
+  --hud-accent-glow: rgba(227, 152, 255, 0.8);
+}
+
+.canvas-wrapper[data-curve-type="epicycloid"] {
+  --hud-accent-bg: rgba(77, 255, 154, 0.14);
+  --hud-accent-border: rgba(77, 255, 154, 0.28);
+  --hud-accent-glow: rgba(77, 255, 154, 0.8);
+}
+
+.canvas-wrapper[data-curve-type="hypocycloid"] {
+  --hud-accent-bg: rgba(255, 184, 77, 0.14);
+  --hud-accent-border: rgba(255, 184, 77, 0.28);
+  --hud-accent-glow: rgba(255, 184, 77, 0.8);
+}
+
+
+.canvas-hud {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 3;
+
+  width: 200px;
+  padding: 10px 10px 12px;
+  border-radius: 12px;
+
+  background: rgba(8, 13, 22, 0.1); 
+  backdrop-filter: blur(6px);
+
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(10px);
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.14);
+}
+
+.canvas-hud--collapsed {
+  width: 28px;               
+  height: 190px;              
+
+  padding: 6px 4px;
+  display: flex;
+  justify-content: center;    /* centrera knappen horisontellt */
+  align-items: flex-start;    /* toppen */
+
+  background: rgba(8, 13, 22, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(3px);
+  box-shadow: 0 0 10px rgba(77, 226, 255, 0.2);
+}
+
+.canvas-hud__toggle {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  background: rgba(255, 255, 255, 0.04);
+  color: #eef7ff;
+
+  font-size: 0.62rem;
+  cursor: pointer;
+}
+
+/* för kollaps */
+.canvas-hud--collapsed .canvas-hud__toggle {
+  margin-top: 6px;
+}
+
+
+.canvas-hud__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.canvas-hud__title {
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(210, 225, 245, 0.68);
+}
+
+.canvas-hud__badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 20px;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: var(--hud-accent-bg);
+  border: 1px solid var(--hud-accent-border);
+  color: #f4fbff;
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.canvas-hud__live {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  color: #d7e7f8;
+  font-size: 0.7rem;
+}
+
+.canvas-hud__live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--hud-accent-glow);
+  box-shadow: 0 0 8px var(--hud-accent-glow);
+}
+
+.canvas-hud__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.canvas-hud__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 0.72rem;
+}
+
+.canvas-hud__row-label {
+  color: rgba(150, 170, 190, 0.85);
+}
+
+.canvas-hud__row-value {
+  color: #e8f2fc;
+}
+
+@media (max-width: 600px) {
+  .canvas-hud:not(.canvas-hud--collapsed) {
+    width: min(280px, calc(100% - 16px));
+    height: auto;
+    padding: 6px 8px;
+
+    background: rgba(8, 13, 22, 0.28);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(10px);
+  }
+
+  .canvas-hud__header {
+    margin-top: 2px;
+  }
+
+  .canvas-hud__title {
+    font-size: 0.62rem;
+  }
+
+  .canvas-hud__badge {
+    min-height: 12px;
+    padding: 0 6px;
+    font-size: 0.56rem;
+  }
+
+  .canvas-hud__live {
+    display: none;
+  }
+
+  .canvas-hud__rows {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 3px;
+    margin-top: 3px;
+  }
+
+  .canvas-hud__row {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    font-size: 0.64rem;
+  }
+
+  .canvas-hud__row-label {
+    white-space: nowrap;
+  }
+
+  .canvas-hud__row-value {
+    white-space: nowrap;
+    font-weight: 500;
+    text-overflow: ellipsis;
+  }
+
+  .canvas-hud__row-label::after {
+    content: ":";
+    margin-right: 2px;
+  }
+
+  .canvas-hud--collapsed {
+    width: 28px;
+    height: 64px;
+    padding: 6px 4px;
+    overflow: visible;
+
+    background: rgba(8, 13, 22, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(10px);
+  }
+}
+
+@media (max-width: 1200px) {
+  .canvas-wrapper {
+    min-height: 240px;
+  }
+
+  .canvas {
+    height: 100%;
+    min-height: 240px;
+  }
+}
+
+@container (max-height: 230px) {
+  .canvas-hud:not(.canvas-hud--collapsed) {
+    padding: 6px 8px;
+  }
+
+  .canvas-hud__live {
+    display: none;
+  }
+
+  .canvas-hud__rows {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 10px;
+    margin-top: 6px;
+  }
+
+  .canvas-hud__row {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    font-size: 0.64rem;
+    white-space: nowrap;
+  }
+
+  .canvas-hud__row-label::after {
+    content: ":";
+    margin-right: 2px;
+  }
+}
+
+.curve-lab-page__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) 420px;
+  gap: 24px;
+  align-items: start;
+  min-height: 150vh;
+}
+
+.curve-lab-page__canvas {
+  min-width: 0;
+  align-self: start;
+  position: sticky;
+  top: 120px;
+  z-index: 5;
+}
+
+.curve-lab-page__canvas .canvas-wrapper {
+  position: relative;
+}
+
+
+.canvas-wrapper,
+.canvas {
+  transition: none !important;
+}

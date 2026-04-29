@@ -1,4 +1,5 @@
 import "./styles/theme.css";
+import "./styles/canvas.css";
 import "./styles/controls.css";
 import "./styles/XYChart.css";
 import "./styles/dashboard.css";
