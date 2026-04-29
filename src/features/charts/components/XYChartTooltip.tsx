@@ -94,13 +94,13 @@ return (
         <div>X: {activePoint.xValue}</div>
         <div>Y: {activePoint.yValue}</div>
 
-        <button
+        {/* <button
           type="button"
           className="xy-chart__tooltip-select-button"
           onClick={() => onSelect(activePoint)}
         >
           Visa mer
-        </button>
+        </button> */}
       </div>
     </div>
   );
