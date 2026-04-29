@@ -1,5 +1,6 @@
 import "./styles/theme.css";
 import "./styles/controls.css";
+import "./styles/XYChart.css";
 import "./styles/dashboard.css";
 import { useState } from "react";
 

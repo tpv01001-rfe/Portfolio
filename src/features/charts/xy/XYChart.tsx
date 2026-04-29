@@ -242,6 +242,9 @@ const sortedData = useMemo(() => {
       const width = Math.max(1, Math.round(rect.width));
       const height = Math.max(1, Math.round(rect.height));
 
+//       const width = Math.max(1, Math.round(rect.width));
+// const height = Math.round(width * 0.6); // t.ex. 16:10-ish
+
       if (canvas.width !== width || canvas.height !== height) {
         canvas.width = width;
         canvas.height = height;
@@ -332,7 +335,6 @@ drawChart({
   return (
     <div className={["xy-chart", className].filter(Boolean).join(" ")}>
       <div className="xy-chart__meta" />
-
 
       <div className="xy-chart__wrapper">
         <div ref={stageRef} className="xy-chart__stage">
