@@ -11,7 +11,7 @@ export default function CycloidControls({
   speed,
   onSpeedChange,
   radius,
-  onRadiusChange,
+  onRadiusChange
 }: CycloidControlsProps) {
   return (
     <div className="controls-stack">

@@ -22,7 +22,7 @@ export default function SliderControl({
   onChange,
   description,
   unit,
-  formatValue,
+  formatValue
 }: SliderControlProps) {
   const inputId = useId();
 

@@ -1,18 +1,24 @@
-// import type { Dispatch, SetStateAction } from "react";
-// import type { CurveLabState, CurveLabActions  } from "./curveTypes";
-
-
-import type { Dispatch, SetStateAction } from "react";
-import type { CurveLabActions, CurveLabState } from "./curveTypes";
-import type { LissajousParams } from "./curveParams";
+import type { CurveLabState } from "./curveTypes";
 
 export function createInitialCurveLabState(): CurveLabState {
   return {
     curveType: "lissajous",
-    cycloid: {
-      speed: 1,
-      radius: 40,
+
+    rollingCurves: {
+      cycloid: {
+        speed: 1,
+        radius: 40,
+      },
+      epicycloid: {
+        speed: 0.5,
+        radius: 40,
+      },
+      hypocycloid: {
+        speed: 0.5,
+        radius: 40,
+      },
     },
+
     lissajous: {
       speed: 1,
       drawFull: false,
@@ -26,109 +32,3 @@ export function createInitialCurveLabState(): CurveLabState {
     },
   };
 }
-
-export function createCurveLabActions(
-  setState: Dispatch<SetStateAction<CurveLabState>>
-): CurveLabActions {
-  return {
-    setCurveType: (curveType) => {
-      setState((prev) => ({ ...prev, curveType }));
-    },
-
-    setCycloidSpeed: (speed) => {
-      setState((prev) => ({
-        ...prev,
-        cycloid: {
-          ...prev.cycloid,
-          speed,
-        },
-      }));
-    },
-
-    setCycloidRadius: (radius) => {
-      setState((prev) => ({
-        ...prev,
-        cycloid: {
-          ...prev.cycloid,
-          radius,
-        },
-      }));
-    },
-
-    setLissajousSpeed: (speed) => {
-      setState((prev) => ({
-        ...prev,
-        lissajous: {
-          ...prev.lissajous,
-          speed,
-        },
-      }));
-    },
-
-    setLissajousDrawFull: (drawFull) => {
-      setState((prev) => ({
-        ...prev,
-        lissajous: {
-          ...prev.lissajous,
-          drawFull,
-        },
-      }));
-    },
-
-    setLissajousParams: (params: LissajousParams) => {
-      setState((prev) => ({
-        ...prev,
-        lissajous: {
-          ...prev.lissajous,
-          params,
-        },
-      }));
-    },
-
-    patchLissajousParams: (patch) => {
-      setState((prev) => ({
-        ...prev,
-        lissajous: {
-          ...prev.lissajous,
-          params: {
-            ...prev.lissajous.params,
-            ...patch,
-          },
-        },
-      }));
-    },
-  };
-}
-
-/*
-export function createInitialCurveAppState(): CurveLabState {
-  return {
-    curveType: "lissajous",
-    isAnimating: true,
-    showFullCurve: false,
-    speed: 1,
-  } as CurveLabState;
-}
-
-export function createCurveAppActions(
-  setState: Dispatch<SetStateAction<CurveLabState>>
-): CurveLabActions  {
-  return {
-    setCurveType: (curveType) => {
-      setState((prev) => ({ ...prev, curveType }));
-    },
-
-    setIsAnimating: (isAnimating) => {
-      setState((prev) => ({ ...prev, isAnimating }));
-    },
-
-    setShowFullCurve: (showFullCurve) => {
-      setState((prev) => ({ ...prev, showFullCurve }));
-    },
-
-    setSpeed: (speed) => {
-      setState((prev) => ({ ...prev, speed }));
-    },
-  } as CurveLabActions ;
-}
-*/

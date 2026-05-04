@@ -1,28 +1,22 @@
 import type { LissajousParams } from "./curveParams";
 
-export type CurveType =
-  | "cycloid"
-  | "epicycloid"
-  | "hypocycloid"
-  | "lissajous";
 
+export type CurveType = RollingCurveType | "lissajous";
 
-export type CurveLabActions  = {
+export type CurveLabActions = {
   setCurveType: (curveType: CurveType) => void;
 
-  setCycloidSpeed: (speed: number) => void;
-  setCycloidRadius: (radius: number) => void;
+  patchRollingCurve: (
+    curveType: RollingCurveType,
+    patch: Partial<RollingCurveState>
+  ) => void;
 
   setLissajousSpeed: (speed: number) => void;
   setLissajousDrawFull: (drawFull: boolean) => void;
-
-  setLissajousParams: (params: LissajousParams) => void; 
-  //fälten i LissajousParams valfria
   patchLissajousParams: (patch: Partial<LissajousParams>) => void;
-
 };
 
-export type CycloidState = {
+export type RollingCurveState = {
   speed: number;
   radius: number;
 };
@@ -33,8 +27,20 @@ export type LissajousState = {
   params: LissajousParams;
 };
 
+export type RollingCurveType =
+  | "cycloid"
+  | "epicycloid"
+  | "hypocycloid";
+
+
 export type CurveLabState = {
   curveType: CurveType;
-  cycloid: CycloidState;
-  lissajous: LissajousState;
+
+  rollingCurves: Record<RollingCurveType, RollingCurveState>;
+
+  lissajous: {
+    speed: number;
+    drawFull: boolean;
+    params: LissajousParams;
+  };
 };

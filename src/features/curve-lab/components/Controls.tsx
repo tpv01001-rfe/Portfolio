@@ -1,20 +1,32 @@
 import "../../../styles/theme.css";
 import "../../../styles/controls.css";
 
-//import type { ControlsProps } from "../model/appTypes";
+
 import CycloidControls from "../components/controls/CycloidControls";
 import LissajousControls from "../components/controls/LissajousControls";
 import CurveTypeButtons from "../components/controls/CurveTypeButtons";
 import ControlPanelSection from "../components/layout/ControlPanelSection";
 import ControlsHeader from "../components/layout/ControlsHeader";
 import { useCurveLab } from "../context/CurveLabContext";
+import { getActiveRollingCurveState, isRollingCurveType } from "../model/curveSelectors";
+import type { RollingCurveState } from "../model/curveTypes";
 
 
 export function Controls() {
   const { state, actions } = useCurveLab();
-  const { curveType, lissajous, cycloid } = state;
+  const { curveType, lissajous } = state;
+  const rollingCurve = getActiveRollingCurveState(state);
+
+
+//sätter radie och hastigheten generiskt
+function setRollingParam(patch: Partial<RollingCurveState>) {
+  if (!isRollingCurveType(curveType)) return;
+
+  actions.patchRollingCurve(curveType, patch);
+}
+
   return (
-    <div className="controls-panel curve-lab-controls-panel" data-curve-type={curveType}>
+    <div className="controls-panel" data-curve-type={curveType}>
       <ControlsHeader curveType={curveType} />
 
       <ControlPanelSection
@@ -23,7 +35,7 @@ export function Controls() {
       >
         <CurveTypeButtons
           curveType={curveType}
-          setCurveType={actions.setCurveType}//.curveType.set}
+          setCurveType={actions.setCurveType}
         />
       </ControlPanelSection>
 
@@ -46,12 +58,15 @@ export function Controls() {
           title="Cycloid Parameters"
           description="Control radius and animation speed"
         >
-          <CycloidControls
-            speed={cycloid.speed}
-            onSpeedChange={actions.setCycloidSpeed}
-            radius={cycloid.radius}
-            onRadiusChange={actions.setCycloidRadius}
-          />
+
+          {rollingCurve ? (
+            <CycloidControls
+              speed={rollingCurve.speed}
+              onSpeedChange={(value) => setRollingParam({speed: value})}
+              radius={rollingCurve.radius}
+              onRadiusChange={(value) => setRollingParam({radius: value})}
+            />
+          ) : null}
         </ControlPanelSection>
       )}
     </div>

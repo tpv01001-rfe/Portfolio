@@ -4,10 +4,6 @@ export type CycloidParams = {
   r: number;
 };
 
-// export type HypoCycloidParams = {
-//   r: number;
-//   R: number;
-// };
 
 export type RollingCircleParams = {
   r: number;

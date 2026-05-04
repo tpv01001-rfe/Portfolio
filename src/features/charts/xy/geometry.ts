@@ -1,7 +1,4 @@
-import type {
-  ChartGeometry,
-  ChartPadding,
-} from "./types";
+import type { ChartGeometry, ChartPadding } from "./types";
 import { getPlotArea, getSeriesArea } from "./layout";
 import { createChartScale, generateTicks, getAxisPositions } from "./scales";
 

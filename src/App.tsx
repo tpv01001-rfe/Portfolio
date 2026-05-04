@@ -16,13 +16,6 @@ export default function App() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
 
-  // useEffect(() => {
-  //   if (curveType) {
-  //     document.body.dataset.curveType = curveType;
-  //   }
-  // }, [curveType]);
-
-
   let page: React.ReactNode = null;
 
   switch (activeView) {

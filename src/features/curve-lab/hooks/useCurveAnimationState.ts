@@ -1,36 +1,31 @@
 import { useEffect, useRef } from "react";
-//import type { CurveCanvasProps } from "../model/appTypes";
 import type { CurveLabState } from "../model/curveTypes";
-
-//type CurveState = CurveCanvasProps["state"];
+import { getActiveRollingCurveState } from "../model/curveSelectors";
 
 export function useCurveAnimationState(state: CurveLabState) {
-  const { curveType, cycloid, lissajous } = state;
+  const { curveType, lissajous } = state;
 
-  const requestRef = useRef<number | null>(null);
-  const previousTimeRef = useRef<number | null>(null);
+  const rollingCurve = getActiveRollingCurveState(state);
 
-  const cycloidSpeedRef = useRef(cycloid.speed);
-  const radiusRef = useRef(cycloid.radius);
-  const positionRef = useRef(0);
-  const tRef = useRef(0);
+  const cycloidSpeedRef = useRef(rollingCurve?.speed ?? 1);
+  const radiusRef = useRef(rollingCurve?.radius ?? 40);
 
-  const drawFullLissajousRef = useRef(lissajous.drawFull);
   const lissajousSpeedRef = useRef(lissajous.speed);
   const lissajousParamsRef = useRef(lissajous.params);
+  const drawFullLissajousRef = useRef(lissajous.drawFull);
+
+  const positionRef = useRef(0);
+  const tRef = useRef(0);
   const progressRef = useRef(0);
+  const previousTimeRef = useRef<number | null>(null);
+  const requestRef = useRef<number | null>(null);
 
   useEffect(() => {
-    cycloidSpeedRef.current = cycloid.speed;
-  }, [cycloid.speed]);
+    if (!rollingCurve) return;
 
-  useEffect(() => {
-    radiusRef.current = cycloid.radius;
-  }, [cycloid.radius]);
-
-  useEffect(() => {
-    drawFullLissajousRef.current = lissajous.drawFull;
-  }, [lissajous.drawFull]);
+    cycloidSpeedRef.current = rollingCurve.speed;
+    radiusRef.current = rollingCurve.radius;
+  }, [rollingCurve?.speed, rollingCurve?.radius]);
 
   useEffect(() => {
     lissajousSpeedRef.current = lissajous.speed;
@@ -41,57 +36,47 @@ export function useCurveAnimationState(state: CurveLabState) {
   }, [lissajous.params]);
 
   useEffect(() => {
+    drawFullLissajousRef.current = lissajous.drawFull;
+  }, [lissajous.drawFull]);
+
+  useEffect(() => {
     positionRef.current = 0;
     tRef.current = 0;
-
-    if (curveType === "lissajous") {
-      progressRef.current = 0;
-    }
+    progressRef.current = 0;
+    previousTimeRef.current = null;
   }, [curveType]);
 
   const getDeltaTime = (time: number) => {
     if (previousTimeRef.current === null) {
       previousTimeRef.current = time;
-      return 0;
     }
 
     const deltaTime = (time - previousTimeRef.current) / 1000;
     previousTimeRef.current = time;
+
     return deltaTime;
   };
 
-  const resetFrameTime = () => {
+  const cleanup = () => {
+    if (requestRef.current) {
+      cancelAnimationFrame(requestRef.current);
+    }
+
     previousTimeRef.current = null;
   };
 
-  const cancelFrame = () => {
-    if (requestRef.current !== null) {
-      cancelAnimationFrame(requestRef.current);
-    }
-  };
-
-  const cleanup = () => {
-    cancelFrame();
-    resetFrameTime();
-  };
-
   return {
-    requestRef,
-    previousTimeRef,
-
     cycloidSpeedRef,
     radiusRef,
-    positionRef,
-    tRef,
-
-    drawFullLissajousRef,
     lissajousSpeedRef,
     lissajousParamsRef,
+    drawFullLissajousRef,
+    positionRef,
+    tRef,
     progressRef,
-
+    previousTimeRef,
+    requestRef,
     getDeltaTime,
-    resetFrameTime,
-    cancelFrame,
     cleanup,
   };
 }
