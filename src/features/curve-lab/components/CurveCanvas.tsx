@@ -8,6 +8,8 @@ import { drawCycloidScene, getResponsiveCycloidGeometry } from "../rendering/dra
 import { useCurveLab } from "../context/CurveLabContext";
 import CurveHud from "./CurveHud";
 
+import { useViewport } from "../../../shared/interaction/useViewport";
+import { useCanvasPointer } from "../../../shared/interaction/useCanvasPointer";
 
 //export default function CurveCanvas({ state }: CurveCanvasProps) {
 export default function CurveCanvas() {
@@ -19,6 +21,14 @@ export default function CurveCanvas() {
 
   const { wrapperRef, sizeRef } = useCanvasResize(canvasRef);
   const animation = useCurveAnimationState(state);
+
+  const viewport = useViewport();
+
+  useCanvasPointer({
+  canvasRef,
+  viewportApi: viewport,
+});
+
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -40,10 +50,21 @@ export default function CurveCanvas() {
     if (!ctx) return;
 
     const draw = (time: number) => {
+
       const { width, height } = sizeRef.current;
       const deltaTime = animation.getDeltaTime(time);
 
+      const v = viewport.viewportRef.current;
+
+      //ctx.clearRect(0, 0, width, height);
       ctx.clearRect(0, 0, width, height);
+
+ctx.save();
+
+ctx.translate(width / 2, height / 2);
+ctx.translate(v.panX, v.panY);
+ctx.scale(v.zoom, v.zoom);
+ctx.translate(-width / 2, -height / 2);
 
       if (curveType === "lissajous") {
         drawLissajousScene({
@@ -82,6 +103,8 @@ export default function CurveCanvas() {
           tRef: animation.tRef,
         });
       }
+
+      ctx.restore();
 
       animation.requestRef.current = requestAnimationFrame(draw);
     };
