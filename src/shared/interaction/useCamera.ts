@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { screenToWorld } from "./viewportMath";
+import { type CameraState } from "./viewportTypes";
 
 export function useCamera() {
   const cameraRef = useRef<CameraState>({
