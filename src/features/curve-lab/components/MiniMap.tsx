@@ -15,6 +15,7 @@ type MiniMapProps = {
   worldBounds: WorldBounds;
   width?: number;
   height?: number;
+  onJumpTo?: (x: number, y: number) => void;
 };
 
 function worldToMiniMap(
@@ -37,27 +38,18 @@ export function MiniMap({
   worldBounds,
   width = 160,
   height = 90,
+  onJumpTo
 }: MiniMapProps) {
 
   const visibleTopLeft = screenToWorld(0, 0, camera, canvasWidth, canvasHeight);
 
-const visibleBottomRight = screenToWorld(
-  canvasWidth,
-  canvasHeight,
-  camera,
-  canvasWidth,
-  canvasHeight
-);
-
-  // const topLeft = screenToWorld(0, 0, viewport, canvasWidth, canvasHeight);
-
-  // const bottomRight = screenToWorld(
-  //   canvasWidth,
-  //   canvasHeight,
-  //   viewport,
-  //   canvasWidth,
-  //   canvasHeight
-  // );
+  const visibleBottomRight = screenToWorld(
+    canvasWidth,
+    canvasHeight,
+    camera,
+    canvasWidth,
+    canvasHeight
+  );
 
   const miniTopLeft = worldToMiniMap(
     visibleTopLeft.x,
@@ -76,16 +68,28 @@ const visibleBottomRight = screenToWorld(
   );
 
 
-  /*
-    const rectX = miniTopLeft.x;
-    const rectY = miniTopLeft.y;
-    const rectWidth = miniBottomRight.x - miniTopLeft.x;
-    const rectHeight = miniBottomRight.y - miniTopLeft.y;
-  */
   const rectX = Math.min(miniTopLeft.x, miniBottomRight.x);
   const rectY = Math.min(miniTopLeft.y, miniBottomRight.y);
   const rectWidth = Math.abs(miniBottomRight.x - miniTopLeft.x);
   const rectHeight = Math.abs(miniBottomRight.y - miniTopLeft.y);
+
+
+  const handleClick = (event: React.MouseEvent<SVGSVGElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    const worldX =
+      worldBounds.minX +
+      (x / width) * (worldBounds.maxX - worldBounds.minX);
+
+    const worldY =
+      worldBounds.minY +
+      (y / height) * (worldBounds.maxY - worldBounds.minY);
+
+    onJumpTo?.(worldX, worldY);
+  };
 
   return (
     <svg
@@ -93,6 +97,7 @@ const visibleBottomRight = screenToWorld(
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
+      onClick={handleClick}
     >
       <defs>
         <clipPath id="mini-map-clip">

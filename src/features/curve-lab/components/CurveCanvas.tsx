@@ -33,12 +33,12 @@ export default function CurveCanvas() {
   //   viewportApi: viewport,
   // });
 
-const camera = useCamera();
+  const camera = useCamera();
 
-useCanvasPointer({
-  canvasRef,
-  viewportApi: camera,
-});
+  useCanvasPointer({
+    canvasRef,
+    viewportApi: camera,
+  });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -71,7 +71,7 @@ useCanvasPointer({
       // const viewRef = viewport.viewportRef;
       // const v = viewRef.current;
 
-      
+
 
       const c = camera.cameraRef.current;
 
@@ -80,22 +80,22 @@ useCanvasPointer({
       ctx.save();
 
       ctx.translate(c.x, c.y);
-ctx.scale(c.zoom, c.zoom);
-//       ctx.translate(width / 2, height / 2);
-// ctx.scale(c.zoom, c.zoom);
-// ctx.translate(-c.x, -c.y);
+      ctx.scale(c.zoom, c.zoom);
+      //       ctx.translate(width / 2, height / 2);
+      // ctx.scale(c.zoom, c.zoom);
+      // ctx.translate(-c.x, -c.y);
 
- /*
-      ctx.translate(width / 2, height / 2);
-      ctx.translate(v.panX, v.panY);
-      ctx.scale(v.zoom, v.zoom);
-      ctx.translate(-width / 2, -height / 2);
-
+      /*
+           ctx.translate(width / 2, height / 2);
+           ctx.translate(v.panX, v.panY);
+           ctx.scale(v.zoom, v.zoom);
+           ctx.translate(-width / 2, -height / 2);
      
-ctx.translate(width / 2, height / 2);
-ctx.scale(camera.zoom, camera.zoom);
-ctx.translate(-camera.x, -camera.y);
-      */
+          
+     ctx.translate(width / 2, height / 2);
+     ctx.scale(camera.zoom, camera.zoom);
+     ctx.translate(-camera.x, -camera.y);
+           */
 
       if (curveType === "lissajous") {
         drawLissajousScene({
@@ -176,6 +176,9 @@ ctx.translate(-camera.x, -camera.y);
           maxX: width,
           minY: -height,
           maxY: height
+        }}
+        onJumpTo={(x, y) => {
+          camera.jumpToMiniMapPoint(x, y, width, height);
         }}
       />
     </div>

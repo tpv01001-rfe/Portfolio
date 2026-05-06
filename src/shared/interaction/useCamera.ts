@@ -56,12 +56,28 @@ export function useCamera() {
         commit();
     };
 
+    const jumpToMiniMapPoint = (
+        worldX: number,
+        worldY: number,
+        canvasWidth: number,
+        canvasHeight: number
+    ) => {
+        cameraRef.current.x =
+            canvasWidth / 2 - worldX * cameraRef.current.zoom;
+
+        cameraRef.current.y =
+            canvasHeight / 2 - worldY * cameraRef.current.zoom;
+
+        commit();
+    };
+
     return {
         camera,
         cameraRef,
         panBy,
         zoomAt,
         commit,
-        reset
+        reset,
+        jumpToMiniMapPoint
     };
 }

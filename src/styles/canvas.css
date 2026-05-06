@@ -27,6 +27,11 @@
   stroke-width: 1.5;
 }
 
+.mini-map {
+  pointer-events: auto;
+  cursor: crosshair;
+}
+
 .canvas {
   display: block;
   width: 100%;
