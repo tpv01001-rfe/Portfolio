@@ -1,5 +1,7 @@
+/*
 import { useState, useRef } from "react";
 import { screenToWorld } from "./viewportMath";
+
 
 export function useViewport() {
     const viewportRef = useRef({ panX: 0, panY: 0, zoom: 1 });
@@ -37,3 +39,4 @@ export function useViewport() {
         reset,
     };
 }
+    */

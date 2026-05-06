@@ -1,4 +1,4 @@
-import type { ViewportState } from "../../../shared/interaction/viewportTypes";
+import type { CameraState } from "../../../shared/interaction/viewportTypes";
 import { screenToWorld } from "../../../shared/interaction/viewportMath";
 
 type WorldBounds = {
@@ -9,7 +9,7 @@ type WorldBounds = {
 };
 
 type MiniMapProps = {
-  viewport: ViewportState;
+  camera: CameraState;
   canvasWidth: number;
   canvasHeight: number;
   worldBounds: WorldBounds;
@@ -31,34 +31,45 @@ function worldToMiniMap(
 }
 
 export function MiniMap({
-  viewport,
+  camera,
   canvasWidth,
   canvasHeight,
   worldBounds,
   width = 160,
   height = 90,
 }: MiniMapProps) {
-  const topLeft = screenToWorld(0, 0, viewport, canvasWidth, canvasHeight);
 
-  const bottomRight = screenToWorld(
-    canvasWidth,
-    canvasHeight,
-    viewport,
-    canvasWidth,
-    canvasHeight
-  );
+  const visibleTopLeft = screenToWorld(0, 0, camera, canvasWidth, canvasHeight);
+
+const visibleBottomRight = screenToWorld(
+  canvasWidth,
+  canvasHeight,
+  camera,
+  canvasWidth,
+  canvasHeight
+);
+
+  // const topLeft = screenToWorld(0, 0, viewport, canvasWidth, canvasHeight);
+
+  // const bottomRight = screenToWorld(
+  //   canvasWidth,
+  //   canvasHeight,
+  //   viewport,
+  //   canvasWidth,
+  //   canvasHeight
+  // );
 
   const miniTopLeft = worldToMiniMap(
-    topLeft.x,
-    topLeft.y,
+    visibleTopLeft.x,
+    visibleTopLeft.y,
     worldBounds,
     width,
     height
   );
 
   const miniBottomRight = worldToMiniMap(
-    bottomRight.x,
-    bottomRight.y,
+    visibleBottomRight.x,
+    visibleBottomRight.y,
     worldBounds,
     width,
     height

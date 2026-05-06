@@ -8,7 +8,8 @@ import { drawCycloidScene, getResponsiveCycloidGeometry } from "../rendering/dra
 import { useCurveLab } from "../context/CurveLabContext";
 import CurveHud from "./CurveHud";
 
-import { useViewport } from "../../../shared/interaction/useViewport";
+import { useCamera } from "../../../shared/interaction/useCamera";
+//import { useViewport } from "../../../shared/interaction/useViewport";
 import { useCanvasPointer } from "../../../shared/interaction/useCanvasPointer";
 import {
   MiniMap
@@ -25,13 +26,19 @@ export default function CurveCanvas() {
   const { wrapperRef, sizeRef } = useCanvasResize(canvasRef);
   const animation = useCurveAnimationState(state);
 
-  const viewport = useViewport();
+  // const viewport = useViewport();
 
-  useCanvasPointer({
-    canvasRef,
-    viewportApi: viewport,
-  });
+  // useCanvasPointer({
+  //   canvasRef,
+  //   viewportApi: viewport,
+  // });
 
+const camera = useCamera();
+
+useCanvasPointer({
+  canvasRef,
+  viewportApi: camera,
+});
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -59,17 +66,30 @@ export default function CurveCanvas() {
       const { width, height } = sizeRef.current;
       const deltaTime = animation.getDeltaTime(time);
 
-      const viewRef = viewport.viewportRef;
-      const v = viewRef.current;
+      // const viewRef = viewport.viewportRef;
+      // const v = viewRef.current;
+
+      const c = camera.cameraRef.current;
 
       ctx.clearRect(0, 0, width, height);
 
       ctx.save();
 
       ctx.translate(width / 2, height / 2);
+ctx.scale(c.zoom, c.zoom);
+ctx.translate(-c.x, -c.y);
+
+ /*
+      ctx.translate(width / 2, height / 2);
       ctx.translate(v.panX, v.panY);
       ctx.scale(v.zoom, v.zoom);
       ctx.translate(-width / 2, -height / 2);
+
+     
+ctx.translate(width / 2, height / 2);
+ctx.scale(camera.zoom, camera.zoom);
+ctx.translate(-camera.x, -camera.y);
+      */
 
       if (curveType === "lissajous") {
         drawLissajousScene({
@@ -142,7 +162,7 @@ export default function CurveCanvas() {
       {state.curveType === "lissajous" && <CurveHud state={state} />}
 
       <MiniMap
-        viewport={viewport.viewport}
+        camera={camera.camera}
         canvasWidth={width}
         canvasHeight={height}
         worldBounds={{
