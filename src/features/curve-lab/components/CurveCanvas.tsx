@@ -50,6 +50,8 @@ useCanvasPointer({
         height: canvas.height,
       };
     }
+
+    //camera.resetToCenter(width, height);
   }, []);
 
   useEffect(() => {
@@ -69,15 +71,19 @@ useCanvasPointer({
       // const viewRef = viewport.viewportRef;
       // const v = viewRef.current;
 
+      
+
       const c = camera.cameraRef.current;
 
       ctx.clearRect(0, 0, width, height);
 
       ctx.save();
 
-      ctx.translate(width / 2, height / 2);
+      ctx.translate(c.x, c.y);
 ctx.scale(c.zoom, c.zoom);
-ctx.translate(-c.x, -c.y);
+//       ctx.translate(width / 2, height / 2);
+// ctx.scale(c.zoom, c.zoom);
+// ctx.translate(-c.x, -c.y);
 
  /*
       ctx.translate(width / 2, height / 2);
