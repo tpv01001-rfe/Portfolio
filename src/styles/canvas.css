@@ -6,6 +6,27 @@
   min-height: 240px;
 }
 
+
+.mini-map {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 0.5rem;
+  background: rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+
+.mini-map__background {
+  fill: rgba(255, 255, 255, 0.06);
+}
+
+.mini-map__viewport {
+  fill: rgba(255, 255, 255, 0.16);
+  stroke: rgba(255, 255, 255, 0.85);
+  stroke-width: 1.5;
+}
+
 .canvas {
   display: block;
   width: 100%;

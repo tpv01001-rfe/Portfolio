@@ -10,7 +10,10 @@ import CurveHud from "./CurveHud";
 
 import { useViewport } from "../../../shared/interaction/useViewport";
 import { useCanvasPointer } from "../../../shared/interaction/useCanvasPointer";
+import {
+  MiniMap
 
+} from "./MiniMap";
 //export default function CurveCanvas({ state }: CurveCanvasProps) {
 export default function CurveCanvas() {
   const { state } = useCurveLab();
@@ -25,9 +28,9 @@ export default function CurveCanvas() {
   const viewport = useViewport();
 
   useCanvasPointer({
-  canvasRef,
-  viewportApi: viewport,
-});
+    canvasRef,
+    viewportApi: viewport,
+  });
 
 
   useEffect(() => {
@@ -49,22 +52,24 @@ export default function CurveCanvas() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    //const { width, height } = sizeRef.current;
+
     const draw = (time: number) => {
 
       const { width, height } = sizeRef.current;
       const deltaTime = animation.getDeltaTime(time);
 
-      const v = viewport.viewportRef.current;
+      const viewRef = viewport.viewportRef;
+      const v = viewRef.current;
 
-      //ctx.clearRect(0, 0, width, height);
       ctx.clearRect(0, 0, width, height);
 
-ctx.save();
+      ctx.save();
 
-ctx.translate(width / 2, height / 2);
-ctx.translate(v.panX, v.panY);
-ctx.scale(v.zoom, v.zoom);
-ctx.translate(-width / 2, -height / 2);
+      ctx.translate(width / 2, height / 2);
+      ctx.translate(v.panX, v.panY);
+      ctx.scale(v.zoom, v.zoom);
+      ctx.translate(-width / 2, -height / 2);
 
       if (curveType === "lissajous") {
         drawLissajousScene({
@@ -117,8 +122,11 @@ ctx.translate(-width / 2, -height / 2);
 
   }, [curveType, sizeRef]);
 
+  const width = sizeRef.current.width;
+  const height = sizeRef.current.height;
 
   return (
+
     <div
       ref={wrapperRef}
       className="canvas-wrapper"
@@ -132,6 +140,18 @@ ctx.translate(-width / 2, -height / 2);
       />
 
       {state.curveType === "lissajous" && <CurveHud state={state} />}
+
+      <MiniMap
+        viewport={viewport.viewport}
+        canvasWidth={width}
+        canvasHeight={height}
+        worldBounds={{
+          minX: -width,
+          maxX: width,
+          minY: -height,
+          maxY: height
+        }}
+      />
     </div>
   );
 }
