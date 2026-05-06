@@ -202,7 +202,7 @@ function setupEpiAndHypoCycloid(
   R: number
 ) {
   ctx.beginPath();
-  ctx.strokeStyle = "black";
+  ctx.strokeStyle = "#413d3d";;
   ctx.moveTo(0, h);
   ctx.lineTo(w, h);
   ctx.moveTo(w / 2, 0);

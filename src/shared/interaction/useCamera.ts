@@ -18,8 +18,8 @@ export function useCamera() {
     };
 
     const panBy = (dx: number, dy: number) => {
-        cameraRef.current.x -= dx / cameraRef.current.zoom;
-        cameraRef.current.y -= dy / cameraRef.current.zoom;
+        cameraRef.current.x += dx / cameraRef.current.zoom;
+        cameraRef.current.y += dy / cameraRef.current.zoom;
     };
 
     const zoomAt = (
