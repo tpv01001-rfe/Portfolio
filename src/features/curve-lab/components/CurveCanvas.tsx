@@ -1,21 +1,17 @@
 import { useEffect, useRef } from "react";
-//import type { CurveLabState } from "../model/curveTypes";
 import { useCanvasResize } from "../hooks/useCanvasResize";
 import { useCurveAnimationState } from "../hooks/useCurveAnimationState";
 import { drawLissajousScene } from "../rendering/drawLissajousScene";
-import { drawCycloidScene, getResponsiveCycloidGeometry } from "../rendering/drawCycloidScene";
+import { drawCycloidScene, getCycloidWorldGeometry } from "../rendering/drawCycloidScene";
 
 import { useCurveLab } from "../context/CurveLabContext";
 import CurveHud from "./CurveHud";
 
 import { useCamera } from "../../../shared/interaction/useCamera";
-//import { useViewport } from "../../../shared/interaction/useViewport";
 import { useCanvasPointer } from "../../../shared/interaction/useCanvasPointer";
-import {
-  MiniMap
+import { MiniMap } from "./MiniMap";
 
-} from "./MiniMap";
-//export default function CurveCanvas({ state }: CurveCanvasProps) {
+
 export default function CurveCanvas() {
   const { state } = useCurveLab();
   const { curveType } = state;
@@ -25,13 +21,6 @@ export default function CurveCanvas() {
 
   const { wrapperRef, sizeRef } = useCanvasResize(canvasRef);
   const animation = useCurveAnimationState(state);
-
-  // const viewport = useViewport();
-
-  // useCanvasPointer({
-  //   canvasRef,
-  //   viewportApi: viewport,
-  // });
 
   const camera = useCamera();
 
@@ -51,7 +40,12 @@ export default function CurveCanvas() {
       };
     }
 
-    //camera.resetToCenter(width, height);
+    camera.fitBounds({
+      minX: -100,
+      maxX: 100,
+      minY: -75,
+      maxY: 75,
+    }, width, height);
   }, []);
 
   useEffect(() => {
@@ -61,17 +55,10 @@ export default function CurveCanvas() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    //const { width, height } = sizeRef.current;
-
     const draw = (time: number) => {
 
       const { width, height } = sizeRef.current;
       const deltaTime = animation.getDeltaTime(time);
-
-      // const viewRef = viewport.viewportRef;
-      // const v = viewRef.current;
-
-
 
       const c = camera.cameraRef.current;
 
@@ -79,23 +66,9 @@ export default function CurveCanvas() {
 
       ctx.save();
 
-      ctx.translate(c.x, c.y);
+      ctx.translate(width / 2, height / 2);
       ctx.scale(c.zoom, c.zoom);
-      //       ctx.translate(width / 2, height / 2);
-      // ctx.scale(c.zoom, c.zoom);
-      // ctx.translate(-c.x, -c.y);
-
-      /*
-           ctx.translate(width / 2, height / 2);
-           ctx.translate(v.panX, v.panY);
-           ctx.scale(v.zoom, v.zoom);
-           ctx.translate(-width / 2, -height / 2);
-     
-          
-     ctx.translate(width / 2, height / 2);
-     ctx.scale(camera.zoom, camera.zoom);
-     ctx.translate(-camera.x, -camera.y);
-           */
+      ctx.translate(-c.x, -c.y);
 
       if (curveType === "lissajous") {
         drawLissajousScene({
@@ -110,14 +83,9 @@ export default function CurveCanvas() {
           progressRef: animation.progressRef,
         });
       } else {
-        const geometry = getResponsiveCycloidGeometry({
+        const geometry = getCycloidWorldGeometry({
           curveType,
-          width,
-          height,
-          initialWidth: initialSizeRef.current.width || width,
-          initialHeight: initialSizeRef.current.height || height,
           radius: animation.radiusRef.current,
-          lineMargin: 15,
           radiusMin: 10,
           radiusMax: 100,
         });
@@ -165,6 +133,19 @@ export default function CurveCanvas() {
         height={400}
       />
 
+      <button
+        onClick={() =>
+          camera.fitBounds({
+            minX: -100,
+            maxX: 100,
+            minY: -75,
+            maxY: 75
+          }, width, height, 1)
+        }
+      >
+        Reset view
+      </button>
+
       {state.curveType === "lissajous" && <CurveHud state={state} />}
 
       <MiniMap
@@ -178,7 +159,7 @@ export default function CurveCanvas() {
           maxY: height
         }}
         onJumpTo={(x, y) => {
-          camera.jumpToMiniMapPoint(x, y, width, height);
+          camera.centerOn(x, y);//, width, height);
         }}
       />
     </div>

@@ -10,6 +10,13 @@ export function useCamera() {
         zoom: 1,
     };
 
+    type WorldBounds = {
+        minX: number;
+        maxX: number;
+        minY: number;
+        maxY: number;
+    }
+
     const cameraRef = useRef<CameraState>(INITIAL_CAMERA);
     const [camera, setCamera] = useState<CameraState>(INITIAL_CAMERA);
 
@@ -18,8 +25,8 @@ export function useCamera() {
     };
 
     const panBy = (dx: number, dy: number) => {
-        cameraRef.current.x += dx / cameraRef.current.zoom;
-        cameraRef.current.y += dy / cameraRef.current.zoom;
+        cameraRef.current.x -= dx / cameraRef.current.zoom;
+        cameraRef.current.y -= dy / cameraRef.current.zoom;
     };
 
     const zoomAt = (
@@ -56,18 +63,35 @@ export function useCamera() {
         commit();
     };
 
-    const jumpToMiniMapPoint = (
-        worldX: number,
-        worldY: number,
-        canvasWidth: number,
-        canvasHeight: number
+    //function fitBounds(bounds, width: number, height: number, padding = 40) {
+    const fitBounds = (
+        bounds: WorldBounds,
+        width: number,
+        height: number,
+        factor = 0.5,
+        padding = 40
     ) => {
-        cameraRef.current.x =
-            canvasWidth / 2 - worldX * cameraRef.current.zoom;
+        const worldWidth = bounds.maxX - bounds.minX;
+        const worldHeight = bounds.maxY - bounds.minY;
 
-        cameraRef.current.y =
-            canvasHeight / 2 - worldY * cameraRef.current.zoom;
+        const zoomX = (width - padding * 2) / worldWidth;
+        const zoomY = (height - padding * 2) / worldHeight;
 
+        const zoom = Math.min(zoomX, zoomY) * factor;
+
+        cameraRef.current = {
+            x: (bounds.minX + bounds.maxX) / 2,
+            y: (bounds.minY + bounds.maxY) / 2,
+            zoom,
+        };
+
+        commit();
+    };
+
+    //const centerOn = (x: number, y: number)
+    const centerOn = (x: number, y: number) => {
+        cameraRef.current.x = x;
+        cameraRef.current.y = y;
         commit();
     };
 
@@ -78,6 +102,7 @@ export function useCamera() {
         zoomAt,
         commit,
         reset,
-        jumpToMiniMapPoint
+        centerOn,
+        fitBounds
     };
 }

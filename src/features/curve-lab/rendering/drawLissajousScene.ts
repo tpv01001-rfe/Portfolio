@@ -65,48 +65,39 @@ export function drawLissajousScene({
 
   const endStep = Math.ceil(currentT * smoothingValue);
 
-const paddingX = 32;
-const paddingY = 32;
+  const paddingX = 32;
+  const paddingY = 32;
 
-const drawLeft = paddingX;
-const drawTop = paddingY;
-const drawWidth = Math.max(1, width - paddingX * 2);
-const drawHeight = Math.max(1, height - paddingY * 2);
+  const drawWidth = Math.max(1, width - paddingX * 2);
+  const drawHeight = Math.max(1, height - paddingY * 2);
 
-const maxAmplitudeX = 190;
-const maxAmplitudeY = 190;
+  const maxAmplitudeX = 190;
+  const maxAmplitudeY = 190;
 
-const worldMinX = -maxAmplitudeX;
-const worldMaxX = maxAmplitudeX;
-const worldMinY = -maxAmplitudeY;
-const worldMaxY = maxAmplitudeY;
+  const worldMinX = -maxAmplitudeX;
+  const worldMaxX = maxAmplitudeX;
+  const worldMinY = -maxAmplitudeY;
+  const worldMaxY = maxAmplitudeY;
 
-const scaleX = drawWidth / (worldMaxX - worldMinX);
-const scaleY = drawHeight / (worldMaxY - worldMinY);
-
-const offsetX = drawLeft;
-const offsetY = drawTop;
+  const scaleX = drawWidth / (worldMaxX - worldMinX);
+  const scaleY = drawHeight / (worldMaxY - worldMinY);
 
   ctx.beginPath();
-  ctx.strokeStyle = "#4de3c3";
 
-  // let lastX = 0;
-  // let lastY = 0;
+  ctx.strokeStyle = "#4de3c3";
 
   for (let i = 0; i <= endStep; i++) {
     const t = i / smoothingValue;
     const p = curve.getPoint(t);
 
-    const x = offsetX + (p.x - worldMinX) * scaleX;
-    const y = offsetY + (worldMaxY - p.y) * scaleY;
+    const x = p.x * scaleX;
+    const y = p.y * scaleY;
 
     if (i === 0) {
       ctx.moveTo(x, y);
     } else {
       ctx.lineTo(x, y);
     }
-    // lastX = x;
-    // lastY = y;
   }
 
   ctx.stroke();

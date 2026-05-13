@@ -8,32 +8,37 @@ export function drawGrid(
   ctx.lineWidth = 1;
 
   const spacing = 40;
+  const worldXStop = width/2;
+  const worldXStart = -worldXStop;
+  const worldYStop = height/2;
+  const worldYStart = -worldYStop;
 
-  for (let x = 0; x <= width; x += spacing) {
+  for (let x = worldXStart; x <= worldXStop; x += spacing) {
     ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, height);
+    ctx.moveTo(x, worldYStart);
+    ctx.lineTo(x, worldYStop);
     ctx.stroke();
   }
 
-  for (let y = 0; y <= height; y += spacing) {
+  for (let y = worldYStart; y <= worldYStop; y += spacing) {
     ctx.beginPath();
-    ctx.moveTo(0, y);
-    ctx.lineTo(width, y);
+    ctx.moveTo(worldXStart, y);
+    ctx.lineTo(worldXStop, y);
     ctx.stroke();
   }
 
   ctx.strokeStyle = "rgba(255, 255, 255, 0.09)";
 
   ctx.beginPath();
-  ctx.moveTo(width / 2, 0);
-  ctx.lineTo(width / 2, height);
+  ctx.moveTo(worldXStop, worldYStart);
+  ctx.lineTo(worldXStop, worldYStop);
   ctx.stroke();
 
-  ctx.beginPath();
-  ctx.moveTo(0, height / 2);
-  ctx.lineTo(width, height / 2);
-  ctx.stroke();
+  /* verkar inte behövas */
+  // ctx.beginPath();
+  // ctx.moveTo(0, height / 2);
+  // ctx.lineTo(width, height / 2);
+  // ctx.stroke();
 
   ctx.restore();
 }

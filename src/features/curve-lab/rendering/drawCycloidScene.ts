@@ -4,54 +4,37 @@ import { buildCurveConfig } from "../math/curveConfig";
 import type { CurveType } from "../model/curveTypes";
 import { drawRollingCircle } from "./canvasPrimitives";
 
-type CycloidGeometryArgs = {
-  curveType: CurveType;
-  width: number;
-  height: number;
-  initialWidth: number;
-  initialHeight: number;
+
+type CycloidWorldGeometryArgs = {
+  curveType: "cycloid" | "epicycloid" | "hypocycloid";
   radius: number;
-  lineMargin: number;
   radiusMin: number;
   radiusMax: number;
 };
 
-export function getResponsiveCycloidGeometry(args: CycloidGeometryArgs) {
-  const {
-    curveType,
-    width,
-    height,
-    initialWidth,
-    initialHeight,
-    radius,
-    lineMargin,
-    radiusMin,
-    radiusMax,
-  } = args;
+export function getCycloidWorldGeometry(args: CycloidWorldGeometryArgs) {
+  const { curveType, radius, radiusMin, radiusMax } = args;
 
   const isCycloid = curveType === "cycloid";
   const isEpicycloid = curveType === "epicycloid";
   const isHypocycloid = curveType === "hypocycloid";
 
-  const h = isCycloid ? height - lineMargin : height / 2;
-  const margin = isCycloid ? 0 : isEpicycloid ? 20 : 15;
+  const h = isCycloid ? 100 : 0;
+  const margin = 0;
 
-  const scaleX = width / initialWidth;
-  const scaleY = height / initialHeight;
-  const uniformScale = Math.min(scaleX, scaleY);
-
-  let r = radius * uniformScale;
-  let R = h - margin;
+  let r = radius;
+  let R = 80;
 
   if (isEpicycloid) {
-    const availableRadius = h - margin;
-    const minFixedRadius = 10;
+    const availableRadius = 110;
+    const minFixedRadius = 20;
 
     const maxRollingRadius = Math.max(
       0,
       (availableRadius - minFixedRadius) / 2
     );
 
+    //skala stor och liten radie gentemot varandra
     const radiusRange = radiusMax - radiusMin;
     const radiusRatio =
       radiusRange > 0
@@ -67,15 +50,14 @@ export function getResponsiveCycloidGeometry(args: CycloidGeometryArgs) {
   }
 
   if (isHypocycloid) {
-    const availableRadius = h - margin;
-    R = Math.min(R, availableRadius);
-    r = Math.min(r, R);
+    R = 100;
+    r = Math.min(radius, R);
   }
 
   return {
     h,
     margin,
-    O: { X: width / 2, Y: h },
+    O: { X: 0, Y: 0 },
     r,
     R,
   };
@@ -87,12 +69,13 @@ export type CycloidSceneArgs = {
   height: number;
   deltaTime: number;
   curveType: CurveType;
-  geometry: ReturnType<typeof getResponsiveCycloidGeometry>;
+  geometry: ReturnType<typeof getCycloidWorldGeometry>;
   cycloidSpeedRef: RefObject<number>;
   positionRef: RefObject<number>;
   tRef: RefObject<number>;
 };
 
+//TODO: Rensa bort rester efter flytt från screen- till world-koordinater
 export function drawCycloidScene({
   ctx,
   width,
@@ -107,6 +90,13 @@ export function drawCycloidScene({
   const isCycloid = curveType === "cycloid";
   const smoothingValue = 20;
 
+  const cycloidWorld = {
+    groundY: 75,
+    startX: -300,
+    endX: 300,
+    translate: 200
+  };
+
   const config = buildCurveConfig({
     curveType,
     radius: r,
@@ -116,9 +106,11 @@ export function drawCycloidScene({
   const curve = createCurve(config);
 
   if (isCycloid) {
-    setupCycloid(ctx, h, width);
+    //setupCycloid(ctx, groundInWorld, width - translateCycloid, -translateCycloid);
+    setupCycloid(ctx, cycloidWorld.groundY, cycloidWorld.startX, cycloidWorld.endX);
   } else {
-    setupEpiAndHypoCycloid(ctx, h, width, O, R);
+    //setupEpiAndHypoCycloid(ctx, 0, width-cycloidWorld.translate, O, R, cycloidWorld.translate);
+    setupEpiAndHypoCycloid(ctx, R);
   }
 
   const moveStep = cycloidSpeedRef.current * deltaTime * 60;
@@ -139,8 +131,9 @@ export function drawCycloidScene({
   const firstT = start / smoothingValue;
   const firstPoint = curve.getPoint(firstT);
 
+
   if (isCycloid) {
-    ctx.moveTo(firstPoint.x, h - firstPoint.y);
+    ctx.moveTo(firstPoint.x - cycloidWorld.translate, cycloidWorld.groundY - firstPoint.y);
   } else {
     ctx.moveTo(O.X + firstPoint.x, O.Y + firstPoint.y);
   }
@@ -150,15 +143,15 @@ export function drawCycloidScene({
     const p = curve.getPoint(td);
 
     if (isCycloid) {
-      ctx.lineTo(p.x, h - p.y);
+      ctx.lineTo(p.x - cycloidWorld.translate, cycloidWorld.groundY - p.y);
     } else {
-      ctx.lineTo(O.X + p.x, O.Y + p.y);
+      ctx.lineTo(p.x, p.y);
     }
   }
 
   const finalP = curve.getPoint(end / smoothingValue);
-  const xstop = isCycloid ? finalP.x : O.X + finalP.x;
-  const ystop = isCycloid ? h - finalP.y : O.Y + finalP.y;
+  const xstop = isCycloid ? finalP.x - cycloidWorld.translate : O.X + finalP.x;
+  const ystop = isCycloid ? cycloidWorld.groundY - finalP.y : O.Y + finalP.y;
 
   ctx.lineTo(xstop, ystop);
   ctx.stroke();
@@ -167,8 +160,8 @@ export function drawCycloidScene({
   let rY: number;
 
   if (isCycloid) {
-    rX = r * (positionRef.current / smoothingValue);
-    rY = h - r;
+    rX = r * (positionRef.current / smoothingValue) - cycloidWorld.translate;
+    rY = cycloidWorld.groundY - r;//rY h - r;
   } else {
     const centerP = curve.getCenter(end / smoothingValue);
     rX = O.X + centerP.x;
@@ -184,34 +177,42 @@ export function drawCycloidScene({
 
 function setupCycloid(
   ctx: CanvasRenderingContext2D,
-  h: number,
-  w: number
+  groundY: number,
+  startX: number,
+  endX: number
 ) {
   ctx.beginPath();
   ctx.strokeStyle = "green";
-  ctx.moveTo(0, h);
-  ctx.lineTo(w, h);
+  ctx.moveTo(startX, groundY);
+  ctx.lineTo(endX, groundY);
   ctx.stroke();
 }
 
+//setupEpiAndHypoCycloid(ctx, cycloidWorld.startX, R, cycloidWorld.translate);
 function setupEpiAndHypoCycloid(
   ctx: CanvasRenderingContext2D,
-  h: number,
-  w: number,
-  O: { X: number; Y: number },
-  R: number
+  //h: number,
+  // w: number,
+  //O: { X: number; Y: number },
+  R: number,
+  // translate: number
 ) {
+
+  //Axlarna
   ctx.beginPath();
-  ctx.strokeStyle = "#413d3d";;
-  ctx.moveTo(0, h);
-  ctx.lineTo(w, h);
-  ctx.moveTo(w / 2, 0);
-  ctx.lineTo(w / 2, h * 2);
+  ctx.strokeStyle = "#413d3d";
+  ctx.moveTo(-130, 0);
+  ctx.lineTo(130, 0);
+
+  ctx.moveTo(0, -130);
+  ctx.lineTo(0, 130);
   ctx.stroke();
 
+  //storcirkeln
   ctx.beginPath();
   ctx.strokeStyle = "#c3c3c3";
-  ctx.arc(O.X, O.Y, R, 0, 2 * Math.PI);
+  ctx.arc(0, 0, R, 0, 2 * Math.PI);
+  //ctx.arc(O.X, O.Y, R, 0, 2 * Math.PI);
   ctx.stroke();
 }
 
