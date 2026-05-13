@@ -86,7 +86,7 @@ export function drawCycloidScene({
   positionRef,
   tRef,
 }: CycloidSceneArgs) {
-  const { h, O, r, R } = geometry;
+  const { O, r, R } = geometry;
   const isCycloid = curveType === "cycloid";
   const smoothingValue = 20;
 
