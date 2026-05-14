@@ -26,7 +26,7 @@ export default function CurveCanvas() {
 
   useCanvasPointer({
     canvasRef,
-    viewportApi: camera,
+    cameraApi: camera,
   });
 
   useEffect(() => {

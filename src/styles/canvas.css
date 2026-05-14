@@ -32,6 +32,10 @@
   cursor: crosshair;
 }
 
+/* .canvas {
+  touch-action: none;
+} */
+
 .canvas {
   display: block;
   width: 100%;
@@ -43,6 +47,9 @@
   box-shadow:
     0 0 0 1px var(--surface-overlay-strong) inset,
     var(--shadow-card);
+
+  touch-action: none;
+  
 }
 
 .canvas-wrapper::after {
