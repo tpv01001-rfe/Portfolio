@@ -24,46 +24,49 @@ export default function XYChartTooltip({
     return null;
   }
 
-const tooltipWidth = 280;
-const tooltipHeight = 180;
-const gap = 8;
-const clearance = 14;
+  const tooltipWidth = 280;
+  const tooltipHeight = 180;
+  const gap = 8;
+  const clearance = 14;
 
-let left = group.anchorX + gap;
-let top = group.anchorY + clearance;
+  let left = group.anchorX + gap;
+  let top = group.anchorY + clearance;
 
-// håll inom höger/vänster kant
-left = Math.min(left, group.stageWidth - tooltipWidth - gap);
-left = Math.max(left, gap);
+  // håll inom höger/vänster kant
+  left = Math.min(left, group.stageWidth - tooltipWidth - gap);
+  left = Math.max(left, gap);
 
-// om tooltippen täcker den aktiva punkten, lägg den ovanför
-const coversActivePoint =
-  group.anchorX >= left &&
-  group.anchorX <= left + tooltipWidth &&
-  group.anchorY >= top &&
-  group.anchorY <= top + tooltipHeight;
+  // om tooltippen täcker den aktiva punkten, lägg den ovanför
+  const coversActivePoint =
+    group.anchorX >= left &&
+    group.anchorX <= left + tooltipWidth &&
+    group.anchorY >= top &&
+    group.anchorY <= top + tooltipHeight;
 
-if (coversActivePoint) {
-  top = group.anchorY - tooltipHeight - clearance;
-}
+  if (coversActivePoint) {
+    top = group.anchorY - tooltipHeight - clearance;
+  }
 
-// håll inom topp/botten
-top = Math.min(top, group.stageHeight - tooltipHeight - gap);
-top = Math.max(top, gap);
+  // håll inom topp/botten
+  top = Math.min(top, group.stageHeight - tooltipHeight - gap);
+  top = Math.max(top, gap);
 
-return (
+  const hasMultiplePoints = group.points.length > 1;
+
+  return (
     <div
-  className="xy-chart__tooltip"
-  style={{
-    transform: `translate(${left}px, ${top}px)`,
-  }}
-  onMouseEnter={onMouseEnter}
-  onMouseLeave={onMouseLeave}
->
+      className="xy-chart__tooltip"
+      style={{
+        transform: `translate(${left}px, ${top}px)`,
+      }}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       {group.points.length > 1 && (
         <div className="xy-chart__tooltip-list">
           {group.points.map((point) => {
             const isActive = point.id === activePoint.id;
+
 
             return (
               <button
@@ -90,7 +93,13 @@ return (
       )}
 
       <div className="xy-chart__tooltip-detail">
-        <div className="xy-chart__tooltip-title">{activePoint.seriesLabel}</div>
+        {!hasMultiplePoints && (
+          <div className="xy-chart__tooltip-title">
+            {activePoint.seriesLabel}
+          </div>
+        )}
+
+        {/* <div className="xy-chart__tooltip-title">{activePoint.seriesLabel}</div> */}
         <div>X: {activePoint.xValue}</div>
         <div>Y: {activePoint.yValue}</div>
 

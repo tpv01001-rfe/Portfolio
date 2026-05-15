@@ -1,11 +1,9 @@
-
 .canvas-wrapper {
   position: relative;
   width: 100%;
   aspect-ratio: 2 / 1;
   min-height: 240px;
 }
-
 
 .mini-map {
   position: absolute;
@@ -49,7 +47,6 @@
     var(--shadow-card);
 
   touch-action: none;
-  
 }
 
 .canvas-wrapper::after {
@@ -96,7 +93,6 @@
   --hud-accent-glow: rgba(255, 184, 77, 0.8);
 }
 
-
 .canvas-hud {
   position: absolute;
   top: 12px;
@@ -107,7 +103,7 @@
   padding: 10px 10px 12px;
   border-radius: 12px;
 
-  background: rgba(8, 13, 22, 0.1); 
+  background: rgba(8, 13, 22, 0.1);
   backdrop-filter: blur(6px);
 
   border: 1px solid rgba(255, 255, 255, 0.06);
@@ -117,13 +113,13 @@
 }
 
 .canvas-hud--collapsed {
-  width: 28px;               
-  height: 190px;              
+  width: 28px;
+  height: 190px;
 
   padding: 6px 4px;
   display: flex;
-  justify-content: center;    /* centrera knappen horisontellt */
-  align-items: flex-start;    /* toppen */
+  justify-content: center; /* centrera knappen horisontellt */
+  align-items: flex-start; /* toppen */
 
   background: rgba(8, 13, 22, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.06);
@@ -150,7 +146,6 @@
 .canvas-hud--collapsed .canvas-hud__toggle {
   margin-top: 6px;
 }
-
 
 .canvas-hud__header {
   display: flex;
@@ -290,6 +285,47 @@
   }
 }
 
+
+
+
+.canvas-reset-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+
+  padding: 0.5rem 0.9rem;
+
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 0.6rem;
+
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.92);
+
+  backdrop-filter: blur(2px);
+
+  cursor: pointer;
+
+  transition:
+    background 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.canvas-reset-button:hover {
+  background: rgba(255, 255, 255, 0.16);
+
+  border-color: rgba(255, 255, 255, 0.35);
+
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.08),
+    0 4px 14px rgba(0,0,0,0.22);
+}
+
+.canvas-reset-button:active {
+  transform: scale(0.98);
+}
+
 @media (max-width: 1200px) {
   .canvas-wrapper {
     min-height: 240px;
@@ -350,7 +386,6 @@
 .curve-lab-page__canvas .canvas-wrapper {
   position: relative;
 }
-
 
 .canvas-wrapper,
 .canvas {

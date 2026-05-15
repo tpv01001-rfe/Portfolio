@@ -133,7 +133,8 @@ export default function CurveCanvas() {
         height={400}
       />
 
-      <button
+      <button 
+      className="canvas-reset-button" 
         onClick={() =>
           camera.fitBounds({
             minX: -100,
