@@ -2,7 +2,7 @@
   "datasets": [
     {
       "id": "baseline",
-      "label": "Baseline",
+      "label": "Baseline XY",
       "data": [
         { "X": 0, "Y": 25, "ID": 0 },
         { "X": 1, "Y": 10, "ID": 1 },

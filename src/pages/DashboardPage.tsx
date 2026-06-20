@@ -54,10 +54,10 @@ export function DashboardPage({
   return (
     <div className="dashboard-page">
       <section className="dashboard-hero">
-        <p className="dashboard-hero__eyebrow">Overview</p>
+        <p className="dashboard-hero__eyebrow">&nbsp;</p>
         <h1 className="dashboard-hero__title">Portfolio</h1>
         <p className="dashboard-hero__description">
-          A modular environment for various experiments.
+          An environment for various test and experiments.
         </p>
       </section>
 
@@ -65,21 +65,21 @@ export function DashboardPage({
         <div className="dashboard-section__header">
           <h2 className="dashboard-section__title">Active Tools</h2>
           <p className="dashboard-section__description">
-            Open the tools you are actively building and refining.
+            Open the tools.
           </p>
         </div>
 
         <div className="dashboard-grid dashboard-grid--tools">
           <ToolCard
             title="Curve Lab"
-            description="Explore parametric curves, animation, responsive canvas behavior, and overlays."
+            description="Parametric curves animation, responsive canvas and pan/zoom."
             actionLabel="Open tool"
             onClick={onOpenCurveLab}
           />
 
           <ToolCard
             title="Charts Lab"
-            description="Build interactive XY and pie diagrams with axes, labels, click areas, and reusable chart structure."
+            description="Interactive charts, diagrams and reusable chart structure."
             actionLabel="Open tool"
             onClick={onOpenChartsLab}
           />
@@ -129,7 +129,7 @@ export function DashboardPage({
           />
           <FocusCard
             title="Diagram Tooling"
-            description="Cleaner architecture for imagemaps, labels, and click-driven detail views."
+            description="Cleaner architecture for labels, legends, and click-driven detail views."
           />
         </div>
       </section>
