@@ -81,8 +81,8 @@ export default function XYChartTooltip({
                 onClick={() => onSelect(point)}
               >
                 <span
-                  className="xy-chart__tooltip-swatch"
-                  style={{ backgroundColor: point.color ?? "currentColor" }}
+                  className={`xy-chart__tooltip-marker xy-chart__tooltip-marker--${point.markerShape}`}
+                  style={{ color: point.color }}
                 />
                 <span>{point.seriesLabel}</span>
                 <span>{point.id}</span>
