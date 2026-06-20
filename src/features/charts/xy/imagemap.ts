@@ -1,6 +1,6 @@
 import type { ChartScale, MarkerArea, XYPoint } from "./types";
 
-export function buildMarkerAreas(args: {
+export function buildMarkerAreas2(args: {
   data: XYPoint[];
   markerSize: number;
   scale: ChartScale;
