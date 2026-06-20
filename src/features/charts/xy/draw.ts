@@ -27,15 +27,6 @@ type DrawSeries = {
   data: XYPoint[];
 };
 
-//type DrawChartArgs = {
-//   ctx: CanvasRenderingContext2D;
-//   width: number;
-//   height: number;
-//   geometry: ChartGeometry;
-//   series: DrawSeries[];
-//   markerSize: number;
-//   markerStyle: MarkerStyleConfig;
-// };
 
 const markerDrawers: Record<XYMarkerShape, MarkerDrawFn> = {
   square: (ctx, x, y, size) => {
@@ -76,6 +67,7 @@ export function drawChart(args: {
   series: DrawSeries[];
   markerSize: number;
   markerStyle?: MarkerStyleConfig;
+  hoveredSeriesId?: string | null;
 }) {
   const {
     ctx,
@@ -85,6 +77,7 @@ export function drawChart(args: {
     series,
     markerSize,
     markerStyle,
+    hoveredSeriesId,
   } = args;
 
   const {
@@ -125,6 +118,8 @@ export function drawChart(args: {
 
   const safeSeries = Array.isArray(series) ? series : [];
 
+  
+/*
   for (const currentSeries of safeSeries) {
     drawSeriesLine(ctx, currentSeries.data, scale, currentSeries.color);
 
@@ -144,79 +139,42 @@ export function drawChart(args: {
       );
     }
   }
-}
-export function drawChart2(args: {
-  ctx: CanvasRenderingContext2D;
-  width: number;
-  height: number;
-  geometry: ChartGeometry;
-  series: DrawSeries[];
-  markerSize: number;
-  markerStyle?: MarkerStyleConfig;
-}) {
-  const {
-    ctx,
-    width,
-    height,
-    geometry,
-    series,
-    markerSize,
-  } = args;
+*/
+for (const currentSeries of safeSeries) {
+  const isDimmed =
+    hoveredSeriesId !== null &&
+    hoveredSeriesId !== currentSeries.id;
 
-  const {
-    plotArea,
-    scale,
-    axisPositions,
-    xTicks,
-    yTicks,
-  } = geometry;
+  const alpha = isDimmed ? 0.25 : 1;
 
-  clearCanvas(ctx, width, height);
-  drawChartSurface(ctx, width, height);
-  drawGrid(ctx, plotArea, scale, xTicks, yTicks);
+  ctx.save();
+  ctx.globalAlpha = alpha;
 
-  const xAxis: AxisLine = {
-    x1: plotArea.left,
-    y1: axisPositions.xAxisY,
-    x2: plotArea.right,
-    y2: axisPositions.xAxisY,
-    orientation: "x",
-  };
+  drawSeriesLine(ctx, currentSeries.data, scale, currentSeries.color);
 
-  const yAxis: AxisLine = {
-    x1: axisPositions.yAxisX,
-    y1: plotArea.top,
-    x2: axisPositions.yAxisX,
-    y2: plotArea.bottom,
-    orientation: "y",
-  };
+  for (const point of currentSeries.data) {
+    const x = scale.xToPx(point.X);
+    const y = scale.yToPx(point.Y);
+    const markerColor = getMarkerFill(point.Y, markerStyle);
 
-  drawAxis(ctx, xAxis, "rgba(230, 235, 240, 0.95)");
-  drawAxis(ctx, yAxis, "rgba(230, 235, 240, 0.95)");
-
-  drawXAxisTicks(ctx, scale, plotArea, xTicks);
-  drawYAxisTicks(ctx, scale, plotArea, yTicks);
-
-  drawAxisTitles(ctx, height, plotArea);
-
-  for (const currentSeries of series) {
-    drawSeriesLine(ctx, currentSeries.data, scale, currentSeries.color);
-
-    for (const point of currentSeries.data) {
-      const x = scale.xToPx(point.X);
-      const y = scale.yToPx(point.Y);
-
-      drawMarker(
-        ctx,
-        x,
-        y,
-        markerSize,
-        currentSeries.color,
-        currentSeries.markerShape
-      );
-    }
+    drawMarker(
+      ctx,
+      x,
+      y,
+      markerSize,
+      markerColor,
+      currentSeries.markerShape
+    );
   }
+
+  ctx.restore();
 }
+
+}
+
+
+
+
 function clearCanvas(
   ctx: CanvasRenderingContext2D,
   width: number,

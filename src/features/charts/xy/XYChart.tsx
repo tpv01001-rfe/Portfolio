@@ -19,7 +19,7 @@ import { drawChart } from "./draw";
 import { getPlotArea, getSeriesArea } from "./layout";
 import XYChartHotspot from "../components/XYChartHotspot";
 import XYChartTooltip from "../components/XYChartTooltip";
-
+import XYChartLegend from "../components/XYChartLegend";
 
 const DEFAULT_WIDTH = 640;
 const DEFAULT_HEIGHT = 440;
@@ -62,64 +62,66 @@ export default function XYChart({
   const [tooltipGroup, setTooltipGroup] = useState<XYChartTooltipGroup | null>(null);
   const [tooltipActiveId, setTooltipActiveId] = useState<string | null>(null);
   const [isTooltipHovered, setIsTooltipHovered] = useState(false);
+  const [hoveredSeriesId, setHoveredSeriesId] = useState<string | null>(null);
+
 
 
   //flera serier
-const tooltipPoints = useMemo<XYTooltipPoint[]>(() => {
-  if (series.length > 0) {
-    return series.flatMap((currentSeries) =>
-      currentSeries.data.map((point) => ({
-        id: `${currentSeries.id}:${String(point.ID)}`,
-        seriesId: currentSeries.id,
-        seriesLabel: currentSeries.label,
-        color: currentSeries.color,
-        markerShape: currentSeries.markerShape,
-        xValue: point.X,
-        yValue: point.Y,
-        raw: point,
-      }))
-    );
-  }
+  const tooltipPoints = useMemo<XYTooltipPoint[]>(() => {
+    if (series.length > 0) {
+      return series.flatMap((currentSeries) =>
+        currentSeries.data.map((point) => ({
+          id: `${currentSeries.id}:${String(point.ID)}`,
+          seriesId: currentSeries.id,
+          seriesLabel: currentSeries.label,
+          color: currentSeries.color,
+          markerShape: currentSeries.markerShape,
+          xValue: point.X,
+          yValue: point.Y,
+          raw: point,
+        }))
+      );
+    }
 
-  return data.map((point) => ({
-    id: String(point.ID),
-    seriesId: "default",
-    seriesLabel: "Serie 1",
-    color: markerStyle.defaultColor,
-    markerShape: "square",
-    xValue: point.X,
-    yValue: point.Y,
-    raw: point,
-  }));
-}, [data, series, markerStyle.defaultColor]);
-
-
-const normalizedSeries = useMemo<XYSeries[]>(() => {
-  if (series && series.length > 0) {
-    return series;
-  }
-
-  return [
-    {
-      id: "default",
-      label: "Serie 1",
+    return data.map((point) => ({
+      id: String(point.ID),
+      seriesId: "default",
+      seriesLabel: "Serie 1",
       color: markerStyle.defaultColor,
       markerShape: "square",
-      data: data ?? [],
-    },
-  ];
-}, [data, series, markerStyle.defaultColor]);
-
-const allPoints = useMemo<XYPoint[]>(() => {
-  return normalizedSeries.flatMap((currentSeries) => currentSeries.data);
-}, [normalizedSeries]);
-
-const sortedData = useMemo(() => {
-  return [...allPoints].sort((a, b) => a.X - b.X);
-}, [allPoints]);
+      xValue: point.X,
+      yValue: point.Y,
+      raw: point,
+    }));
+  }, [data, series, markerStyle.defaultColor]);
 
 
-//flera serier
+  const normalizedSeries = useMemo<XYSeries[]>(() => {
+    if (series && series.length > 0) {
+      return series;
+    }
+
+    return [
+      {
+        id: "default",
+        label: "Serie 1",
+        color: markerStyle.defaultColor,
+        markerShape: "square",
+        data: data ?? [],
+      },
+    ];
+  }, [data, series, markerStyle.defaultColor]);
+
+  const allPoints = useMemo<XYPoint[]>(() => {
+    return normalizedSeries.flatMap((currentSeries) => currentSeries.data);
+  }, [normalizedSeries]);
+
+  const sortedData = useMemo(() => {
+    return [...allPoints].sort((a, b) => a.X - b.X);
+  }, [allPoints]);
+
+
+  //flera serier
 
   const xDomain = useMemo(() => {
     if (sortedData.length === 0) {
@@ -242,8 +244,8 @@ const sortedData = useMemo(() => {
       const width = Math.max(1, Math.round(rect.width));
       const height = Math.max(1, Math.round(rect.height));
 
-//       const width = Math.max(1, Math.round(rect.width));
-// const height = Math.round(width * 0.6); // t.ex. 16:10-ish
+      //       const width = Math.max(1, Math.round(rect.width));
+      // const height = Math.round(width * 0.6); // t.ex. 16:10-ish
 
       if (canvas.width !== width || canvas.height !== height) {
         canvas.width = width;
@@ -283,29 +285,18 @@ const sortedData = useMemo(() => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // drawChart({
-    //   ctx,
-    //   width: chartSize.width,
-    //   height: chartSize.height,
-    //   geometry,
-    //   data: sortedData,
-    //   markerSize,
-    //   markerStyle,
-    // });
+    drawChart({
+      ctx,
+      width: chartSize.width,
+      height: chartSize.height,
+      geometry,
+      series: normalizedSeries,
+      markerSize,
+      markerStyle,
+      hoveredSeriesId,
+    });
 
-  
-
-drawChart({
-  ctx,
-  width: chartSize.width,
-  height: chartSize.height,
-  geometry,
-  series: normalizedSeries,
-  markerSize,
-  markerStyle,
-});
-
-  }, [chartSize.height, chartSize.width, markerSize, maxY, plotArea, scale, sortedData, xTickCount, yTickCount]);
+  }, [chartSize.height, chartSize.width, markerSize, maxY, plotArea, scale, sortedData, xTickCount, yTickCount, hoveredSeriesId]);
 
   const handleHotspotEnter = (node: XYChartOverlayNode) => {
     setHoveredNodeId(node.id);
@@ -387,6 +378,13 @@ drawChart({
           )}
 
         </div>
+        <XYChartLegend
+          series={normalizedSeries}
+          hoveredSeriesId={hoveredSeriesId}
+          onSeriesHoverStart={setHoveredSeriesId}
+          onSeriesHoverEnd={() => setHoveredSeriesId(null)}
+        />
+
       </div>
 
       {selectedPoint && (
