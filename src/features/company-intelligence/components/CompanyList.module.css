@@ -1,0 +1,105 @@
+.container {
+  min-width: 0;
+}
+
+.heading {
+  margin: 0 0 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary, #e5e7eb);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.companyButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+
+  width: 100%;
+  min-width: 0;
+  padding: 0.7rem 0.85rem;
+
+  background: rgba(255, 255, 255, 0.025);
+  color: var(--text-primary, #e5e7eb);
+
+  border: 1px solid var(--border-color, #263244);
+  border-radius: 8px;
+
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.companyButton:hover {
+  background: rgba(111, 177, 255, 0.08);
+  border-color: rgba(111, 177, 255, 0.4);
+}
+
+.companyButton:focus-visible {
+  outline: 2px solid #6fb1ff;
+  outline-offset: 2px;
+}
+
+.selected {
+  background: rgba(111, 177, 255, 0.12);
+  border-color: #6fb1ff;
+}
+
+.companyInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.companyName {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.companySector {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  font-size: 0.75rem;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: var(--text-secondary, #94a3b8);
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.selected .chevron {
+  color: #6fb1ff;
+}
+
+.empty {
+  color: var(--text-secondary, #94a3b8);
+  font-size: 0.85rem;
+}
+

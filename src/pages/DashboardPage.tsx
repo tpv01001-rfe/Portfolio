@@ -1,6 +1,7 @@
 type DashboardPageProps = {
   onOpenCurveLab: () => void;
   onOpenChartsLab: () => void;
+  onOpencompanyIntelligence: () => void;
 };
 
 type ToolCardProps = {
@@ -50,6 +51,7 @@ function FocusCard({ title, description }: FocusCardProps) {
 export function DashboardPage({
   onOpenCurveLab,
   onOpenChartsLab,
+  onOpencompanyIntelligence,
 }: DashboardPageProps) {
   return (
     <div className="dashboard-page">
@@ -82,6 +84,13 @@ export function DashboardPage({
             description="Interactive charts, diagrams and reusable chart structure."
             actionLabel="Open tool"
             onClick={onOpenChartsLab}
+          />
+
+          <ToolCard
+            title="Company Intelligence"
+            description="Explore company data and insights. Leaflet maps"
+            actionLabel="Open tool"
+            onClick={onOpencompanyIntelligence}
           />
         </div>
       </section>

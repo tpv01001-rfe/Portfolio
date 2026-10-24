@@ -1,0 +1,70 @@
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.label {
+  font-size: 0.74rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.control {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 42px;
+  padding: 0 14px;
+
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  background: rgba(255, 255, 255, 0.045);
+  color: rgba(236, 244, 252, 0.95);
+
+  font: inherit;
+  font-size: 0.85rem;
+
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.control:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(120, 220, 255, 0.24);
+  box-shadow: 0 0 0 4px rgba(60, 180, 255, 0.06);
+}
+
+.control:focus-visible {
+  outline: none;
+  border-color: rgba(120, 220, 255, 0.55);
+  box-shadow: 0 0 0 4px rgba(60, 180, 255, 0.1);
+}
+
+.control::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.select {
+  cursor: pointer;
+  color-scheme: dark;
+}
+
+.select option {
+  background: #0c1018;
+  color: #ecf4fc;
+}

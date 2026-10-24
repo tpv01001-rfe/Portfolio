@@ -10,6 +10,7 @@ import { defaultView, type ActiveView } from "./shared/ui/layout/navigation";
 import { DashboardPage } from "./pages/DashboardPage";
 import { ChartsLabPage } from "./pages/ChartsLabPage";
 import { CurveLabScreen } from "./features/curve-lab/CurveLabScreen";
+import { CompanyIntelligencePage } from "./pages/CompanyIntelligencePage";
 
 export default function App() {
   const [activeView, setActiveView] = useState<ActiveView>(defaultView);
@@ -24,6 +25,7 @@ export default function App() {
         <DashboardPage
           onOpenCurveLab={() => setActiveView("curve-lab")}
           onOpenChartsLab={() => setActiveView("charts-lab")}
+          onOpencompanyIntelligence={() => setActiveView("company-intelligence")} 
         />
       );
       break;
@@ -35,6 +37,10 @@ export default function App() {
     case "charts-lab":
       page = <ChartsLabPage />;
       break;
+
+    case "company-intelligence":
+      page = <CompanyIntelligencePage />;
+      break;  
   }
 
   return (

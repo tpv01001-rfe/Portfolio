@@ -1,0 +1,163 @@
+[
+  {
+    "id": "cpy01",
+    "name": "Företag 1 AB",
+    "sector": "Information Technology",
+    "city": "Svedala",
+    "country": "Sweden"
+  },
+  {
+    "id": "cpy02",
+    "name": "Företag 2 AB",
+    "sector": "Agriculture & Farming",
+    "city": "Svedala",
+    "country": "Sweden"
+  },
+  {
+    "id": "cpy03",
+    "name": "Företag 3 AB",
+    "sector": "Defence",
+    "city": "Svedala",
+    "country": "Sweden"
+  },
+  {
+    "id": "cpy04",
+    "name": "Företag 4 AB",
+    "sector": "Other",
+    "city": "Svedala",
+    "country": "Sweden"
+  },
+  {
+    "id": "cpy05",
+    "name": "Företag 5 AB",
+    "sector": "GreenTech",
+    "city": "Svedala",
+    "country": "Sweden"
+  },
+  {
+    "id": "cpy06",
+    "name": "Företag 6 AB",
+    "sector": "Robotics & Manufacturing",
+    "city": "Svedala",
+    "country": "Sweden"
+  },
+    {
+    "id": "cpy07",
+    "name": "Företag 7 AB",
+    "sector": "Health",
+    "city": "Svedala",
+    "country": "Sweden"
+  },
+  {
+    "id": "cpy08",
+    "name": "Företag 8 AB",
+    "sector": "Science & Engineering",
+    "city": "Svedala",
+    "country": "Sweden"
+  },
+  {
+    "id": "cpy09",
+    "name": "Företag 9 AB",
+    "sector": "Transportation & Logistics",
+    "city": "Svedala",
+    "country": "Sweden"
+  },
+  {
+    "id": "cpy10",
+    "name": "Företag 10 AB",
+    "sector": "Health",
+    "city": "Svedala",
+    "country": "Sweden"
+  },
+  {
+    "id": "cpy11",
+    "name": "Företag 11 AB",
+    "sector": "Health",
+    "city": "Svedala",
+    "country": "Sweden"
+  },
+  {
+    "id": "cpy12",
+    "name": "Företag 12 AB",
+    "sector": "Health",
+    "city": "Svedala",
+    "country": "Sweden"
+  },
+  {
+    "id": "cpy13",
+    "name": "Företag 13 AB",
+    "sector": "Health",
+    "city": "Svedala",
+    "country": "Sweden"
+  },
+  {
+    "id": "cpy14",
+    "name": "Företag 14 AB",
+    "sector": "Telecommunication",
+    "city": "Svedala",
+    "country": "Sweden"
+  },
+  {
+    "id": "cpy15",
+    "name": "Företag 15 AB",
+    "sector": "Food & Beverages",
+    "city": "Svedala",
+    "country": "Sweden"
+  },
+  {
+    "id": "cpy16",
+    "name": "Företag 16 AB",
+    "sector": "Health",
+    "city": "Svedala",
+    "country": "Sweden"
+  },
+  {
+    "id": "cpy17",
+    "name": "Företag 17AB",
+    "sector": "Science & Engineering",
+    "city": "Svedala",
+    "country": "Sweden"
+  },
+  {
+    "id": "cpy18",
+    "name": "Företag 18 AB",
+    "sector": "Health",
+    "city": "Svedala",
+    "country": "Sweden"
+  },
+  {
+    "id": "cpy19",
+    "name": "Företag 19 AB",
+    "sector": "Information Technology",
+    "city": "Svedala",
+    "country": "Sweden"
+  },
+  {
+    "id": "cpy20",
+    "name": "Företag 20 AB",
+    "sector": "Science & Engineering",
+    "city": "Svedala",
+    "country": "Sweden"
+  },
+  {
+    "id": "cpy21",
+    "name": "Företag 21 AB",
+    "sector": "Health",
+    "city": "Svedala",
+    "country": "Sweden"
+  },
+  {
+    "id": "cpy22",
+    "name": "Företag 22 AB",
+    "sector": "Data & Analytics",
+    "city": "Svedala",
+    "country": "Sweden"
+  },
+  {
+    "id": "cpy23",
+    "name": "Företag 23 AB",
+    "sector": "Food & Beverages",
+    "city": "Svedala",
+    "country": "Sweden"
+  }
+]

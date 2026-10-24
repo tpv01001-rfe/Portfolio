@@ -1,4 +1,4 @@
-export type ActiveView = "overview" | "curve-lab" | "charts-lab";
+export type ActiveView = "overview" | "curve-lab" | "charts-lab" | "company-intelligence";
 
 export const defaultView: ActiveView = "overview";
 
@@ -10,6 +10,8 @@ export const getViewTitle = (view: ActiveView): string => {
       return "Curve Lab";
     case "charts-lab":
       return "Charts Lab";
+    case "company-intelligence":
+      return "Company Intelligence";
     default:
       return "Workspace";
   }
@@ -22,4 +24,5 @@ export const navItems: Array<{
   { id: "overview", label: "Overview" },
   { id: "curve-lab", label: "Curve Lab" },
   { id: "charts-lab", label: "Charts Lab" },
+  { id: "company-intelligence", label: "Company Intelligence" },
 ];
