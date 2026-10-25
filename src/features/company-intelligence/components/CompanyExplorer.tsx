@@ -3,20 +3,15 @@ import { useEffect, useMemo, useState } from "react";
 import styles from "./CompanyExplorer.module.css";
 
 import { CompanyFilters } from "./CompanyFilters";
-import type { CompanySector } from "../data/companyTypes";
+import type { CompanyId, CompanySector } from "../data/companyTypes";
 
 import { CompanyList } from "./CompanyList";
 import { CompanyDetails } from "./CompanyDetails";
 
-import {
-  getCompany,
-  getCompanyIndex,
-} from "../data/companyRepository";
+import { getCompany, getCompanyIndex } from "../data/companyRepository";
 
-import type {
-  Company,
-  CompanyIndexEntry,
-} from "../data/companyTypes";
+import type { Company, CompanyIndexEntry } from "../data/companyTypes";
+import { CompanyMap } from "../map/CompanyMap";
 
 export function CompanyExplorer() {
   const [companies, setCompanies] = useState<CompanyIndexEntry[]>([]);
@@ -67,20 +62,21 @@ export function CompanyExplorer() {
     loadCompanies();
   }, []);
 
-  async function handleSelectCompany(id: string) {
-    try {
-      setError(null);
 
+
+  const handleSelectCompany = async (id: CompanyId) => {
+    if (selectedCompany?.id === id) {
+      setSelectedCompany(null);
+      return;
+    }
+
+    try {
       const company = await getCompany(id);
       setSelectedCompany(company);
     } catch (error) {
-      setError(
-        error instanceof Error
-          ? error.message
-          : "Failed to load company"
-      );
+      console.error("Failed to load company:", error);
     }
-  }
+  };
 
   if (isLoading) {
     return <p>Loading companies...</p>;
@@ -92,65 +88,46 @@ export function CompanyExplorer() {
 
 
   return (
-  <div className={styles.explorer}>
-    <aside className={styles.sidebar}>
-      <CompanyFilters
-        search={search}
-        sector={sector}
-        sectors={sectors}
-        onSearchChange={setSearch}
-        onSectorChange={setSector}
-      />
+    <div className={styles.explorer}>
+      <aside className={styles.sidebar}>
+        <CompanyFilters
+          search={search}
+          sector={sector}
+          sectors={sectors}
+          onSearchChange={setSearch}
+          onSectorChange={setSector}
+        />
 
-      <p className={styles.results}>
-        Showing {filteredCompanies.length} of {companies.length} companies
-      </p>
+        <p className={styles.results}>
+          Showing {filteredCompanies.length} of {companies.length} companies
+        </p>
 
-      <CompanyList
-        companies={filteredCompanies}
-        onSelectCompany={handleSelectCompany}
-      />
-    </aside>
+        <CompanyList
+          companies={filteredCompanies}
+          selectedCompanyId={selectedCompany?.id ?? null}
+          onSelectCompany={handleSelectCompany}
+        />
+      </aside>
 
-    <section className={styles.content}>
-      {error && <p role="alert">{error}</p>}
+      <section className={styles.content}>
+        <CompanyMap
+          visibleCompanyIds={filteredCompanies.map((company) => company.id)}
+          selectedCompanyId={selectedCompany?.id ?? null}
+          onSelectCompany={handleSelectCompany}
+        />
 
-      {selectedCompany ? (
-        <CompanyDetails company={selectedCompany} />
-      ) : (
-        <div className={styles.emptyState}>
-          <p>Select a company to explore its profile.</p>
-        </div>
-      )}
-    </section>
-  </div>
-);
-/*
-  return (
-    <>
-      <CompanyFilters
-        search={search}
-        sector={sector}
-        sectors={sectors}
-        onSearchChange={setSearch}
-        onSectorChange={setSector}
-      />
+        {error && <p role="alert">{error}</p>}
 
-      <p>
-        Showing {filteredCompanies.length} of {companies.length} companies
-      </p>
+        {selectedCompany ? (
+          <CompanyDetails company={selectedCompany} />
+        ) : (
+          <div className={styles.emptyState}>
+            <p>Select a company to explore its profile.</p>
+          </div>
+        )}
+      </section>
 
-      <CompanyList
-        companies={filteredCompanies}
-        onSelectCompany={handleSelectCompany}
-      />
 
-      {error && <p>{error}</p>}
-
-      {selectedCompany && (
-        <CompanyDetails company={selectedCompany} />
-      )}
-    </>
+    </div>
   );
-  */
 }

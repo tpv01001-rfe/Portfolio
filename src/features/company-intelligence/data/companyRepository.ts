@@ -37,3 +37,17 @@ export async function getCompany(id: CompanyId): Promise<Company> {
     data,
   };
 }
+
+export async function getCompanyGeoJson(): Promise<GeoJSON.FeatureCollection> {
+  const response = await fetch(
+    `${DATA_BASE_URL}companies.geojson`
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      `Failed to load company GeoJSON: ${response.status}`
+    );
+  }
+
+  return response.json();
+}
