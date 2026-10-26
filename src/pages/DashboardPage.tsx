@@ -81,7 +81,7 @@ export function DashboardPage({
 
           <ToolCard
             title="Charts Lab"
-            description="Interactive charts, diagrams and reusable chart structure."
+            description="Olika diagram med klickbara ytor och återanvändbar diagramstruktur."
             actionLabel="Open tool"
             onClick={onOpenChartsLab}
           />

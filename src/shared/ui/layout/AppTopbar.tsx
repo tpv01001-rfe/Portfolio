@@ -9,9 +9,10 @@ export function AppTopbar({ activeView }: AppTopbarProps) {
   const title = getViewTitle(activeView);
 
   const subtitleMap: Record<ActiveView, string> = {
-    overview: "Active tools, current work, and next experiments",
-    "curve-lab": "Parametric curves, animation, and interactive controls",
-    "charts-lab": "Interactive diagrams, axes, labels, and click areas",
+    overview: "Olika typer av applikationer för experiment och lärande",
+    "curve-lab": "Interaktiva parametriska kurvor",
+    "charts-lab": "Olika diagram med klickbara ytor",
+    "company-intelligence": "Företagsinformation, nyckeltal och Leafletkarta",
   };
 
   return (
