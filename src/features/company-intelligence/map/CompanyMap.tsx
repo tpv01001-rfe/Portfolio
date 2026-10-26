@@ -5,6 +5,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 import styles from "./CompanyMap.module.css";
+
 import {
   type MarkerOffset,
   type MarkerPosition,
@@ -20,6 +21,8 @@ interface CompanyMapProps {
   visibleCompanyIds: CompanyId[];
   selectedCompanyId: CompanyId | null;
   onSelectCompany: (id: CompanyId) => void;
+  onClearSelection: () => void;
+  onOpenReport: (id: CompanyId) => void;
 }
 
 function applyMarkerOffset(
@@ -42,6 +45,8 @@ export function CompanyMap({
   visibleCompanyIds,
   selectedCompanyId,
   onSelectCompany,
+  onOpenReport,
+  onClearSelection,
 }: CompanyMapProps) {
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -52,6 +57,19 @@ export function CompanyMap({
   const visibleLayerRef = useRef<L.LayerGroup | null>(null);
   const selectedCompanyIdRef = useRef(selectedCompanyId);
   selectedCompanyIdRef.current = selectedCompanyId;
+
+  const onClearSelectionRef = useRef(onClearSelection);
+
+useEffect(() => {
+  onClearSelectionRef.current = onClearSelection;
+}, [onClearSelection]);
+
+  const onOpenReportRef = useRef(onOpenReport);
+
+useEffect(() => {
+  onOpenReportRef.current = onOpenReport;
+}, [onOpenReport]);
+
 
   useEffect(() => {
     const container = containerRef.current;
@@ -73,6 +91,11 @@ export function CompanyMap({
         attribution: "&copy; OpenStreetMap contributors",
       }
     ).addTo(map);
+
+    map.on("click", () => {
+  onClearSelectionRef.current();
+});
+
     return () => {
       map.remove();
       mapRef.current = null;
@@ -121,6 +144,10 @@ export function CompanyMap({
     markersRef.current.clear();
 
     const companyLayer = L.geoJSON(geoData, {
+
+
+
+/*
       pointToLayer: (feature, latlng) => {
         const id = String(feature.properties?.id);
 
@@ -147,7 +174,80 @@ export function CompanyMap({
         markersRef.current.set(id, marker);
 
         return marker;
-      },
+      }*/
+      
+      pointToLayer: (feature, latlng) => {
+  const id = String(feature.properties?.id);
+  const name = String(feature.properties?.name ?? id);
+
+  const sector = feature.properties?.sector as
+    | CompanySector
+    | undefined;
+
+  const color = sector
+    ? companySectorColors[sector] ?? "#D0D0D0"
+    : "#D0D0D0";
+
+  const marker = L.circleMarker(latlng, {
+    radius: 4,
+    color: "#333333",
+    weight: 1,
+    fillColor: color,
+    fillOpacity: 0.9,
+    bubblingMouseEvents: false, // Förhindrar att markörens klickhändelse också utlöser kartans klickhändelse
+  });                           
+
+  // Visa företagsnamn vid hover.
+  marker.bindTooltip(name, {
+    direction: "top",
+    offset: L.point(0, -8),
+    opacity: 0.95,
+  });
+
+  // Popup som öppnas vid klick.
+  const popupContent = document.createElement("div");
+popupContent.className = styles.popupContent;
+
+  const title = document.createElement("strong");
+  title.textContent = name;
+
+const reportLink = document.createElement("a");
+reportLink.href = "#";
+reportLink.className = styles.reportLink;
+
+const label = document.createElement("span");
+label.textContent = "View Report";
+
+const arrow = document.createElement("span");
+arrow.textContent = "↗";
+arrow.setAttribute("aria-hidden", "true");
+
+reportLink.append(label, arrow);
+
+  reportLink.addEventListener("click", (event) => {
+    event.preventDefault();
+    onOpenReportRef.current(id);
+    marker.closePopup();
+  });
+
+  popupContent.append(title, reportLink);
+
+  //styr utsseendet via lokal css
+marker.bindPopup(popupContent, {
+  className: styles.companyPopup,
+});
+  // Behåll befintligt beteende vid markörklick.
+  // marker.on("click", () => {
+  //   onSelectCompanyRef.current(id);
+  // });
+marker.on("click", () => {
+  //marker.openPopup();
+  onSelectCompanyRef.current(id);
+});
+  markersRef.current.set(id, marker);
+
+  return marker;
+},
     });
 
     const visibleLayer = L.layerGroup().addTo(map);
@@ -212,6 +312,44 @@ export function CompanyMap({
     };
   }, [geoData]);
 
+  // Uppdatera synliga markörer när visibleCompanyIds ändras.
+  useEffect(() => {
+  const visibleLayer = visibleLayerRef.current;
+
+  if (!visibleLayer) return;
+
+  const visibleIds = new Set(visibleCompanyIds);
+
+  markersRef.current.forEach((marker, id) => {
+    const shouldBeVisible = visibleIds.has(id);
+    const isVisible = visibleLayer.hasLayer(marker);
+
+    if (shouldBeVisible && !isVisible) {
+      visibleLayer.addLayer(marker);
+    } else if (!shouldBeVisible && isVisible) {
+      visibleLayer.removeLayer(marker);
+    }
+  });
+}, [visibleCompanyIds, geoData]);
+
+//panorera till den valda företagsmarkören när selectedCompanyId ändras.
+useEffect(() => {
+  const map = mapRef.current;
+
+  if (!map || !selectedCompanyId) return;
+
+  const marker = markersRef.current.get(selectedCompanyId);
+
+  if (!marker) return;
+
+  map.panTo(marker.getLatLng(), {
+    animate: true,
+    duration: 0.6,
+  });
+}, [selectedCompanyId, geoData]);
+
+
+  /*
   useEffect(() => {
     const visibleLayer = visibleLayerRef.current;
 
@@ -226,7 +364,7 @@ export function CompanyMap({
       }
     }
   }, [visibleCompanyIds, geoData]);
-
+*/
   useEffect(() => {
     const zoom = mapRef.current?.getZoom() ?? 14;
     const markerRadius = getMarkerRadius(zoom);
@@ -245,6 +383,12 @@ export function CompanyMap({
       }
     });
   }, [selectedCompanyId, geoData]);
+
+//   const onOpenReportRef = useRef(onOpenReport);
+
+// useEffect(() => {
+//   onOpenReportRef.current = onOpenReport;
+// }, [onOpenReport]);
 
   return (
     <div className={styles.mapContainer}>

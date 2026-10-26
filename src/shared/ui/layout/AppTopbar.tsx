@@ -12,7 +12,7 @@ export function AppTopbar({ activeView }: AppTopbarProps) {
     overview: "Olika typer av applikationer för experiment och lärande",
     "curve-lab": "Interaktiva parametriska kurvor",
     "charts-lab": "Olika diagram med klickbara ytor",
-    "company-intelligence": "Företagsinformation, nyckeltal och Leafletkarta",
+    "company-intelligence": "Företagsinformation, nyckeltal. JSON-data och Leafletkarta",
   };
 
   return (

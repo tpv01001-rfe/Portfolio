@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import styles from "./CompanyExplorer.module.css";
 
 import { CompanyFilters } from "./CompanyFilters";
-import type { CompanyId, CompanySector } from "../data/companyTypes";
+import type { CompanyId, CompanyRaw, CompanySector } from "../data/companyTypes";
 
 import { CompanyList } from "./CompanyList";
 import { CompanyDetails } from "./CompanyDetails";
@@ -12,6 +12,9 @@ import { getCompany, getCompanyIndex } from "../data/companyRepository";
 
 import type { Company, CompanyIndexEntry } from "../data/companyTypes";
 import { CompanyMap } from "../map/CompanyMap";
+
+import { ReportModal } from "../report/ReportModal";
+
 
 export function CompanyExplorer() {
   const [companies, setCompanies] = useState<CompanyIndexEntry[]>([]);
@@ -22,6 +25,8 @@ export function CompanyExplorer() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const [reportCompany, setReportCompany] = useState<CompanyRaw | null>(null);
 
   const sectors = useMemo(() => {
     return [...new Set(companies.map((company) => company.sector))]
@@ -62,13 +67,24 @@ export function CompanyExplorer() {
     loadCompanies();
   }, []);
 
+  const handleOpenReport = async (id: CompanyId) => {
+    if (!selectedCompany) return;
 
-
-  const handleSelectCompany = async (id: CompanyId) => {
-    if (selectedCompany?.id === id) {
-      setSelectedCompany(null);
-      return;
+    try {
+      const company = await getCompany(id);
+      setReportCompany(company.data);
+    } catch (error) {
+      console.error("Failed to load company report:", error);
     }
+  };
+  const handleSelectCompany = async (id: CompanyId) => {
+    // if (selectedCompany?.id === id) {
+    //   setSelectedCompany(null);
+    //   return;
+    // }
+    if (selectedCompany?.id === id) {
+  return;
+}
 
     try {
       const company = await getCompany(id);
@@ -77,6 +93,10 @@ export function CompanyExplorer() {
       console.error("Failed to load company:", error);
     }
   };
+
+  const handleClearSelection = () => {
+  setSelectedCompany(null);
+};
 
   if (isLoading) {
     return <p>Loading companies...</p>;
@@ -114,18 +134,32 @@ export function CompanyExplorer() {
           visibleCompanyIds={filteredCompanies.map((company) => company.id)}
           selectedCompanyId={selectedCompany?.id ?? null}
           onSelectCompany={handleSelectCompany}
+          onOpenReport={handleOpenReport}
+          onClearSelection={handleClearSelection}
         />
 
         {error && <p role="alert">{error}</p>}
 
         {selectedCompany ? (
-          <CompanyDetails company={selectedCompany} />
+          <CompanyDetails
+            company={selectedCompany}
+            onOpenReport={() => {
+              if (selectedCompany) {
+                void handleOpenReport(selectedCompany.id);
+              }
+            }}
+          />
         ) : (
           <div className={styles.emptyState}>
             <p>Select a company to explore its profile.</p>
           </div>
         )}
       </section>
+
+      <ReportModal
+        company={reportCompany}
+        onClose={() => setReportCompany(null)}
+      />
 
 
     </div>

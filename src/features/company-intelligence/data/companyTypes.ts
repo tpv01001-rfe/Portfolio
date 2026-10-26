@@ -49,10 +49,10 @@ export interface CompanyRaw {
   acquisitions_made: string[] | null;
   merger_activity: string | null;
 
-  partners: string[];
+  partners: string[] | null;
   partnership_signal: string | null;
 
-  customer_segments: string[];
+  customer_segments: string[] | null;
   notable_clients: string[] | null;
   target_market: string | null;
 

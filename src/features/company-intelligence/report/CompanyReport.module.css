@@ -1,0 +1,184 @@
+.report {
+  --primary: #0f6cbd;
+  --secondary: #115ea3;
+  --background: #f5f7fa;
+  --card: #ffffff;
+  --text: #323130;
+
+  background: var(--background);
+  color: var(--text);
+  font-family: "Segoe UI", sans-serif;
+  line-height: 1.6;
+  min-height: 100%;
+}
+
+.report * {
+  box-sizing: border-box;
+}
+
+.header {
+  padding: 48px;
+  background: linear-gradient(
+    135deg,
+    var(--primary),
+    var(--secondary)
+  );
+  color: white;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 30px;
+}
+
+.card,
+.swotCard,
+.kpi {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 6%);
+}
+
+.card {
+  margin-bottom: 24px;
+}
+
+.card h2 {
+  margin-top: 0;
+  color: var(--primary);
+}
+
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(180px, 1fr)
+  );
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.kpi {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+}
+
+.kpi strong {
+  font-size: 1.8rem;
+  color: var(--primary);
+}
+
+.kpi span {
+  color: #666;
+}
+
+.swotGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.swotCard h3 {
+  margin-top: 0;
+}
+
+.swotCard ul {
+  padding-left: 20px;
+}
+
+.strength {
+  border-left: 6px solid #107c10;
+}
+
+.weakness {
+  border-left: 6px solid #d13438;
+}
+
+.opportunity {
+  border-left: 6px solid #0f6cbd;
+}
+
+.threat {
+  border-left: 6px solid #ff8c00;
+}
+
+.scores {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(250px, 1fr)
+  );
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.scores .card {
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.scoreNumber {
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.scoreBar {
+  height: 24px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #e5e5e5;
+}
+
+.scoreFill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    #107c10,
+    #0f6cbd
+  );
+}
+
+.report address {
+  margin-top: 16px;
+  font-style: normal;
+}
+
+.footer {
+  padding: 30px;
+  text-align: center;
+  color: #666;
+}
+
+@media (max-width: 700px) {
+  .header {
+    padding: 28px 20px;
+  }
+
+  .content {
+    padding: 16px;
+  }
+
+  .swotGrid {
+    grid-template-columns: 1fr;
+  }
+}

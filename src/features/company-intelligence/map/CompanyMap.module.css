@@ -13,3 +13,68 @@
   height: 420px;
   background: #101820;
 }
+
+.popupContent {
+  min-width: 170px;
+}
+
+.reportLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  margin-top: 12px;
+  padding: 9px 12px;
+
+  border: 1px solid #365b80;
+  border-radius: 6px;
+
+  background: #192b3d;
+  color: #a8d4ff;
+
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.reportLink:hover {
+  background: #25415b;
+  border-color: #6fb1ff;
+  color: #ffffff;
+}
+
+.reportLink:focus-visible {
+  outline: 2px solid #6fb1ff;
+  outline-offset: 3px;
+}
+
+.companyPopup :global(.leaflet-popup-content-wrapper) {
+  background: #202a36;
+  color: #e5edf5;
+  border: 1px solid #36485c;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.companyPopup :global(.leaflet-popup-content) {
+  margin: 14px 16px;
+  min-width: 170px;
+}
+
+.companyPopup :global(.leaflet-popup-tip) {
+  background: #202a36;
+}
+
+.companyPopup :global(.leaflet-popup-close-button) {
+  color: #a8b8ca;
+}
+
+.companyPopup :global(.leaflet-popup-close-button:hover) {
+  color: #ffffff;
+}
