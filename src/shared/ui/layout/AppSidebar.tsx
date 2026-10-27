@@ -8,6 +8,13 @@ type AppSidebarProps = {
   onToggleSidebar: () => void;
 };
 
+const navSymbols: Record<ActiveView, string> = {
+  overview: "◧",
+  "curve-lab": "∿",
+  "charts-lab": "⋮",
+  "company-intelligence": "⌖",
+};
+
 export function AppSidebar({
   activeView,
   isSidebarCollapsed,
@@ -26,7 +33,7 @@ export function AppSidebar({
       <div className="dashboard-sidebar__header">
         {!isSidebarCollapsed && (
           <div className="dashboard-sidebar__brand">
-            <p className="dashboard-sidebar__eyebrow">Portfolio</p>
+            <p className="dashboard-sidebar__eyebrow">Portfölj</p>
             <h1 className="dashboard-sidebar__title">Rickard</h1>
           </div>
         )}
@@ -35,8 +42,8 @@ export function AppSidebar({
           type="button"
           className="dashboard-sidebar__toggle"
           onClick={onToggleSidebar}
-          aria-label={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-          title={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          aria-label={isSidebarCollapsed ? "Expandera sidopanelen" : "Fäll ihop sidopanelen"}
+          title={isSidebarCollapsed ? "Expandera sidopanelen" : "Fäll ihop sidopanelen"}
         >
           {isSidebarCollapsed ? "→" : "←"}
         </button>
@@ -44,7 +51,7 @@ export function AppSidebar({
 
       <nav className="dashboard-sidebar__nav">
         {!isSidebarCollapsed && (
-          <div className="dashboard-sidebar__section-label">Tools</div>
+          <div className="dashboard-sidebar__section-label">&nbsp;</div>
         )}
 
         {navItems.map((item) => {
@@ -64,11 +71,7 @@ export function AppSidebar({
               title={isSidebarCollapsed ? item.label : undefined}
             >
               <span className="dashboard-sidebar__nav-icon">
-                {item.id === "overview"
-                  ? "◧"
-                  : item.id === "curve-lab"
-                    ? "◌"
-                    : "△"}
+                    {navSymbols[item.id]}
               </span>
 
               {!isSidebarCollapsed && (
@@ -83,9 +86,9 @@ export function AppSidebar({
 
       {!isSidebarCollapsed && (
         <div className="dashboard-sidebar__footer">
-          <p className="dashboard-sidebar__footer-label">Current direction</p>
+          <p className="dashboard-sidebar__footer-label">På gång</p>
           <p className="dashboard-sidebar__footer-text">
-            Adding moor tools.
+            Fler projekt och funktioner tillkommer.
           </p>
         </div>
       )}

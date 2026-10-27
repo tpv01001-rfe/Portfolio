@@ -5,13 +5,13 @@ export const defaultView: ActiveView = "overview";
 export const getViewTitle = (view: ActiveView): string => {
   switch (view) {
     case "overview":
-      return "Overview";
+      return "Översikt";
     case "curve-lab":
-      return "Curve Lab";
+      return "Kurvlabb";
     case "charts-lab":
-      return "Charts Lab";
+      return "Diagramlabb";
     case "company-intelligence":
-      return "Company Intelligence";
+      return "Företagsanalys";
     default:
       return "Workspace";
   }
@@ -21,8 +21,8 @@ export const navItems: Array<{
   id: ActiveView;
   label: string;
 }> = [
-  { id: "overview", label: "Overview" },
-  { id: "curve-lab", label: "Curve Lab" },
-  { id: "charts-lab", label: "Charts Lab" },
-  { id: "company-intelligence", label: "Company Intelligence" },
+  { id: "overview", label: "Översikt" },
+  { id: "curve-lab", label: "Kurvlabb" },
+  { id: "charts-lab", label: "Diagramlabb" },
+  { id: "company-intelligence", label: "Företagsanalys" },
 ];

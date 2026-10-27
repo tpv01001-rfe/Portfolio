@@ -8,16 +8,13 @@ type CurveLabPageProps = {
 export function CurveLabPage({ canvas, controls }: CurveLabPageProps) {
   return (
     <div className="curve-lab-page">
-      <section className="curve-lab-page__hero">
-        <div>
-          <p className="curve-lab-page__eyebrow">Curve Module</p>
-          <h1 className="curve-lab-page__title">Curve Lab</h1>
-        </div>
-
-        <div className="curve-lab-page__status">
-          Sticky canvas + modular controls preserved inside the dashboard shell.
-        </div>
-      </section>
+      <section className="dashboard-hero">
+        <p className="dashboard-hero__eyebrow">Interaktiv visualisering</p>
+        <h1 className="dashboard-hero__title">Kurvlabb</h1>
+        <p className="dashboard-hero__description">
+          Experimentera med matematiska kurvor och se hur deras form förändras när parametrarna justeras.
+        </p>
+      </section><br />
 
       <section className="curve-lab-page__layout">
         <div className="curve-lab-page__canvas">{canvas}</div>

@@ -25,7 +25,7 @@ export function CompanyFilters({
                     htmlFor="company-search"
                     className={styles.label}
                 >
-                    Search companies
+                    Sök företag
                 </label>
 
                 <input
@@ -33,7 +33,7 @@ export function CompanyFilters({
                     className={styles.control}
                     type="search"
                     value={search}
-                    placeholder="Company name or city..."
+                    placeholder="Företagsnamn eller stad..."
                     onChange={(event) =>
                         onSearchChange(event.target.value)
                     }
@@ -43,10 +43,10 @@ export function CompanyFilters({
             <div className={styles.field}>
 
                 <SelectControl
-                    label="Sector"
+                    label="Sektor"
                     value={sector}
                     options={[
-                        { value: "all", label: "All sectors" },
+                        { value: "all", label: "Alla sektorer" },
                         ...sectors.map((item) => ({
                             value: item,
                             label: item,

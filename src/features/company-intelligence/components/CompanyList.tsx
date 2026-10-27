@@ -19,10 +19,10 @@ export function CompanyList({
   
   return (
     <section className={styles.container}>
-      <h2 className={styles.heading}>Companies</h2>
+      <h2 className={styles.heading}>Företag</h2>
 
       {companies.length === 0 ? (
-        <p className={styles.empty}>No matching companies.</p>
+        <p className={styles.empty}>Inga matchande företag.</p>
       ) : (
         <ul className={styles.list}>
           {companies.map((company) => (

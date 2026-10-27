@@ -27,10 +27,11 @@ export function AppShell({
         onToggleSidebar={onToggleSidebar}
       />
 
-      {<div className="dashboard-main">
-        <AppTopbar activeView={activeView} />
+      <div className="dashboard-main">
+        {/* <AppTopbar activeView={activeView} /> */}
+        <AppTopbar />
         <main className="dashboard-content">{children}</main>
-      </div>}
+      </div>
     </div>
   );
 }

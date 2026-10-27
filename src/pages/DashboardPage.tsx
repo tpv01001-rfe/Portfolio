@@ -57,39 +57,39 @@ export function DashboardPage({
     <div className="dashboard-page">
       <section className="dashboard-hero">
         <p className="dashboard-hero__eyebrow">&nbsp;</p>
-        <h1 className="dashboard-hero__title">Portfolio</h1>
+        <h1 className="dashboard-hero__title">Min portfölj</h1>
         <p className="dashboard-hero__description">
-          An environment for various test and experiments.
+          Ett urval av egna utvecklingsprojekt där jag utforskar teknik, visualisering och interaktiva lösningar.
         </p>
       </section>
 
       <section className="dashboard-section">
         <div className="dashboard-section__header">
-          <h2 className="dashboard-section__title">Active Tools</h2>
+          <h2 className="dashboard-section__title">Utforska projekten</h2>
           <p className="dashboard-section__description">
-            Open the tools.
+            Välj ett projekt för att se hur det fungerar och prova själv.
           </p>
         </div>
 
         <div className="dashboard-grid dashboard-grid--tools">
           <ToolCard
-            title="Curve Lab"
-            description="Parametric curves animation, responsive canvas and pan/zoom."
-            actionLabel="Open tool"
+            title="Kurvlabb"
+            description="Utforska parametriska kurvor och animationer genom att ändra parametrar och se resultatet direkt."
+            actionLabel="Öppna projekt"
             onClick={onOpenCurveLab}
           />
 
           <ToolCard
-            title="Charts Lab"
-            description="Olika diagram med klickbara ytor och återanvändbar diagramstruktur."
-            actionLabel="Open tool"
+            title="Diagramlabb"
+            description="Interaktiva diagram med klickbara datapunkter, responsiv layout och återanvändbara komponenter."
+            actionLabel="Öppna projekt"
             onClick={onOpenChartsLab}
           />
 
           <ToolCard
-            title="Company Intelligence"
-            description="Explore company data and insights. Leaflet maps"
-            actionLabel="Open tool"
+            title="Företagsanalys"
+            description="Utforska företagsinformation på en interaktiv karta, filtrera företag och ta del av analyser och rapporter."
+            actionLabel="Öppna projekt"
             onClick={onOpencompanyIntelligence}
           />
         </div>
@@ -97,39 +97,39 @@ export function DashboardPage({
 
       <section className="dashboard-section">
         <div className="dashboard-section__header">
-          <h2 className="dashboard-section__title">Current Focus</h2>
-          <p className="dashboard-section__description">
+          <h2 className="dashboard-section__title">Utvecklingsområden</h2>
+          {/* <p className="dashboard-section__description">
             The main visual systems and interaction work in progress.
-          </p>
+          </p> */}
         </div>
 
         <div className="dashboard-grid dashboard-grid--focus">
           <FocusCard
-            title="Responsive Rendering"
-            description="Stabilizing canvas layout, scaling, and rendering behavior across tool surfaces."
+            title="Responsiv rendering"
+            description="Anpassning av canvas, skalning och rendering för olika skärmstorlekar."
           />
           <FocusCard
-            title="Chart Structure"
-            description="Improving axes, labels, tick layout, and reusable plotting primitives."
+            title="Diagramstruktur"
+            description="Utveckling av återanvändbara komponenter för axlar, skalor, etiketter och datapunkter."
           />
           <FocusCard
-            title="Interactive Surfaces"
-            description="Preparing for mouse interaction, overlays, hover states, and direct manipulation."
+            title="Interaktiva gränssnitt"
+            description="Funktioner för markering, hovring, överlägg och direkt interaktion med visualiseringar."
           />
         </div>
       </section>
 
       <section className="dashboard-section">
         <div className="dashboard-section__header">
-          <h2 className="dashboard-section__title">Next Experiments</h2>
-          <p className="dashboard-section__description">
+          <h2 className="dashboard-section__title">Idéer och vidareutveckling</h2>
+          {/* <p className="dashboard-section__description">
             Likely next additions to the workspace.
-          </p>
+          </p> */}
         </div>
 
         <div className="dashboard-grid dashboard-grid--focus">
           <FocusCard
-            title="Pan and Zoom"
+            title="Panorering och zoomning"
             description="Mouse-based navigation for curve and chart surfaces."
           />
           <FocusCard

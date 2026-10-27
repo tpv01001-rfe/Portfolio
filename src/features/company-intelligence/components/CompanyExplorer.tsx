@@ -78,10 +78,6 @@ export function CompanyExplorer() {
     }
   };
   const handleSelectCompany = async (id: CompanyId) => {
-    // if (selectedCompany?.id === id) {
-    //   setSelectedCompany(null);
-    //   return;
-    // }
     if (selectedCompany?.id === id) {
   return;
 }
@@ -119,7 +115,7 @@ export function CompanyExplorer() {
         />
 
         <p className={styles.results}>
-          Showing {filteredCompanies.length} of {companies.length} companies
+          Visar {filteredCompanies.length} av {companies.length} företag
         </p>
 
         <CompanyList
@@ -151,7 +147,7 @@ export function CompanyExplorer() {
           />
         ) : (
           <div className={styles.emptyState}>
-            <p>Select a company to explore its profile.</p>
+            <p>Välj ett företag för att se mer information om dess verksamhet.</p>
           </div>
         )}
       </section>

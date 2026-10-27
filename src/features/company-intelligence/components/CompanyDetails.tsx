@@ -21,7 +21,7 @@ export function CompanyDetails({
   className={styles.reportButton}
   onClick={onOpenReport}
 >
-  <span>View Report</span>
+  <span>Visa rapport</span>
   <span aria-hidden="true">↗</span>
 </button>
 
@@ -32,20 +32,20 @@ export function CompanyDetails({
       <p>{data.summary}</p>
 
       <dl>
-        <dt>Sector</dt>
+        <dt>Sektor</dt>
         <dd>{data.sector}</dd>
 
-        <dt>Industry</dt>
+        <dt>Industri</dt>
         <dd>{data.industry}</dd>
 
-        <dt>City</dt>
+        <dt>Stad</dt>
         <dd>{data.city}</dd>
 
-        <dt>Organization number</dt>
+        <dt>Organisationsnummer</dt>
         <dd>{data.organization_number}</dd>
 
-        <dt>Employees</dt>
-        <dd>{data.employees ?? "Unknown"}</dd>
+        <dt>Antal anställda</dt>
+        <dd>{data.employees ?? "Okänd"}</dd>
       </dl>
     </section>
   );

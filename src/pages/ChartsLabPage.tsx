@@ -11,10 +11,10 @@ export function ChartsLabPage() {
   return (
     <div className="dashboard-page">
       <section className="dashboard-hero">
-        <p className="dashboard-hero__eyebrow">Charts Module</p>
-        <h1 className="dashboard-hero__title">Charts Lab</h1>
+        <p className="dashboard-hero__eyebrow">Datavisualisering</p>
+        <h1 className="dashboard-hero__title">Diagramlabb</h1>
         <p className="dashboard-hero__description">
-          Responsive and interactive charts with clickable areas.
+          Utforska interaktiva diagram med klickbara datapunkter och responsiv layout.
         </p>
       </section>
 
@@ -28,8 +28,8 @@ export function ChartsLabPage() {
         value={chartKind}
         onChange={setChartKind}
         options={[
-          { id: "xy", label: "XY" },
-          { id: "pie", label: "Pie" },
+          { id: "xy", label: "XY-diagram" },
+          { id: "pie", label: "Cirkeldiagram" },
         ]}
       />
     </div>
