@@ -71,27 +71,46 @@ export function DashboardPage({
           </p>
         </div>
 
-        <div className="dashboard-grid dashboard-grid--tools">
-          <ToolCard
-            title="Kurvlabb"
-            description="Utforska parametriska kurvor och animationer genom att ändra parametrar och se resultatet direkt."
-            actionLabel="Öppna projekt"
-            onClick={onOpenCurveLab}
-          />
+        <div className="dashboard-project-group">
+          <h3 className="dashboard-project-group__title">
+            Visualisering och matematik
+          </h3>
+          <div className="dashboard-grid dashboard-grid--tools">
+            <ToolCard
+              title="Kurvlabb"
+              description="Utforska parametriska kurvor och animationer genom att ändra parametrar och se resultatet direkt."
+              actionLabel="Öppna projekt"
+              onClick={onOpenCurveLab}
+            />
 
-          <ToolCard
-            title="Diagramlabb"
-            description="Interaktiva diagram med klickbara datapunkter, responsiv layout och återanvändbara komponenter."
-            actionLabel="Öppna projekt"
-            onClick={onOpenChartsLab}
-          />
+            <ToolCard
+              title="Diagramlabb"
+              description="Interaktiva diagram med klickbara datapunkter, responsiv layout och återanvändbara komponenter."
+              actionLabel="Öppna projekt"
+              onClick={onOpenChartsLab}
+            />
+          </div>
+        </div>
+        <div className="dashboard-project-group">
+          <h3 className="dashboard-project-group__title">
+            GIS och geografisk analys
+          </h3>
 
-          <ToolCard
+          <div className="dashboard-grid dashboard-grid--tools">
+            <ToolCard
+              title="Företagsanalys"
+              description="Utforska företagsinformation på en interaktiv karta, filtrera företag och ta del av analyser och rapporter."
+              actionLabel="Öppna projekt"
+              onClick={onOpencompanyIntelligence}
+            />
+          </div>
+
+          {/* <ToolCard
             title="Företagsanalys"
             description="Utforska företagsinformation på en interaktiv karta, filtrera företag och ta del av analyser och rapporter."
             actionLabel="Öppna projekt"
             onClick={onOpencompanyIntelligence}
-          />
+          /> */}
         </div>
       </section>
 
@@ -119,34 +138,34 @@ export function DashboardPage({
         </div>
       </section>
 
- <section className="dashboard-section">
-  <div className="dashboard-section__header">
-    <h2 className="dashboard-section__title">
-      På gång
-    </h2>
-    <p className="dashboard-section__description">
-      Idéer och förbättringar som jag vill utforska
-      och utveckla vidare.
-    </p>
-  </div>
+      <section className="dashboard-section">
+        <div className="dashboard-section__header">
+          <h2 className="dashboard-section__title">
+            På gång
+          </h2>
+          <p className="dashboard-section__description">
+            Idéer och förbättringar som jag vill utforska
+            och utveckla vidare.
+          </p>
+        </div>
 
-  <div className="dashboard-grid dashboard-grid--focus">
-    <FocusCard
-      title="Flerspråkigt gränssnitt"
-      description="Möjlighet att växla mellan svenska och engelska, med gemensam hantering av texter i hela portföljen."
-    />
+        <div className="dashboard-grid dashboard-grid--focus">
+          <FocusCard
+            title="Flerspråkigt gränssnitt"
+            description="Möjlighet att växla mellan svenska och engelska, med gemensam hantering av texter i hela portföljen."
+          />
 
-    <FocusCard
-      title="Fördjupad företagsanalys"
-      description="Utveckla fler analysindikatorer, tydligare datakvalitetsmått och möjligheter att jämföra företag."
-    />
+          <FocusCard
+            title="Fördjupad företagsanalys"
+            description="Utveckla fler analysindikatorer, tydligare datakvalitetsmått och möjligheter att jämföra företag."
+          />
 
-    <FocusCard
-      title="Visualisering och interaktion"
-      description="Vidareutveckla diagram och matematiska visualiseringar med fler funktioner och förbättrad användarinteraktion."
-    />
-  </div>
-</section>
+          <FocusCard
+            title="Visualisering och interaktion"
+            description="Vidareutveckla diagram och matematiska visualiseringar med fler funktioner och förbättrad användarinteraktion."
+          />
+        </div>
+      </section>
     </div>
   );
 }

@@ -401,15 +401,6 @@ body,
   }
 }
 
-
-
-
-
-
-
-
-
-
 .dashboard-topbar__subtitle {
   margin: 6px 0 0;
   font-size: 0.95rem;
@@ -492,7 +483,21 @@ body,
   min-width: 0;
 }
 
-/* html,
-body {
-  overflow-x: hidden;
-} */
+.dashboard-project-group {
+  margin-bottom: 20px;
+  padding: 20px;
+
+  border: 1px solid #303b4a;
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.dashboard-project-group__title {
+  margin: 0 0 18px;
+
+  color: #aebdce;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+}
