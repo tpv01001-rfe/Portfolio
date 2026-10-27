@@ -119,29 +119,34 @@ export function DashboardPage({
         </div>
       </section>
 
-      <section className="dashboard-section">
-        <div className="dashboard-section__header">
-          <h2 className="dashboard-section__title">Idéer och vidareutveckling</h2>
-          {/* <p className="dashboard-section__description">
-            Likely next additions to the workspace.
-          </p> */}
-        </div>
+ <section className="dashboard-section">
+  <div className="dashboard-section__header">
+    <h2 className="dashboard-section__title">
+      På gång
+    </h2>
+    <p className="dashboard-section__description">
+      Idéer och förbättringar som jag vill utforska
+      och utveckla vidare.
+    </p>
+  </div>
 
-        <div className="dashboard-grid dashboard-grid--focus">
-          <FocusCard
-            title="Panorering och zoomning"
-            description="Mouse-based navigation for curve and chart surfaces."
-          />
-          <FocusCard
-            title="Reusable Visual Primitives"
-            description="Shared foundations for axes, labels, overlays, and interactive markers."
-          />
-          <FocusCard
-            title="Diagram Tooling"
-            description="Cleaner architecture for labels, legends, and click-driven detail views."
-          />
-        </div>
-      </section>
+  <div className="dashboard-grid dashboard-grid--focus">
+    <FocusCard
+      title="Flerspråkigt gränssnitt"
+      description="Möjlighet att växla mellan svenska och engelska, med gemensam hantering av texter i hela portföljen."
+    />
+
+    <FocusCard
+      title="Fördjupad företagsanalys"
+      description="Utveckla fler analysindikatorer, tydligare datakvalitetsmått och möjligheter att jämföra företag."
+    />
+
+    <FocusCard
+      title="Visualisering och interaktion"
+      description="Vidareutveckla diagram och matematiska visualiseringar med fler funktioner och förbättrad användarinteraktion."
+    />
+  </div>
+</section>
     </div>
   );
 }
