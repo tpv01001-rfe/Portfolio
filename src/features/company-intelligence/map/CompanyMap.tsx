@@ -16,6 +16,7 @@ import {
 
 import { companySectorColors } from "./companySectorColors";
 import type { CompanySector, CompanyId } from "../data/companyTypes";
+import type { Position } from "../spatial/pointInPolygon";
 
 interface CompanyMapProps {
   visibleCompanyIds: CompanyId[];
@@ -23,6 +24,7 @@ interface CompanyMapProps {
   onSelectCompany: (id: CompanyId) => void;
   onClearSelection: () => void;
   onOpenReport: (id: CompanyId) => void;
+  onPolygonChange: (polygon: Position[] | null) => void;
 }
 
 function applyMarkerOffset(
@@ -47,7 +49,9 @@ export function CompanyMap({
   onSelectCompany,
   onOpenReport,
   onClearSelection,
+  onPolygonChange,
 }: CompanyMapProps) {
+
 
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
@@ -57,18 +61,29 @@ export function CompanyMap({
   const visibleLayerRef = useRef<L.LayerGroup | null>(null);
   const selectedCompanyIdRef = useRef(selectedCompanyId);
   selectedCompanyIdRef.current = selectedCompanyId;
-
   const onClearSelectionRef = useRef(onClearSelection);
 
-useEffect(() => {
-  onClearSelectionRef.current = onClearSelection;
-}, [onClearSelection]);
+  // Areasökning ------------------------------
+  //De riktiga koordinaterna för bl.a. areasökning.
+  //const [lng, lat] = feature.geometry.coordinates;
+  const [isDrawing, setIsDrawing] = useState(false);
+  const isDrawingRef = useRef(false);
+  const polygonPointsRef = useRef<L.LatLng[]>([]);
+  const drawingLayerRef = useRef<L.Polyline | null>(null);
+  const polygonLayerRef = useRef<L.Polygon | null>(null);
+  const [pointCount, setPointCount] = useState(0);
+
+  //Areasökning ------------------------------
+
+  useEffect(() => {
+    onClearSelectionRef.current = onClearSelection;
+  }, [onClearSelection]);
 
   const onOpenReportRef = useRef(onOpenReport);
 
-useEffect(() => {
-  onOpenReportRef.current = onOpenReport;
-}, [onOpenReport]);
+  useEffect(() => {
+    onOpenReportRef.current = onOpenReport;
+  }, [onOpenReport]);
 
 
   useEffect(() => {
@@ -92,9 +107,20 @@ useEffect(() => {
       }
     ).addTo(map);
 
-    map.on("click", () => {
-  onClearSelectionRef.current();
-});
+    map.on("click", (event: L.LeafletMouseEvent) => {
+      if (isDrawingRef.current) {
+        polygonPointsRef.current.push(event.latlng);
+        setPointCount(polygonPointsRef.current.length);
+
+        drawingLayerRef.current?.setLatLngs(
+          polygonPointsRef.current
+        );
+
+        return;
+      }
+
+      onClearSelectionRef.current();
+    });
 
     return () => {
       map.remove();
@@ -145,11 +171,9 @@ useEffect(() => {
 
     const companyLayer = L.geoJSON(geoData, {
 
-
-
-/*
       pointToLayer: (feature, latlng) => {
         const id = String(feature.properties?.id);
+        const name = String(feature.properties?.name ?? id);
 
         const sector = feature.properties?.sector as
           | CompanySector
@@ -165,89 +189,59 @@ useEffect(() => {
           weight: 1,
           fillColor: color,
           fillOpacity: 0.9,
+          bubblingMouseEvents: false, // Förhindrar att markörens klickhändelse också utlöser kartans klickhändelse
+        });
+
+        // Visa företagsnamn vid hover.
+        marker.bindTooltip(name, {
+          direction: "top",
+          offset: L.point(0, -8),
+          opacity: 0.95,
+        });
+
+        // Popup som öppnas vid klick.
+        const popupContent = document.createElement("div");
+        popupContent.className = styles.popupContent;
+
+        const title = document.createElement("strong");
+        title.textContent = name;
+
+        const reportLink = document.createElement("a");
+        reportLink.href = "#";
+        reportLink.className = styles.reportLink;
+
+        const label = document.createElement("span");
+        label.textContent = "View Report";
+
+        const arrow = document.createElement("span");
+        arrow.textContent = "↗";
+        arrow.setAttribute("aria-hidden", "true");
+
+        reportLink.append(label, arrow);
+
+        reportLink.addEventListener("click", (event) => {
+          event.preventDefault();
+          onOpenReportRef.current(id);
+          marker.closePopup();
+        });
+
+        popupContent.append(title, reportLink);
+
+        //styr utsseendet via lokal css
+        marker.bindPopup(popupContent, {
+          className: styles.companyPopup,
         });
 
         marker.on("click", () => {
+          if (isDrawingRef.current) return;
+
           onSelectCompanyRef.current(id);
         });
 
         markersRef.current.set(id, marker);
 
         return marker;
-      }*/
-      
-      pointToLayer: (feature, latlng) => {
-  const id = String(feature.properties?.id);
-  const name = String(feature.properties?.name ?? id);
-
-  const sector = feature.properties?.sector as
-    | CompanySector
-    | undefined;
-
-  const color = sector
-    ? companySectorColors[sector] ?? "#D0D0D0"
-    : "#D0D0D0";
-
-  const marker = L.circleMarker(latlng, {
-    radius: 4,
-    color: "#333333",
-    weight: 1,
-    fillColor: color,
-    fillOpacity: 0.9,
-    bubblingMouseEvents: false, // Förhindrar att markörens klickhändelse också utlöser kartans klickhändelse
-  });                           
-
-  // Visa företagsnamn vid hover.
-  marker.bindTooltip(name, {
-    direction: "top",
-    offset: L.point(0, -8),
-    opacity: 0.95,
-  });
-
-  // Popup som öppnas vid klick.
-  const popupContent = document.createElement("div");
-popupContent.className = styles.popupContent;
-
-  const title = document.createElement("strong");
-  title.textContent = name;
-
-const reportLink = document.createElement("a");
-reportLink.href = "#";
-reportLink.className = styles.reportLink;
-
-const label = document.createElement("span");
-label.textContent = "View Report";
-
-const arrow = document.createElement("span");
-arrow.textContent = "↗";
-arrow.setAttribute("aria-hidden", "true");
-
-reportLink.append(label, arrow);
-
-  reportLink.addEventListener("click", (event) => {
-    event.preventDefault();
-    onOpenReportRef.current(id);
-    marker.closePopup();
-  });
-
-  popupContent.append(title, reportLink);
-
-  //styr utsseendet via lokal css
-marker.bindPopup(popupContent, {
-  className: styles.companyPopup,
-});
-  // Behåll befintligt beteende vid markörklick.
-  // marker.on("click", () => {
-  //   onSelectCompanyRef.current(id);
-  // });
-marker.on("click", () => {
-  //marker.openPopup();
-  onSelectCompanyRef.current(id);
-});
-  markersRef.current.set(id, marker);
-
-  return marker;
-},
+      },
     });
 
     const visibleLayer = L.layerGroup().addTo(map);
@@ -314,57 +308,40 @@ marker.on("click", () => {
 
   // Uppdatera synliga markörer när visibleCompanyIds ändras.
   useEffect(() => {
-  const visibleLayer = visibleLayerRef.current;
-
-  if (!visibleLayer) return;
-
-  const visibleIds = new Set(visibleCompanyIds);
-
-  markersRef.current.forEach((marker, id) => {
-    const shouldBeVisible = visibleIds.has(id);
-    const isVisible = visibleLayer.hasLayer(marker);
-
-    if (shouldBeVisible && !isVisible) {
-      visibleLayer.addLayer(marker);
-    } else if (!shouldBeVisible && isVisible) {
-      visibleLayer.removeLayer(marker);
-    }
-  });
-}, [visibleCompanyIds, geoData]);
-
-//panorera till den valda företagsmarkören när selectedCompanyId ändras.
-useEffect(() => {
-  const map = mapRef.current;
-
-  if (!map || !selectedCompanyId) return;
-
-  const marker = markersRef.current.get(selectedCompanyId);
-
-  if (!marker) return;
-
-  map.panTo(marker.getLatLng(), {
-    animate: true,
-    duration: 0.6,
-  });
-}, [selectedCompanyId, geoData]);
-
-
-  /*
-  useEffect(() => {
     const visibleLayer = visibleLayerRef.current;
 
     if (!visibleLayer) return;
 
-    visibleLayer.clearLayers();
-    for (const id of visibleCompanyIds) {
-      const marker = markersRef.current.get(id);
+    const visibleIds = new Set(visibleCompanyIds);
 
-      if (marker) {
+    markersRef.current.forEach((marker, id) => {
+      const shouldBeVisible = visibleIds.has(id);
+      const isVisible = visibleLayer.hasLayer(marker);
+
+      if (shouldBeVisible && !isVisible) {
         visibleLayer.addLayer(marker);
+      } else if (!shouldBeVisible && isVisible) {
+        visibleLayer.removeLayer(marker);
       }
-    }
+    });
   }, [visibleCompanyIds, geoData]);
-*/
+
+  //panorera till den valda företagsmarkören när selectedCompanyId ändras.
+  useEffect(() => {
+    const map = mapRef.current;
+
+    if (!map || !selectedCompanyId) return;
+
+    const marker = markersRef.current.get(selectedCompanyId);
+
+    if (!marker) return;
+
+    map.panTo(marker.getLatLng(), {
+      animate: true,
+      duration: 0.6,
+    });
+  }, [selectedCompanyId, geoData]);
+
   useEffect(() => {
     const zoom = mapRef.current?.getZoom() ?? 14;
     const markerRadius = getMarkerRadius(zoom);
@@ -384,19 +361,144 @@ useEffect(() => {
     });
   }, [selectedCompanyId, geoData]);
 
-//   const onOpenReportRef = useRef(onOpenReport);
 
-// useEffect(() => {
-//   onOpenReportRef.current = onOpenReport;
-// }, [onOpenReport]);
+  function startDrawing() {
+    const map = mapRef.current;
+    if (!map) return;
+
+    markersRef.current.forEach((marker) => {
+      marker.options.interactive = false;
+      marker.closeTooltip();
+      marker.closePopup();
+
+      const element = marker.getElement();
+
+      if (element instanceof SVGElement) {
+        element.style.pointerEvents = "none";
+      }
+    });
+
+    //hindrar panorering och zoomning när man ritar polygonen
+    map.dragging.disable();
+    map.doubleClickZoom.disable();
+
+    map.getContainer().classList.add(styles.drawingMode);
+
+    drawingLayerRef.current?.remove();
+    polygonLayerRef.current?.remove();
+
+    polygonPointsRef.current = [];
+
+    const line = L.polyline([], {
+      color: "#6fb1ff",
+      weight: 2,
+      dashArray: "6 4",
+    }).addTo(map);
+
+    drawingLayerRef.current = line;
+
+    isDrawingRef.current = true;
+    setIsDrawing(true);
+
+    setPointCount(0);
+  }
+
+  function finishDrawing() {
+    const map = mapRef.current;
+    const points = polygonPointsRef.current;
+
+    if (!map || points.length < 3) return;
+
+    markersRef.current.forEach((marker) => {
+      marker.options.interactive = true;
+
+      const element = marker.getElement();
+
+      if (element instanceof SVGElement) {
+        element.style.pointerEvents = "";
+      }
+    });
+    map.dragging.enable();
+    map.doubleClickZoom.enable();
+
+    map.getContainer().classList.remove(styles.drawingMode);
+
+    drawingLayerRef.current?.remove();
+    drawingLayerRef.current = null;
+
+    polygonLayerRef.current?.remove();
+
+    polygonLayerRef.current = L.polygon(points, {
+      color: "#6fff6f",
+      weight: 2,
+      fillColor: "#6fff6f",
+      fillOpacity: 0.42,
+    }).addTo(map);
+
+    const coordinates: Position[] = points.map(
+      (point) => [point.lng, point.lat]
+    );
+
+    onPolygonChange(coordinates);
+
+    isDrawingRef.current = false;
+    setIsDrawing(false);
+  }
+
+  function clearPolygon() {
+
+    markersRef.current.forEach((marker) => {
+      marker.options.interactive = true;
+
+      const element = marker.getElement();
+
+      if (element instanceof SVGElement) {
+        element.style.pointerEvents = "";
+      }
+    });
+
+    drawingLayerRef.current?.remove();
+    polygonLayerRef.current?.remove();
+
+    drawingLayerRef.current = null;
+    polygonLayerRef.current = null;
+    polygonPointsRef.current = [];
+
+    isDrawingRef.current = false;
+    mapRef.current?.getContainer().classList.remove(styles.drawingMode);
+
+    onPolygonChange(null);
+    setIsDrawing(false);
+  }
 
   return (
+
     <div className={styles.mapContainer}>
       <div
         ref={containerRef}
         className={styles.map}
-        aria-label="Interactive company map"
+        aria-label="Interaktiv företagskarta"
       />
+
+      <div className={styles.spatialControls}>
+        {!isDrawing ? (
+          <button type="button" onClick={startDrawing}>
+            Rita sökområde
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={finishDrawing}
+            disabled={pointCount < 3}
+          >
+            Slutför sökning
+          </button>
+        )}
+
+        <button type="button" onClick={clearPolygon}>
+          Rensa område
+        </button>
+      </div>
     </div>
   );
 }

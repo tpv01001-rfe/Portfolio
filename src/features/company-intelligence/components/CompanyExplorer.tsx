@@ -14,7 +14,9 @@ import type { Company, CompanyIndexEntry } from "../data/companyTypes";
 import { CompanyMap } from "../map/CompanyMap";
 
 import { ReportModal } from "../report/ReportModal";
-
+import type { Position } from "../spatial/pointInPolygon";
+import { getCompanyGeoJson } from "../data/companyRepository";
+import { filterCompaniesByPolygon } from "../spatial/filterCompaniesByPolygon";
 
 export function CompanyExplorer() {
   const [companies, setCompanies] = useState<CompanyIndexEntry[]>([]);
@@ -22,17 +24,58 @@ export function CompanyExplorer() {
 
   const [search, setSearch] = useState("");
   const [sector, setSector] = useState<CompanySector | "all">("all");
+  const [geoData, setGeoData] = useState<GeoJSON.FeatureCollection | null>(null);
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const [reportCompany, setReportCompany] = useState<CompanyRaw | null>(null);
 
+  //Areasökning ---------------------
+  const [searchPolygon, setSearchPolygon] = useState<Position[] | null>(null);
+
   const sectors = useMemo(() => {
     return [...new Set(companies.map((company) => company.sector))]
       .sort();
   }, [companies]);
 
+  const spatialCompanyIds = useMemo(() => {
+  if (!searchPolygon || !geoData) {
+    return null;
+  }
+
+  return filterCompaniesByPolygon(
+    geoData,
+    searchPolygon
+  );
+}, [geoData, searchPolygon]);
+
+const filteredCompanies = useMemo(() => {
+  const query = search.trim().toLocaleLowerCase("sv");
+
+  return companies.filter((company) => {
+    const matchesSearch =
+      company.name.toLocaleLowerCase("sv").includes(query) ||
+      company.city.toLocaleLowerCase("sv").includes(query);
+
+    const matchesSector =
+      sector === "all" || company.sector === sector;
+
+    const matchesSpatial =
+      !searchPolygon ||
+      (spatialCompanyIds !== null &&
+        spatialCompanyIds.has(company.id));
+
+    return matchesSearch && matchesSector && matchesSpatial;
+  });
+}, [
+  companies,
+  search,
+  sector,
+  searchPolygon,
+  spatialCompanyIds,
+]);
+/*
   const filteredCompanies = useMemo(() => {
     const query = search.trim().toLocaleLowerCase("sv");
 
@@ -47,7 +90,7 @@ export function CompanyExplorer() {
       return matchesSearch && matchesSector;
     });
   }, [companies, search, sector]);
-
+*/
   useEffect(() => {
     async function loadCompanies() {
       try {
@@ -67,6 +110,24 @@ export function CompanyExplorer() {
     loadCompanies();
   }, []);
 
+  useEffect(() => {
+    let cancelled = false;
+
+    getCompanyGeoJson()
+      .then((data) => {
+        if (!cancelled) {
+          setGeoData(data);
+        }
+      })
+      .catch((error) => {
+        console.error("Kunde inte läsa geografiska data:", error);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const handleOpenReport = async (id: CompanyId) => {
     if (!selectedCompany) return;
 
@@ -79,8 +140,8 @@ export function CompanyExplorer() {
   };
   const handleSelectCompany = async (id: CompanyId) => {
     if (selectedCompany?.id === id) {
-  return;
-}
+      return;
+    }
 
     try {
       const company = await getCompany(id);
@@ -91,8 +152,8 @@ export function CompanyExplorer() {
   };
 
   const handleClearSelection = () => {
-  setSelectedCompany(null);
-};
+    setSelectedCompany(null);
+  };
 
   if (isLoading) {
     return <p>Loading companies...</p>;
@@ -132,7 +193,9 @@ export function CompanyExplorer() {
           onSelectCompany={handleSelectCompany}
           onOpenReport={handleOpenReport}
           onClearSelection={handleClearSelection}
+          onPolygonChange={setSearchPolygon}
         />
+
 
         {error && <p role="alert">{error}</p>}
 
