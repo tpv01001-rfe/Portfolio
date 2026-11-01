@@ -367,7 +367,7 @@ export function CompanyMap({
     if (!map) return;
 
     markersRef.current.forEach((marker) => {
-      marker.options.interactive = false;
+      //marker.options.interactive = false;
       marker.closeTooltip();
       marker.closePopup();
 
@@ -393,6 +393,7 @@ export function CompanyMap({
       color: "#6fb1ff",
       weight: 2,
       dashArray: "6 4",
+      interactive: false,
     }).addTo(map);
 
     drawingLayerRef.current = line;
@@ -410,7 +411,8 @@ export function CompanyMap({
     if (!map || points.length < 3) return;
 
     markersRef.current.forEach((marker) => {
-      marker.options.interactive = true;
+      //marker.options.interactive = true;
+      
 
       const element = marker.getElement();
 
@@ -433,6 +435,7 @@ export function CompanyMap({
       weight: 2,
       fillColor: "#6fff6f",
       fillOpacity: 0.42,
+      interactive: false,
     }).addTo(map);
 
     const coordinates: Position[] = points.map(
@@ -448,7 +451,7 @@ export function CompanyMap({
   function clearPolygon() {
 
     markersRef.current.forEach((marker) => {
-      marker.options.interactive = true;
+      //marker.options.interactive = true;
 
       const element = marker.getElement();
 
@@ -491,7 +494,7 @@ export function CompanyMap({
             onClick={finishDrawing}
             disabled={pointCount < 3}
           >
-            Slutför sökning
+            Slut område
           </button>
         )}
 
