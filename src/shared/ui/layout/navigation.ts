@@ -1,8 +1,81 @@
-export type ActiveView = "overview" | "curve-lab" | "charts-lab" | "company-intelligence";
+
+import {
+  experimentItems,
+  experimentRegistry,
+  type ExperimentId,
+} from "../../../features/experiments/experimentRegistry";
+
+export type MainView =
+  | "overview"
+  | "curve-lab"
+  | "charts-lab"
+  | "company-intelligence";
+
+export type ActiveView = MainView | ExperimentId;
+
+export type NavigationItem = {
+  type: "item";
+  id: ActiveView;
+  label: string;
+  icon: string;
+};
+
+export type NavigationGroup = {
+  type: "group";
+  id: string;
+  label: string;
+  icon: string;
+  children: NavigationItem[];
+};
+
+export type NavigationEntry =
+  | NavigationItem
+  | NavigationGroup;
 
 export const defaultView: ActiveView = "overview";
 
-export const getViewTitle = (view: ActiveView): string => {
+export const navItems: NavigationEntry[] = [
+  {
+    type: "item",
+    id: "overview",
+    label: "Översikt",
+    icon: "◧",
+  },
+  {
+    type: "item",
+    id: "curve-lab",
+    label: "Kurvlabb",
+    icon: "∿",
+  },
+  {
+    type: "item",
+    id: "charts-lab",
+    label: "Diagramlabb",
+    icon: "⋮",
+  },
+  {
+    type: "item",
+    id: "company-intelligence",
+    label: "Företagsanalys",
+    icon: "⌖",
+  },
+  {
+    type: "group",
+    id: "experiments",
+    label: "Tester och experiment",
+    icon: "◇",
+    children: experimentItems.map(item => ({
+      type: "item",
+      ...item,
+    })),
+  },
+];
+
+export function getViewTitle(view: ActiveView): string {
+  if (view in experimentRegistry) {
+    return experimentRegistry[view as ExperimentId].title;
+  }
+
   switch (view) {
     case "overview":
       return "Översikt";
@@ -15,14 +88,4 @@ export const getViewTitle = (view: ActiveView): string => {
     default:
       return "Workspace";
   }
-};
-
-export const navItems: Array<{
-  id: ActiveView;
-  label: string;
-}> = [
-  { id: "overview", label: "Översikt" },
-  { id: "curve-lab", label: "Kurvlabb" },
-  { id: "charts-lab", label: "Diagramlabb" },
-  { id: "company-intelligence", label: "Företagsanalys" },
-];
+}

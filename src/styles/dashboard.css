@@ -501,3 +501,59 @@ body,
   font-weight: 600;
   letter-spacing: 0.025em;
 }
+
+
+/* Expanderbar navigationsgrupp */
+
+.navigation-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.navigation-group__chevron {
+  margin-left: auto;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.navigation-group__children {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: 14px;
+  margin-left: 12px;
+  border-left: 1px solid var(--panel-border, #444);
+}
+
+.navigation-group__children[hidden] {
+  display: none;
+}
+
+.navigation-group__child {
+  font-size: 0.92rem;
+}
+
+.navigation-group__has-active-child {
+  opacity: 1;
+}
+
+/* Gemensam experimentsida */
+
+.experiment-page {
+  width: 100%;
+  min-width: 0;
+}
+
+.experiment-page__header {
+  margin-bottom: 24px;
+}
+
+.experiment-page__header h2 {
+  margin: 0 0 8px;
+}
+
+.experiment-page__header p {
+  margin: 0;
+  opacity: 0.7;
+}

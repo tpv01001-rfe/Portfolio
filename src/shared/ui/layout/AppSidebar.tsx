@@ -1,18 +1,13 @@
+
 import type { ActiveView } from "./navigation";
 import { navItems } from "./navigation";
+import { NavigationGroup } from "./NavigationGroup";
 
 type AppSidebarProps = {
   activeView: ActiveView;
   isSidebarCollapsed: boolean;
   onNavigate: (view: ActiveView) => void;
   onToggleSidebar: () => void;
-};
-
-const navSymbols: Record<ActiveView, string> = {
-  overview: "◧",
-  "curve-lab": "∿",
-  "charts-lab": "⋮",
-  "company-intelligence": "⌖",
 };
 
 export function AppSidebar({
@@ -25,16 +20,20 @@ export function AppSidebar({
     <aside
       className={[
         "dashboard-sidebar",
-        isSidebarCollapsed ? "dashboard-sidebar--collapsed" : "",
-      ]
-        .filter(Boolean)
-        .join(" ")}
+        isSidebarCollapsed
+          ? "dashboard-sidebar--collapsed"
+          : "",
+      ].filter(Boolean).join(" ")}
     >
       <div className="dashboard-sidebar__header">
         {!isSidebarCollapsed && (
           <div className="dashboard-sidebar__brand">
-            <p className="dashboard-sidebar__eyebrow">Portfölj</p>
-            <h1 className="dashboard-sidebar__title">Rickard</h1>
+            <p className="dashboard-sidebar__eyebrow">
+              Portfölj
+            </p>
+            <h1 className="dashboard-sidebar__title">
+              Rickard
+            </h1>
           </div>
         )}
 
@@ -42,8 +41,16 @@ export function AppSidebar({
           type="button"
           className="dashboard-sidebar__toggle"
           onClick={onToggleSidebar}
-          aria-label={isSidebarCollapsed ? "Expandera sidopanelen" : "Fäll ihop sidopanelen"}
-          title={isSidebarCollapsed ? "Expandera sidopanelen" : "Fäll ihop sidopanelen"}
+          aria-label={
+            isSidebarCollapsed
+              ? "Expandera sidopanelen"
+              : "Fäll ihop sidopanelen"
+          }
+          title={
+            isSidebarCollapsed
+              ? "Expandera sidopanelen"
+              : "Fäll ihop sidopanelen"
+          }
         >
           {isSidebarCollapsed ? "→" : "←"}
         </button>
@@ -51,32 +58,51 @@ export function AppSidebar({
 
       <nav className="dashboard-sidebar__nav">
         {!isSidebarCollapsed && (
-          <div className="dashboard-sidebar__section-label">&nbsp;</div>
+          <div className="dashboard-sidebar__section-label">
+            &nbsp;
+          </div>
         )}
 
-        {navItems.map((item) => {
-          const isActive = item.id === activeView;
+        {navItems.map(entry => {
+          if (entry.type === "group") {
+            return (
+              <NavigationGroup
+                key={entry.id}
+                group={entry}
+                activeView={activeView}
+                isSidebarCollapsed={isSidebarCollapsed}
+                onNavigate={onNavigate}
+                onExpandSidebar={onToggleSidebar}
+              />
+            );
+          }
+
+          const isActive = entry.id === activeView;
 
           return (
             <button
-              key={item.id}
+              key={entry.id}
               type="button"
               className={[
                 "dashboard-sidebar__nav-item",
-                isActive ? "dashboard-sidebar__nav-item--active" : "",
-              ]
-                .filter(Boolean)
-                .join(" ")}
-              onClick={() => onNavigate(item.id)}
-              title={isSidebarCollapsed ? item.label : undefined}
+                isActive
+                  ? "dashboard-sidebar__nav-item--active"
+                  : "",
+              ].filter(Boolean).join(" ")}
+              onClick={() => onNavigate(entry.id)}
+              title={
+                isSidebarCollapsed
+                  ? entry.label
+                  : undefined
+              }
             >
               <span className="dashboard-sidebar__nav-icon">
-                    {navSymbols[item.id]}
+                {entry.icon}
               </span>
 
               {!isSidebarCollapsed && (
                 <span className="dashboard-sidebar__nav-label">
-                  {item.label}
+                  {entry.label}
                 </span>
               )}
             </button>
@@ -86,7 +112,9 @@ export function AppSidebar({
 
       {!isSidebarCollapsed && (
         <div className="dashboard-sidebar__footer">
-          <p className="dashboard-sidebar__footer-label">På gång</p>
+          <p className="dashboard-sidebar__footer-label">
+            På gång
+          </p>
           <p className="dashboard-sidebar__footer-text">
             Fler projekt och funktioner tillkommer.
           </p>
