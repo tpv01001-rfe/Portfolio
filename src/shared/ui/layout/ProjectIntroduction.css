@@ -1,0 +1,253 @@
+.project-introduction {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    padding: 28px;
+
+    border: 1px solid #303b4a;
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.025),
+            transparent 70%
+        ),
+        #111b25;
+}
+
+
+/* Rubrik och introduktion */
+
+.project-introduction__header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    padding-bottom: 20px;
+
+    border-bottom: 1px solid #303b4a;
+}
+
+.project-introduction__eyebrow {
+    margin: 0;
+
+    color: var(--project-accent, #c4a36b);
+
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.project-introduction__title {
+    margin: 0;
+
+    color: #f5f7fa;
+
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.project-introduction__subtitle {
+    margin: 0;
+
+    color: #aebdce;
+
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+
+/* Text och bild */
+
+.project-introduction__body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+
+    align-items: start;
+}
+
+.project-introduction__body--with-image {
+    grid-template-columns:
+        minmax(0, 1.5fr)
+        minmax(0, 1fr);
+}
+
+.project-introduction__content {
+    min-width: 0;
+    max-width: 75ch;
+
+    color: #c6d1dc;
+
+    font-size: 0.98rem;
+    line-height: 1.85;
+}
+
+.project-introduction__content > :first-child {
+    margin-top: 0;
+}
+
+.project-introduction__content > :last-child {
+    margin-bottom: 0;
+}
+
+.project-introduction__content h2,
+.project-introduction__content h3 {
+    color: #e4edf3;
+    font-weight: 500;
+}
+
+
+/* Fotografier och bildtexter */
+
+.project-introduction__figure {
+    min-width: 0;
+    margin: 0;
+}
+
+.project-introduction__figure img {
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    border: 1px solid #303b4a;
+    border-radius: 10px;
+
+    box-sizing: border-box;
+}
+
+.project-introduction__figure figcaption {
+    margin-top: 10px;
+
+    color: #8999aa;
+
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+
+/* Projektets teknikområden */
+
+.project-introduction__topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid #303b4a;
+}
+
+.project-introduction__topic {
+    padding: 6px 12px;
+
+    border: 1px solid #303b4a;
+    border-radius: 6px;
+
+    background: rgba(255, 255, 255, 0.025);
+    color: #aebdce;
+
+    font-size: 0.78rem;
+}
+
+/* =========================================
+   Projektrubrik och status
+   ========================================= */
+
+.project-introduction__title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    gap: 12px;
+}
+
+
+/* Statusindikator */
+
+.project-introduction__status {
+    --status-color: #aebdce;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    width: fit-content;
+    padding: 6px 12px;
+
+    border: 1px solid color-mix(
+        in srgb,
+        var(--status-color) 30%,
+        transparent
+    );
+
+    border-radius: 8px;
+
+    background: color-mix(
+        in srgb,
+        var(--status-color) 8%,
+        transparent
+    );
+
+    color: var(--status-color);
+
+    font-size: 0.78rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+
+/* Statusindikatorns punkt */
+
+.project-introduction__status-dot {
+    width: 7px;
+    height: 7px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+    background: currentColor;
+}
+
+
+/* Färgsättning för olika projektstatusar */
+
+.project-introduction__status[data-status="planned"] {
+    --status-color: #94a3b8;
+}
+
+.project-introduction__status[data-status="in-development"] {
+    --status-color: #e5b65c;
+}
+
+.project-introduction__status[data-status="experimental"] {
+    --status-color: #b388ff;
+}
+
+.project-introduction__status[data-status="completed"] {
+    --status-color: #4de3a0;
+}
+
+/* Responsiv layout */
+
+@media (max-width: 960px) {
+    .project-introduction {
+        padding: 20px;
+    }
+
+    .project-introduction__body--with-image {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .project-introduction__figure {
+        max-width: 560px;
+    }
+}

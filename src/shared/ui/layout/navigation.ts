@@ -36,11 +36,17 @@ export type NavigationEntry =
 export const defaultView: ActiveView = "overview";
 
 export const navItems: NavigationEntry[] = [
-  {
+    {
     type: "item",
     id: "overview",
     label: "Översikt",
     icon: "◧",
+  },
+   {
+    type: "item",
+    id: "odontograph",
+    label: "Odontograph",
+    icon: "⚙",
   },
   {
     type: "item",
@@ -59,12 +65,6 @@ export const navItems: NavigationEntry[] = [
     id: "company-intelligence",
     label: "Företagsanalys",
     icon: "⌖",
-  },
-  {
-    type: "item",
-    id: "odontograph",
-    label: "Odontograph",
-    icon: "⚙",
   },
   {
     type: "group",

@@ -116,7 +116,7 @@ function ProfileSlider({
 export default function Odontograph() {
   const [original] = useState(createDemoPatternWheel);
   const [lowerHalf, setLowerHalf] = useState(true);
-  const [family, setFamily] = useState<WheelFamily>("riefler");
+  const [family, setFamily] = useState<WheelFamily>("richter");
   type EditableProfile = FlankProfile & {
     readonly firstFlankCurvatureMm: number;
     readonly secondFlankCurvatureMm: number;
@@ -129,7 +129,7 @@ export default function Odontograph() {
     secondFlankCurvatureMm: familyProfiles[nextFamily].flankCurvatureMm,
   });
 
-  const [profile, setProfile] = useState<EditableProfile>(() => createEditableProfile("riefler"));
+  const [profile, setProfile] = useState<EditableProfile>(() => createEditableProfile("richter"));
 
   const styledOriginal = useMemo(() => ({
     ...original,
@@ -159,22 +159,18 @@ export default function Odontograph() {
   const meshes = useMemo(() => {
     try {
       return {
-        original: createWheelMesh(styledOriginal),
         modified: createWheelMesh(modified),
-        originalContours: createWheelContourPaths(styledOriginal),
         modifiedContours: createWheelContourPaths(modified),
         error: null as string | null,
       };
     } catch (error) {
       return {
-        original: null,
         modified: null,
-        originalContours: null,
         modifiedContours: null,
         error: error instanceof Error ? error.message : "Okänt geometrifel",
       };
     }
-  }, [styledOriginal, modified]);
+  }, [modified]);
 
   const updateProfile = (key: "tipOffsetMm" | "tipWidthMm" | "firstFlankCurvatureMm" | "secondFlankCurvatureMm", value: number) => {
     setProfile((previous) => ({
@@ -192,8 +188,8 @@ export default function Odontograph() {
     <div style={{ padding: 20, color: "#e4edf3", background: "#111923", minHeight: "100%" }}>
       <h2 style={{ marginTop: 0 }}>Odontografen – fria taggkonturer</h2>
       <p style={{ maxWidth: 820, opacity: 0.8 }}>
-        Jämför fria konturer och finjustera taggarnas tangentiella förskjutning,
-        spetsbredd och rundning. Riefler är orienterad för moturs rotation sett framifrån.
+        Undersök mönsterhjulets geometri och finjustera taggarnas tangentiella
+        förskjutning, spetsbredd och rundning i 2D och 3D.
       </p>
 
       <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 20, alignItems: "center" }}>
@@ -267,16 +263,8 @@ export default function Odontograph() {
         </p>
       )}
 
-      {meshes.original &&
-        meshes.modified &&
-        meshes.originalContours &&
-        meshes.modifiedContours && (
-        <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
-          <WheelViewer
-            title="Originalmönster"
-            mesh={meshes.original}
-            contourPaths={meshes.originalContours}
-          />
+      {meshes.modified && meshes.modifiedContours && (
+        <div style={{ display: "flex", minWidth: 0 }}>
           <WheelViewer
             title="Modifierad kopia"
             mesh={meshes.modified}
@@ -285,13 +273,14 @@ export default function Odontograph() {
         </div>
       )}
 
-<div style={{ marginTop: 24 }}>
+      <div style={{ marginTop: 24 }}>
         <WheelViewer2D wheel={styledOriginal} title="2D-profil – originalmönster" />
       </div>
 
       <p style={{ maxWidth: 820, opacity: 0.7, fontSize: 13 }}>
-        Reglagen påverkar båda hjulens taggform, men bara den högra kopians skrivmönster
-        modifieras. Förinställningarna är illustrativa, inte uppmätta historiska profiler.
+        Reglagen påverkar taggformen i båda vyerna. 2D-vyn visar originalmönstret,
+        medan 3D-vyn visar den modifierade kopian.
+        Förinställningarna är illustrativa, inte uppmätta historiska profiler.
       </p>
     </div>
   );

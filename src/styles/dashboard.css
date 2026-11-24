@@ -15,16 +15,6 @@ body,
   --content-padding: 24px;
 }
 
-/* .dashboard-shell {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  min-height: 100vh;
-  background:
-    radial-gradient(circle at top left, rgba(0, 255, 255, 0.06), transparent 30%),
-    var(--app-bg, #071018);
-  color: var(--text-primary, #f5f7fa);
-} */
-
 .dashboard-shell {
   width: 100%;
   min-width: 0;
@@ -205,41 +195,6 @@ body,
   color: rgba(255, 255, 255, 0.96);
 }
 
-
-/* .dashboard-content {
-  min-width: 0;
-  box-sizing: border-box;
-  padding: 24px;
-}
-
-.dashboard-page,
-.curve-lab-page {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.dashboard-hero,
-.curve-lab-page__hero {
-  min-width: 0;
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 28px;
-  border: 1px solid rgba(120, 220, 255, 0.14);
-  border-radius: 28px;
-  background:
-    linear-gradient(135deg, rgba(0, 255, 255, 0.08), transparent 45%),
-    rgba(255, 255, 255, 0.03);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
-} */
-
-/* .dashboard-content {
-  min-width: 0;
-  padding: 24px;
-} */
-
 .dashboard-content {
   min-width: 0;
   padding: 24px;
@@ -318,61 +273,6 @@ body,
   border-radius: 14px;
   cursor: pointer;
 }
-
-/*
-
-.curve-lab-page__hero {
-  min-width: 0;
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 28px;
-  border: 1px solid rgba(120, 220, 255, 0.14);
-  border-radius: 28px;
-  background:
-    linear-gradient(135deg, rgba(0, 255, 255, 0.08), transparent 45%),
-    rgba(255, 255, 255, 0.03);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
-}
-  
-.curve-lab-page__description {
-  max-width: 780px;
-  margin: 12px 0 0;
-  line-height: 1.8;
-  color: rgba(255, 255, 255, 0.64);
-}
-
-.curve-lab-page__status {
-  padding: 14px 16px;
-  border-radius: 18px;
-  border: 1px solid rgba(120, 220, 255, 0.16);
-  background: rgba(0, 255, 255, 0.08);
-  color: rgba(220, 250, 255, 0.9);
-  font-size: 0.95rem;
-}
-
-.curve-lab-page__layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1.35fr) 420px;
-  gap: 24px;
-  align-items: start;
-}
-
-.curve-lab-page__canvas {
-  min-width: 0;
-  position: sticky;
-  top: calc(var(--topbar-height) + var(--content-padding) + 20px);
-}
-
-.curve-lab-page__controls {
-  min-width: 0;
-  padding: 0;
-  background: transparent;
-  border: 0;
-  box-shadow: none;
-} */
-
 
 @media (max-width: 960px) {
   .dashboard-shell {
@@ -557,3 +457,4 @@ body,
   margin: 0;
   opacity: 0.7;
 }
+

@@ -79,6 +79,12 @@ export function DashboardPage({
           </h3>
           <div className="dashboard-grid dashboard-grid--tools">
             <ToolCard
+              title="Odontograph"
+              description="Mönsterhjul för mekanisk penna."
+              actionLabel="Öppna projekt"
+              onClick={onOpenOdontograph}
+            />
+            <ToolCard
               title="Kurvlabb"
               description="Utforska parametriska kurvor och animationer genom att ändra parametrar och se resultatet direkt."
               actionLabel="Öppna projekt"
@@ -91,13 +97,6 @@ export function DashboardPage({
               actionLabel="Öppna projekt"
               onClick={onOpenChartsLab}
             />
-
-            <ToolCard
-              title="Odontograph"
-              description="Mönsterhjul för mekanisk penna."
-              actionLabel="Öppna projekt"
-              onClick={onOpenOdontograph}
-            />
           </div>
         </div>
         <div className="dashboard-project-group">
@@ -106,6 +105,7 @@ export function DashboardPage({
           </h3>
 
           <div className="dashboard-grid dashboard-grid--tools">
+
             <ToolCard
               title="Företagsanalys"
               description="Utforska företagsinformation på en interaktiv karta, filtrera företag och ta del av analyser och rapporter."
@@ -114,21 +114,12 @@ export function DashboardPage({
             />
           </div>
 
-          {/* <ToolCard
-            title="Företagsanalys"
-            description="Utforska företagsinformation på en interaktiv karta, filtrera företag och ta del av analyser och rapporter."
-            actionLabel="Öppna projekt"
-            onClick={onOpencompanyIntelligence}
-          /> */}
         </div>
       </section>
 
       <section className="dashboard-section">
         <div className="dashboard-section__header">
           <h2 className="dashboard-section__title">Utvecklingsområden</h2>
-          {/* <p className="dashboard-section__description">
-            The main visual systems and interaction work in progress.
-          </p> */}
         </div>
 
         <div className="dashboard-grid dashboard-grid--focus">
@@ -137,8 +128,8 @@ export function DashboardPage({
             description="Anpassning av canvas, skalning och rendering för olika skärmstorlekar."
           />
           <FocusCard
-            title="Diagramstruktur"
-            description="Utveckling av återanvändbara komponenter för axlar, skalor, etiketter och datapunkter."
+            title="Historisk teknik med modern matematik"
+            description="Digital rekonstruktion av historiska mönsterhjul genom parametrisk geometri, kurvkonstruktion och egenutvecklad 3D-rendering."
           />
           <FocusCard
             title="Interaktiva gränssnitt"
