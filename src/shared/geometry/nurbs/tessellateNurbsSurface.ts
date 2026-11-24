@@ -1,4 +1,5 @@
 
+import type { Vec3 } from "../../math/vec3";
 import type { TriangleMesh } from "../triangleMesh";
 
 import type { NurbsSurface } from "./nurbsSurface";
