@@ -19,6 +19,8 @@ import {
   type WheelFamily,
 } from "../model/patternWheel";
 import { WheelViewer2D } from "./WheelViewer2D";
+import { quaternionFromAxisAngle } from
+    "../../../shared/math/quaternion";
 
 interface WheelViewerProps {
   readonly title: string;
@@ -32,12 +34,25 @@ function WheelViewer({
   contourPaths,
 }: WheelViewerProps) {
   const [renderer] = useState(() => new Renderer3D());
+  
   const [camera] = useState(() => {
     const instance = createCamera3D();
+
     instance.distance = 32;
     instance.near = 0.1;
+
+    // Startorientering för hjulet.
+    const rotation = quaternionFromAxisAngle(
+        { x: 1, y: 1, z: 0 },
+        Math.PI / 6
+    );
+
+    if (rotation) {
+        instance.rotation = rotation;
+    }
+
     return instance;
-  });
+});
 
   useEffect(() => () => renderer.dispose(), [renderer]);
 
