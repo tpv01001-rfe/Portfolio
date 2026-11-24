@@ -9,7 +9,8 @@ export type MainView =
   | "overview"
   | "curve-lab"
   | "charts-lab"
-  | "company-intelligence";
+  | "company-intelligence"
+  | "odontograph";
 
 export type ActiveView = MainView | ExperimentId;
 
@@ -60,6 +61,12 @@ export const navItems: NavigationEntry[] = [
     icon: "⌖",
   },
   {
+    type: "item",
+    id: "odontograph",
+    label: "Odontograph",
+    icon: "⚙",
+  },
+  {
     type: "group",
     id: "experiments",
     label: "Tester och experiment",
@@ -85,6 +92,8 @@ export function getViewTitle(view: ActiveView): string {
       return "Diagramlabb";
     case "company-intelligence":
       return "Företagsanalys";
+    case "odontograph":
+      return "Odontografen";
     default:
       return "Workspace";
   }

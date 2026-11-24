@@ -21,6 +21,12 @@ export function subtractVec3(a: Vec3, b: Vec3): Vec3 {
   };
 }
 
+
+//Vänder en vektors riktning.
+export function negateVec3(v: Vec3): Vec3 {
+  return scaleVec3(v, -1);
+}
+
 export function scaleVec3(v: Vec3, scalar: number): Vec3 {
   return {
     x: v.x * scalar,
@@ -29,6 +35,18 @@ export function scaleVec3(v: Vec3, scalar: number): Vec3 {
   };
 }
 
+
+//Speglar en vektor mot ett plan.
+//n måste vara en enhetsvektor.
+export function reflectVec3(
+  v: Vec3,
+  n: Vec3
+): Vec3 {
+  return subtractVec3(
+    v,
+    scaleVec3(n, 2 * dotVec3(v, n))
+  );
+}
 
 //a · b = |a| |b| cos(theta)
 export function dotVec3(a: Vec3, b: Vec3): number {

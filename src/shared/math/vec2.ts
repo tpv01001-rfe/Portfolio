@@ -1,9 +1,20 @@
+import type { Point2 } from "./point";
 
 export type Vec2 = {
   x: number;
   y: number;
 };
 
+export function orientation2D(
+  a: Point2,
+  b: Point2,
+  c: Point2,
+): number {
+  const ab = subtractVec2(b, a);
+  const ac = subtractVec2(c, a);
+
+  return determinantVec2(ab, ac);
+}
 
 export function addVec2(a: Vec2, b: Vec2): Vec2 {
   return {

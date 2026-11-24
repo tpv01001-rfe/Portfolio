@@ -11,20 +11,11 @@ import { DashboardPage } from "./pages/DashboardPage";
 import { ChartsLabPage } from "./pages/ChartsLabPage";
 import { CurveLabScreen } from "./features/curve-lab/CurveLabScreen";
 import { CompanyIntelligencePage } from "./pages/CompanyIntelligencePage";
-// import { ExperimentPage } from "./features/experiments/ExperimentPage";
-// import {
-//   experimentRegistry,
-//   type ExperimentId,
-// } from "./features/experiments/experimentRegistry";
+import { OdontographPage } from "./pages/OdontographPage";
+
 import { ExperimentPage } from "./features/experiments/ExperimentPage";
 import { isExperimentId } from "./features/experiments/experimentRegistry";
 
-// function isExperimentId(view: string): view is ExperimentId {
-//   return Object.prototype.hasOwnProperty.call(
-//     experimentRegistry,
-//     view
-//   );
-// }
 
 export default function App() {
   const [activeView, setActiveView] = useState<ActiveView>(defaultView);
@@ -52,6 +43,7 @@ if (isExperimentId(activeView)) {
           onOpencompanyIntelligence={() =>
             setActiveView("company-intelligence")
           }
+          onOpenOdontograph={() => setActiveView("odontograph")}
         />
       );
       break;
@@ -67,34 +59,13 @@ if (isExperimentId(activeView)) {
     case "company-intelligence":
       page = <CompanyIntelligencePage />;
       break;
+
+    case "odontograph":
+      page = <OdontographPage />;
+      break;  
   }
 }
 
-/*
-  switch (activeView) {
-    case "overview":
-      page = (
-        <DashboardPage
-          onOpenCurveLab={() => setActiveView("curve-lab")}
-          onOpenChartsLab={() => setActiveView("charts-lab")}
-          onOpencompanyIntelligence={() => setActiveView("company-intelligence")} 
-        />
-      );
-      break;
-
-    case "curve-lab":
-      page = <CurveLabScreen />;
-      break;
-
-    case "charts-lab":
-      page = <ChartsLabPage />;
-      break;
-
-    case "company-intelligence":
-      page = <CompanyIntelligencePage />;
-      break;  
-  }
-*/
   return (
     <AppShell
       activeView={activeView}

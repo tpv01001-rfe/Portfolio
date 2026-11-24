@@ -1,9 +1,6 @@
 
 import { Suspense } from "react";
-import {
-  experimentRegistry,
-  type ExperimentId,
-} from "./experimentRegistry";
+import { experimentRegistry, type ExperimentId, } from "./experimentRegistry";
 
 type ExperimentPageProps = {
   experimentId: ExperimentId;

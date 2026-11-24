@@ -2,6 +2,7 @@ type DashboardPageProps = {
   onOpenCurveLab: () => void;
   onOpenChartsLab: () => void;
   onOpencompanyIntelligence: () => void;
+  onOpenOdontograph: () => void;
 };
 
 type ToolCardProps = {
@@ -52,6 +53,7 @@ export function DashboardPage({
   onOpenCurveLab,
   onOpenChartsLab,
   onOpencompanyIntelligence,
+  onOpenOdontograph,
 }: DashboardPageProps) {
   return (
     <div className="dashboard-page">
@@ -88,6 +90,13 @@ export function DashboardPage({
               description="Interaktiva diagram med klickbara datapunkter, responsiv layout och återanvändbara komponenter."
               actionLabel="Öppna projekt"
               onClick={onOpenChartsLab}
+            />
+
+            <ToolCard
+              title="Odontograph"
+              description="Mönsterhjul för mekanisk penna."
+              actionLabel="Öppna projekt"
+              onClick={onOpenOdontograph}
             />
           </div>
         </div>
