@@ -83,40 +83,40 @@ function WheelViewer({
   );
 }
 
-interface ProfileSliderProps {
-  readonly id: string;
-  readonly label: string;
-  readonly value: number;
-  readonly min: number;
-  readonly max: number;
-  readonly step: number;
-  readonly onChange: (value: number) => void;
-}
+// interface ProfileSliderProps {
+//   readonly id: string;
+//   readonly label: string;
+//   readonly value: number;
+//   readonly min: number;
+//   readonly max: number;
+//   readonly step: number;
+//   readonly onChange: (value: number) => void;
+// }
 
-function ProfileSlider({
-  id,
-  label,
-  value,
-  min,
-  max,
-  step,
-  onChange,
-}: ProfileSliderProps) {
-  return (
-    <label htmlFor={id} style={{ display: "grid", gap: 5, minWidth: 195 }}>
-      <span>{label}: <strong>{value.toFixed(2)} mm</strong></span>
-      <input
-        id={id}
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={value}
-        onChange={(event) => onChange(Number(event.target.value))}
-      />
-    </label>
-  );
-}
+// function ProfileSlider({
+//   id,
+//   label,
+//   value,
+//   min,
+//   max,
+//   step,
+//   onChange,
+// }: ProfileSliderProps) {
+//   return (
+//     <label htmlFor={id} style={{ display: "grid", gap: 5, minWidth: 195 }}>
+//       <span>{label}: <strong>{value.toFixed(2)} mm</strong></span>
+//       <input
+//         id={id}
+//         type="range"
+//         min={min}
+//         max={max}
+//         step={step}
+//         value={value}
+//         onChange={(event) => onChange(Number(event.target.value))}
+//       />
+//     </label>
+//   );
+// }
 
 export default function Odontograph() {
   const [original] = useState(() => createReferenceWheel(createDemoPatternWheel()));
@@ -183,12 +183,12 @@ export default function Odontograph() {
     }
   }, [modified, mode, positionCount, topSpan, bottomSpan, lowerHalf]);
 
-  const updateProfile = (key: "tipOffsetMm" | "tipWidthMm" | "firstFlankCurvatureMm" | "secondFlankCurvatureMm", value: number) => {
-    setProfile((previous) => ({
-      ...previous,
-      [key]: value,
-    }));
-  };
+  // const updateProfile = (key: "tipOffsetMm" | "tipWidthMm" | "firstFlankCurvatureMm" | "secondFlankCurvatureMm", value: number) => {
+  //   setProfile((previous) => ({
+  //     ...previous,
+  //     [key]: value,
+  //   }));
+  // };
 
   const changeFamily = (nextFamily: WheelFamily) => {
     setFamily(nextFamily);
