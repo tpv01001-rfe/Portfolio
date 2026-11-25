@@ -3,6 +3,7 @@ import type { Point2 } from "../../../shared/math/point";
 import { subtractVec2, lengthVec2, orientation2D } from "../../../shared/math/vec2";
 import { sampleQuadraticBezier2 } from "../../../shared/geometry/bezierSampling";
 import { TAU, type PatternWheel, validatePatternWheel } from "../model/patternWheel";
+import { DEFAULT_REFERENCE_POSITION_COUNT } from "../model/toothPattern";
 import { familyProfiles, type FlankProfile } from "./wheelProfile";
 
 export interface WheelContour {
@@ -96,20 +97,49 @@ export function createWheelContour(
     }
   };
 
-  for (const interval of wheel.intervals) {
+  // Återförena ett upphöjt parti som delats vid varvets nollpunkt.
+  const intervals = [...wheel.intervals];
+  const first = intervals[0];
+  const last = intervals[intervals.length - 1];
+  if ((wheel.positionCount !== undefined || wheel.referencePositionCount !== undefined) && intervals.length > 1 &&
+      first.state === "lifted" && last.state === "lifted" && !first.separateStart) {
+    intervals.shift();
+    intervals.pop();
+    intervals.push({ ...last, endAngle: first.endAngle + TAU });
+  }
+  const referenceCount = wheel.referencePositionCount ??
+    (wheel.positionCount !== undefined ? DEFAULT_REFERENCE_POSITION_COUNT : undefined);
+
+  if (wheel.positionCount !== undefined &&
+      (!Number.isSafeInteger(wheel.positionCount) || wheel.positionCount <= 0)) {
+    throw new RangeError("Ogiltig konstruktionsdelning.");
+  }
+  if (referenceCount !== undefined &&
+      (!Number.isSafeInteger(referenceCount) || referenceCount <= 0)) {
+    throw new RangeError("Ogiltig referensdelning.");
+  }
+  const pitch = referenceCount === undefined ? undefined : TAU / referenceCount;
+
+  for (const interval of intervals) {
     const span = interval.endAngle - interval.startAngle;
 
-    if (interval.state === "writing") {
+    if (interval.state === "writing" || (pitch !== undefined && span >= TAU - EPSILON)) {
       const count = Math.max(2, Math.ceil(resolution * span / TAU));
 
       for (let i = 0; i < count; i++) {
-        append(polar(root, interval.startAngle + span * i / count));
+        append(polar(interval.state === "writing" ? root : outer, interval.startAngle + span * i / count));
       }
 
       continue;
     }
 
-    const centerAngle = (interval.startAngle + interval.endAngle) / 2;
+    // En flank byggs från en grundposition, inte hela det breda partiet.
+    if (pitch !== undefined && span < pitch - EPSILON) {
+      throw new RangeError("Toppintervallet är mindre än referenstaggen.");
+    }
+    const unitSpan = pitch === undefined ? span : pitch;
+    const extension = span - unitSpan;
+    const centerAngle = interval.startAngle + unitSpan / 2;
     const radial = polar(1, centerAngle);
     const tangent = { x: -radial.y, y: radial.x };
     const baseStart = polar(root, interval.startAngle);
@@ -128,6 +158,12 @@ export function createWheelContour(
     const tipEnd = {
       x: tipCenter.x + halfWidth * tangent.x,
       y: tipCenter.y + halfWidth * tangent.y,
+    };
+
+    // Rotera den avslutande spetsänden kring centrum utan att skala flanken.
+    const rotatedTipEnd = {
+      x: tipEnd.x * Math.cos(extension) - tipEnd.y * Math.sin(extension),
+      y: tipEnd.x * Math.sin(extension) + tipEnd.y * Math.cos(extension),
     };
 
     append(baseStart);
@@ -168,7 +204,17 @@ export function createWheelContour(
 
     appendFlank(baseStart, tipStart, firstFlankCurvatureMm);
     append(tipEnd);
-    appendFlank(tipEnd, baseEnd, secondFlankCurvatureMm);
+    if (extension > EPSILON) {
+      // Förläng den ursprungliga spetsen med en båge genom dess slutpunkt.
+      const radius = Math.hypot(tipEnd.x, tipEnd.y);
+      const angle = Math.atan2(tipEnd.y, tipEnd.x);
+      const count = Math.max(1, Math.ceil(resolution * extension / TAU));
+      for (let i = 1; i < count; i++) {
+        append(polar(radius, angle + extension * i / count));
+      }
+      append(rotatedTipEnd);
+    }
+    appendFlank(rotatedTipEnd, baseEnd, secondFlankCurvatureMm);
   }
 
   // Lägg till sista punkten på rotcirkeln när sista intervallet är nedsänkt.

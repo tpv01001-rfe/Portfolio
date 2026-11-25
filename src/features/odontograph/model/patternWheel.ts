@@ -5,6 +5,8 @@ export type PenState = "writing" | "lifted";
 /** Vinkelintervall i radianer: [startAngle, endAngle), inom ett helt varv. */
 export interface PatternInterval {
   readonly id: string;
+  /** Separat tagg vid denna intervallgräns. */
+  readonly separateStart?: boolean;
   readonly startAngle: number;
   readonly endAngle: number;
   readonly state: PenState;
@@ -41,6 +43,10 @@ export interface PatternWheel {
   readonly thicknessMm: number;
   /** Koaxiellt drivhjul; används för att omvandla papperssträcka till vinkel. */
   readonly driveDiameterMm: number;
+  /** Grunddelning för diskreta mönster; utelämnas för fria intervall. */
+  readonly positionCount?: number;
+  /** Oberoende geometrisk referens; standard 36 för diskreta hjul. */
+  readonly referencePositionCount?: number;
   readonly intervals: readonly PatternInterval[];
   readonly toothStyle: ToothStyle;
   readonly toothGeometry?: ToothGeometry;
@@ -427,7 +433,11 @@ export function setPenStateInRange(
     const nextState = selected ? state : original.state;
     const previous = intervals[intervals.length - 1];
 
-    if (previous?.state === nextState) {
+    const separateStart = nextState === "lifted" &&
+      original.separateStart === true &&
+      Math.abs(start - original.startAngle) < epsilon;
+
+    if (previous?.state === nextState && !separateStart) {
       intervals[intervals.length - 1] = {
         ...previous,
         endAngle: end,
@@ -438,6 +448,7 @@ export function setPenStateInRange(
         startAngle: start,
         endAngle: end,
         state: nextState,
+        separateStart,
       });
     }
   }

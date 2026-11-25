@@ -19,7 +19,7 @@ export function OdontographPage() {
                 image={{
                     src: patternWheelsImage,
                     alt: "Historiska mönsterhjul i mässing",
-                    caption: "Mönsterhjul ur den egna samlingen.",
+                    caption: "Odontograf med mönsterhjul och dubbelt dragstift.",
                 }}
                 topics={[
                     "Parametrisk geometri",

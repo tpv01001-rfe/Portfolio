@@ -1,3 +1,6 @@
+import { createReferenceWheel, periodicSpacing } from "../model/patternGenerators";
+import { applyToothPattern } from "../model/toothPattern";
+import { quaternionFromAxisAngle } from "../../../shared/math/quaternion";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Canvas3D, type Canvas3DFrame } from "../../../shared/graphics3d/Canvas3D";
 import { createCamera3D } from "../../../shared/graphics3d/camera";
@@ -19,8 +22,6 @@ import {
   type WheelFamily,
 } from "../model/patternWheel";
 import { WheelViewer2D } from "./WheelViewer2D";
-import { quaternionFromAxisAngle } from
-    "../../../shared/math/quaternion";
 
 interface WheelViewerProps {
   readonly title: string;
@@ -34,25 +35,14 @@ function WheelViewer({
   contourPaths,
 }: WheelViewerProps) {
   const [renderer] = useState(() => new Renderer3D());
-  
   const [camera] = useState(() => {
     const instance = createCamera3D();
-
     instance.distance = 32;
     instance.near = 0.1;
-
-    // Startorientering för hjulet.
-    const rotation = quaternionFromAxisAngle(
-        { x: 1, y: 1, z: 0 },
-        Math.PI / 6
-    );
-
-    if (rotation) {
-        instance.rotation = rotation;
-    }
-
+    const rotation = quaternionFromAxisAngle({ x: 1, y: 1, z: 0 }, Math.PI / 6);
+    if (rotation) instance.rotation = rotation;
     return instance;
-});
+  });
 
   useEffect(() => () => renderer.dispose(), [renderer]);
 
@@ -129,8 +119,12 @@ function ProfileSlider({
 }
 
 export default function Odontograph() {
-  const [original] = useState(createDemoPatternWheel);
-  const [lowerHalf, setLowerHalf] = useState(true);
+  const [original] = useState(() => createReferenceWheel(createDemoPatternWheel()));
+  const [lowerHalf, setLowerHalf] = useState(false);
+  const [mode, setMode] = useState<"reference" | "periodic">("reference");
+  const [positionCount, setPositionCount] = useState(36);
+  const [topSpan, setTopSpan] = useState(2);
+  const [bottomSpan, setBottomSpan] = useState(1);
   const [family, setFamily] = useState<WheelFamily>("richter");
   type EditableProfile = FlankProfile & {
     readonly firstFlankCurvatureMm: number;
@@ -165,17 +159,19 @@ export default function Odontograph() {
       `${family} – modifierat demonstrationshjul`,
     );
 
-    return lowerHalf
-      ? lowerTeethInRange(copy, Math.PI, TAU)
-      : copy;
-  }, [styledOriginal, lowerHalf, family]);
+    return copy;
+  }, [styledOriginal, family]);
 
   // Ogiltiga extrema former ska visas som ett fel, inte krascha hela sidan.
   const meshes = useMemo(() => {
     try {
+      let wheel = mode === "reference" ? modified : applyToothPattern(
+        modified, periodicSpacing(positionCount, topSpan, bottomSpan), 36
+      );
+      if (lowerHalf) wheel = lowerTeethInRange(wheel, Math.PI, TAU);
       return {
-        modified: createWheelMesh(modified),
-        modifiedContours: createWheelContourPaths(modified),
+        modified: createWheelMesh(wheel),
+        modifiedContours: createWheelContourPaths(wheel),
         error: null as string | null,
       };
     } catch (error) {
@@ -185,7 +181,7 @@ export default function Odontograph() {
         error: error instanceof Error ? error.message : "Okänt geometrifel",
       };
     }
-  }, [modified]);
+  }, [modified, mode, positionCount, topSpan, bottomSpan, lowerHalf]);
 
   const updateProfile = (key: "tipOffsetMm" | "tipWidthMm" | "firstFlankCurvatureMm" | "secondFlankCurvatureMm", value: number) => {
     setProfile((previous) => ({
@@ -230,7 +226,36 @@ export default function Odontograph() {
         </label>
       </div>
 
-      <div style={{ display: "flex", gap: 20, flexWrap: "wrap", marginBottom: 22 }}>
+      <section style={{ border: "1px solid #394553", padding: 16, borderRadius: 10, marginBottom: 20 }}>
+        <h3 style={{ marginTop: 0 }}>Konstruktionsverktyg</h3>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
+          <button type="button" onClick={() => { setMode("reference"); setLowerHalf(false); }}>
+            Referenshjul – 36 taggar
+          </button>
+          <button type="button" onClick={() => { setMode("periodic"); setLowerHalf(false); }}>
+            Periodic spacing
+          </button>
+        </div>
+        {mode === "periodic" && (
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 16, marginTop: 16 }}>
+            {([
+              ["Grundpositioner", positionCount, setPositionCount],
+              ["Topp", topSpan, setTopSpan],
+              ["Dal", bottomSpan, setBottomSpan],
+            ] as const).map(([label, value, setter]) => (
+              <label key={label} style={{ display: "grid", gap: 6 }}>
+                {label}: {value}
+                <input type="range" min={1} max={label === "Grundpositioner" ? 120 : 36}
+                  step={1} value={value} onChange={event => setter(Number(event.target.value))} />
+              </label>
+            ))}
+            <button type="button" onClick={() => setBottomSpan(topSpan)}>Equal spacing</button>
+            <p>Referens: 36 · Toppvinkel: {(360 * topSpan / positionCount).toFixed(2)}°</p>
+          </div>
+        )}
+      </section>
+
+      {/* <div style={{ display: "flex", gap: 20, flexWrap: "wrap", marginBottom: 22 }}>
         <ProfileSlider
           id="tip-offset"
           label="Spetsförskjutning"
@@ -270,7 +295,7 @@ export default function Odontograph() {
         <button type="button" onClick={() => setProfile(createEditableProfile(family))}>
           Återställ profil
         </button>
-      </div>
+      </div> */}
 
       {meshes.error && (
         <p role="alert" style={{ color: "#ffb6a8" }}>
