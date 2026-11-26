@@ -1,0 +1,28 @@
+.workspace {
+    --workspace-bg: #101820;
+    --workspace-panel: #202e3b;
+    --workspace-border: #394553;
+    --workspace-accent: #40c7c2;
+    --workspace-view-height: clamp(340px, 52vh, 560px);
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 8px;
+    container-type: inline-size;
+    min-width: 0;
+}
+.workspace__stage { position: relative; min-width: 0; }
+.workspace__panel {
+    position: absolute;
+    z-index: 5;
+    top: 8px;
+    left: 8px;
+    width: min(280px, calc(100% - 16px));
+    max-height: calc(100% - 16px);
+    overflow: auto;
+    box-sizing: border-box;
+    padding: 12px;
+    background: var(--workspace-panel);
+    border: 1px solid var(--workspace-border);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px #0005;
+}

@@ -1,7 +1,12 @@
+import { Workspace } from "../../../shared/ui/workspace/Workspace";
+import { ToolBar } from "../../../shared/ui/workspace/ToolBar";
+import { SplitView } from "../../../shared/ui/workspace/SplitView";
+import { Viewport } from "../../../shared/ui/workspace/Viewport";
+import "./Odontograph.css";
 import { createReferenceWheel, periodicSpacing } from "../model/patternGenerators";
 import { applyToothPattern } from "../model/toothPattern";
 import { quaternionFromAxisAngle } from "../../../shared/math/quaternion";
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Canvas3D, type Canvas3DFrame } from "../../../shared/graphics3d/Canvas3D";
 import { createCamera3D } from "../../../shared/graphics3d/camera";
 import { createOrbitController } from "../../../shared/graphics3d/orbitController";
@@ -37,7 +42,7 @@ function WheelViewer({
   const [renderer] = useState(() => new Renderer3D());
   const [camera] = useState(() => {
     const instance = createCamera3D();
-    instance.distance = 32;
+    instance.distance = 24;
     instance.near = 0.1;
     const rotation = quaternionFromAxisAngle({ x: 1, y: 1, z: 0 }, Math.PI / 6);
     if (rotation) instance.rotation = rotation;
@@ -71,15 +76,9 @@ function WheelViewer({
   );
 
   return (
-    <section style={{ minWidth: 0, flex: "1 1 300px" }}>
-      <h3 style={{ margin: "0 0 10px", fontSize: 16 }}>{title}</h3>
-      <div style={{ height: 340, background: "#101820", borderRadius: 10, overflow: "hidden" }}>
-        <Canvas3D onCanvasReady={handleCanvasReady} render={render} />
-      </div>
-      <p style={{ opacity: 0.75, fontSize: 13, marginTop: 8 }}>
-        {mesh.triangles.length.toLocaleString("sv-SE")} trianglar · Dra för att rotera, scrolla för att zooma
-      </p>
-    </section>
+    <Viewport title={title} footer={`${mesh.triangles.length.toLocaleString("sv-SE")} trianglar · Rotera / zooma`}>
+      <Canvas3D onCanvasReady={handleCanvasReady} render={render} />
+    </Viewport>
   );
 }
 
@@ -103,7 +102,7 @@ function ProfileSlider({
   onChange,
 }: ProfileSliderProps) {
   return (
-    <label htmlFor={id} style={{ display: "grid", gap: 5, minWidth: 195 }}>
+    <label htmlFor={id} style={{ display: "grid", gap: 5, minWidth: 0 }}>
       <span>{label}: <strong>{value.toFixed(2)} mm</strong></span>
       <input
         id={id}
@@ -119,41 +118,8 @@ function ProfileSlider({
 }
 
 
-interface CollapsibleSectionProps {
-  readonly title: string;
-  readonly defaultOpen?: boolean;
-  readonly children: ReactNode;
-}
-
-// Inbyggd HTML-komponent med tangentbordsstöd.
-function CollapsibleSection({
-  title,
-  defaultOpen = false,
-  children,
-}: CollapsibleSectionProps) {
-  const [open, setOpen] = useState(defaultOpen);
-
-  return (
-    <details
-      open={open}
-      onToggle={(event) => setOpen(event.currentTarget.open)}
-      style={{
-        border: "1px solid #394553",
-        borderRadius: 10,
-        marginBottom: 12,
-      }}
-    >
-      <summary style={{ padding: "10px 16px", cursor: "pointer", fontWeight: 600 }}>
-        {title}
-      </summary>
-      <div style={{ padding: "4px 16px 16px" }}>
-        {children}
-      </div>
-    </details>
-  );
-}
-
 export default function Odontograph() {
+  const [activeTool, setActiveTool] = useState<string | null>(null);
   const [original] = useState(() => createReferenceWheel(createDemoPatternWheel()));
   const [lowerHalf, setLowerHalf] = useState(false);
   const [mode, setMode] = useState<"reference" | "periodic">("reference");
@@ -246,14 +212,14 @@ export default function Odontograph() {
     setProfile(createEditableProfile(nextFamily));
   };
 
-  return (
-    <div style={{ padding: 20, color: "#e4edf3", background: "#111923", minHeight: "100%" }}>
-      <h2 style={{ marginTop: 0 }}>Odontografen – fria taggkonturer</h2>
-      <p style={{ maxWidth: 820, opacity: 0.8 }}>
-        Undersök mönsterhjulets geometri och finjustera taggarnas tangentiella
-        förskjutning, spetsbredd och rundning i 2D och 3D.
-      </p>
+  const tools = [
+    { id: "construction", label: "Konstruktion", icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2" fill="#202e3b"/><circle cx="15" cy="12" r="2" fill="#202e3b"/><circle cx="8" cy="18" r="2" fill="#202e3b"/></svg> },
+    { id: "profile", label: "Taggens form", icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M3 19 Q8 2 12 7 T21 19"/><circle cx="3" cy="19" r="1.5"/><circle cx="21" cy="19" r="1.5"/></svg> },
+  ];
 
+  return (
+    <div className="odontograph-workspace">
+      <h2>Odontograf – fria taggkonturer</h2>
       <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 20, alignItems: "center" }}>
         <label htmlFor="wheel-family">Taggprofil</label>
         <select
@@ -277,8 +243,18 @@ export default function Odontograph() {
         </label>
       </div>
 
-      <CollapsibleSection title="Konstruktionsverktyg" defaultOpen>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
+      <Workspace
+        toolbar={<ToolBar tools={tools} activeTool={activeTool} onToolChange={setActiveTool} />}
+        panel={activeTool && (
+          <div className="odontograph-tool">
+            <header>
+              <strong>{activeTool === "construction" ? "Konstruktion" : "Taggens form"}</strong>
+              <button type="button" aria-label="Stäng verktyg" onClick={() => setActiveTool(null)}>×</button>
+            </header>
+            {activeTool === "construction" ? (
+              <div className="odontograph-tool__content">
+
+        <div style={{ display: "grid", gap: 12 }}>
           <button type="button" onClick={() => { setMode("reference"); setLowerHalf(false); }}>
             Referenshjul – 36 taggar
           </button>
@@ -287,7 +263,7 @@ export default function Odontograph() {
           </button>
         </div>
         {mode === "periodic" && (
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 16, marginTop: 16 }}>
+          <div style={{ display: "grid", gap: 12, marginTop: 16 }}>
             {([
               ["Grundpositioner", positionCount, setPositionCount],
               ["Topp", topSpan, setTopSpan],
@@ -303,10 +279,11 @@ export default function Odontograph() {
             <p>Referens: 36 · Toppvinkel: {(360 * topSpan / positionCount).toFixed(2)}°</p>
           </div>
         )}
-      </CollapsibleSection>
+                    </div>
+            ) : (
+              <div className="odontograph-tool__content">
 
-      <CollapsibleSection title="Taggens form">
-        <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+        <div style={{ display: "grid", gap: 12 }}>
           <ProfileSlider
             id="tip-offset"
             label="Spetsförskjutning"
@@ -347,8 +324,20 @@ export default function Odontograph() {
             Återställ profil
           </button>
         </div>
-      </CollapsibleSection>
-
+                    </div>
+            )}
+          </div>
+        )}
+      >
+        <SplitView initialRatio={0.55}
+          first={meshes.modified && meshes.modifiedContours ? (
+            <WheelViewer title="3D · Perspektiv" mesh={meshes.modified} contourPaths={meshes.modifiedContours} />
+          ) : <Viewport title="3D · Perspektiv"><p className="odontograph-empty">Ingen giltig 3D-modell.</p></Viewport>}
+          second={construction.wheel ? (
+            <WheelViewer2D wheel={construction.wheel} title="2D · Konstruktion" />
+          ) : <Viewport title="2D · Konstruktion"><p className="odontograph-empty">Ingen giltig konstruktion.</p></Viewport>}
+        />
+      </Workspace>
       {construction.error && (
         <p role="alert" style={{ color: "#ffb6a8" }}>
           Konstruktionen är ogiltig: {construction.error}
@@ -361,26 +350,7 @@ export default function Odontograph() {
         </p>
       )}
 
-      {meshes.modified && meshes.modifiedContours && (
-        <div style={{ display: "flex", minWidth: 0 }}>
-          <WheelViewer
-            title="Modifierad kopia"
-            mesh={meshes.modified}
-            contourPaths={meshes.modifiedContours}
-          />
-        </div>
-      )}
-
-      {construction.wheel && (
-        <div style={{ marginTop: 24 }}>
-          <WheelViewer2D wheel={construction.wheel} title="2D-profil – aktuell konstruktion" />
-        </div>
-      )}
-
-      <p style={{ maxWidth: 820, opacity: 0.7, fontSize: 13 }}>
-        Båda vyerna visar den aktuella konstruktionen.
-        Förinställningarna är illustrativa, inte uppmätta historiska profiler.
-      </p>
+      <p className="odontograph-note">Båda vyerna visar den aktuella konstruktionen. Förinställningarna är illustrativa, inte uppmätta historiska profiler.</p>
     </div>
   );
 }

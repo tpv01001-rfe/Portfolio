@@ -1,0 +1,25 @@
+.workspace-viewport {
+    min-width: 0;
+    background: var(--workspace-bg, #101820);
+    border: 1px solid var(--workspace-border, #394553);
+    border-radius: 8px;
+    overflow: hidden;
+}
+.workspace-viewport__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 10px;
+    min-height: 48px;
+    box-sizing: border-box;
+}
+.workspace-viewport__header h3 { margin: 0; font-size: 14px; }
+.workspace-viewport__body {
+    position: relative;
+    height: var(--workspace-view-height, 360px);
+    min-width: 0;
+    overflow: hidden;
+}
+.workspace-viewport footer { padding: 8px 10px; font-size: 12px; opacity: .75; }

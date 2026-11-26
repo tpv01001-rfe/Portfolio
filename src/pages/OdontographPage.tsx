@@ -13,7 +13,7 @@ export function OdontographPage() {
 
             <ProjectIntroduction
                 eyebrow="Historiska instrument / Geometrisk modellering"
-                title="Odontografen"
+                title="Odontograf"
                 subtitle="Från historiska mönsterhjul till digitala modeller"
                 status="in-development"
                 image={{
@@ -29,7 +29,7 @@ export function OdontographPage() {
                 ]}
             >
                 <p>
-                    Odontografen är ett experimentellt projekt
+                    Odontograf är ett experimentellt projekt
                     där historiska mönsterhjul återskapas och
                     undersöks med hjälp av modern geometrisk
                     modellering.

@@ -1,3 +1,4 @@
+import { Viewport } from "../../../shared/ui/workspace/Viewport";
 import { useCallback, useMemo, useState } from "react";
 import { Canvas2D } from "../../../shared/graphics2d/Canvas2D";
 import type { Canvas2DRenderContext } from "../../../shared/graphics2d/canvas2DTypes";
@@ -69,28 +70,17 @@ export function WheelViewer2D({ wheel, title }: WheelViewer2DProps) {
   );
 
   return (
-    <section style={{ minWidth: 0 }}>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: 12,
-          marginBottom: 10,
-        }}
-      >
-        <h3 style={{ margin: 0, fontSize: 16 }}>{title}</h3>
-
-        <label style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <input
-            type="checkbox"
-            checked={showPoints}
-            onChange={(event) => setShowPoints(event.target.checked)}
-          />
-          Visa konturpunkter
+    <Viewport
+      title={title}
+      actions={(
+        <label className="odontograph-points">
+          <input type="checkbox" checked={showPoints}
+            onChange={event => setShowPoints(event.target.checked)} />
+          Konturpunkter
         </label>
-      </div>
-
+      )}
+      footer="Panorera / zooma · mm"
+    >
       <Canvas2D
         viewport={viewport}
         onViewportChange={setViewport}
@@ -98,17 +88,8 @@ export function WheelViewer2D({ wheel, title }: WheelViewer2DProps) {
         showGrid
         minScale={2}
         maxScale={3000}
-        style={{
-          height: 360,
-          background: "#101820",
-          borderRadius: 10,
-        }}
+        style={{ width: "100%", height: "100%" }}
       />
-
-      <p style={{ opacity: 0.75, fontSize: 13 }}>
-        Dra för att panorera och använd mushjulet för att zooma.
-        Konturens koordinater anges i millimeter.
-      </p>
-    </section>
+    </Viewport>
   );
 }

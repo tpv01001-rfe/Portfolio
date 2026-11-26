@@ -1,0 +1,27 @@
+.workspace-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-self: start;
+    padding: 4px;
+    background: var(--workspace-panel);
+    border-radius: 8px;
+}
+.workspace-toolbar button {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    color: inherit;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.workspace-toolbar button[aria-pressed="true"] {
+    border-color: var(--workspace-accent);
+    color: var(--workspace-accent);
+}
+.workspace-toolbar button:focus-visible { outline: 2px solid var(--workspace-accent); }
+.workspace-toolbar svg { width: 22px; height: 22px; }

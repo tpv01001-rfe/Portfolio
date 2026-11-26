@@ -1,0 +1,9 @@
+.workspace-split {
+    display: grid;
+    grid-template-columns: minmax(0, var(--workspace-ratio)) minmax(0, var(--workspace-rest));
+    gap: 8px;
+}
+.workspace-split > div { min-width: 0; }
+@container (max-width: 680px) {
+    .workspace-split { grid-template-columns: minmax(0, 1fr); }
+}

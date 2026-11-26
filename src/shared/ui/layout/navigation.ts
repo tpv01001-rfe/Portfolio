@@ -45,7 +45,7 @@ export const navItems: NavigationEntry[] = [
    {
     type: "item",
     id: "odontograph",
-    label: "Odontograph",
+    label: "Odontograf",
     icon: "⚙",
   },
   {
