@@ -1,7 +1,7 @@
 import { createReferenceWheel, periodicSpacing } from "../model/patternGenerators";
 import { applyToothPattern } from "../model/toothPattern";
 import { quaternionFromAxisAngle } from "../../../shared/math/quaternion";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { Canvas3D, type Canvas3DFrame } from "../../../shared/graphics3d/Canvas3D";
 import { createCamera3D } from "../../../shared/graphics3d/camera";
 import { createOrbitController } from "../../../shared/graphics3d/orbitController";
@@ -83,40 +83,75 @@ function WheelViewer({
   );
 }
 
-// interface ProfileSliderProps {
-//   readonly id: string;
-//   readonly label: string;
-//   readonly value: number;
-//   readonly min: number;
-//   readonly max: number;
-//   readonly step: number;
-//   readonly onChange: (value: number) => void;
-// }
+interface ProfileSliderProps {
+  readonly id: string;
+  readonly label: string;
+  readonly value: number;
+  readonly min: number;
+  readonly max: number;
+  readonly step: number;
+  readonly onChange: (value: number) => void;
+}
 
-// function ProfileSlider({
-//   id,
-//   label,
-//   value,
-//   min,
-//   max,
-//   step,
-//   onChange,
-// }: ProfileSliderProps) {
-//   return (
-//     <label htmlFor={id} style={{ display: "grid", gap: 5, minWidth: 195 }}>
-//       <span>{label}: <strong>{value.toFixed(2)} mm</strong></span>
-//       <input
-//         id={id}
-//         type="range"
-//         min={min}
-//         max={max}
-//         step={step}
-//         value={value}
-//         onChange={(event) => onChange(Number(event.target.value))}
-//       />
-//     </label>
-//   );
-// }
+function ProfileSlider({
+  id,
+  label,
+  value,
+  min,
+  max,
+  step,
+  onChange,
+}: ProfileSliderProps) {
+  return (
+    <label htmlFor={id} style={{ display: "grid", gap: 5, minWidth: 195 }}>
+      <span>{label}: <strong>{value.toFixed(2)} mm</strong></span>
+      <input
+        id={id}
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={(event) => onChange(Number(event.target.value))}
+      />
+    </label>
+  );
+}
+
+
+interface CollapsibleSectionProps {
+  readonly title: string;
+  readonly defaultOpen?: boolean;
+  readonly children: ReactNode;
+}
+
+// Inbyggd HTML-komponent med tangentbordsstöd.
+function CollapsibleSection({
+  title,
+  defaultOpen = false,
+  children,
+}: CollapsibleSectionProps) {
+  const [open, setOpen] = useState(defaultOpen);
+
+  return (
+    <details
+      open={open}
+      onToggle={(event) => setOpen(event.currentTarget.open)}
+      style={{
+        border: "1px solid #394553",
+        borderRadius: 10,
+        marginBottom: 12,
+      }}
+    >
+      <summary style={{ padding: "10px 16px", cursor: "pointer", fontWeight: 600 }}>
+        {title}
+      </summary>
+      <div style={{ padding: "4px 16px 16px" }}>
+        {children}
+      </div>
+    </details>
+  );
+}
 
 export default function Odontograph() {
   const [original] = useState(() => createReferenceWheel(createDemoPatternWheel()));
@@ -162,17 +197,32 @@ export default function Odontograph() {
     return copy;
   }, [styledOriginal, family]);
 
-  // Ogiltiga extrema former ska visas som ett fel, inte krascha hela sidan.
-  const meshes = useMemo(() => {
+  // Samma konstruktion används av båda vyerna.
+  const construction = useMemo(() => {
     try {
       let wheel = mode === "reference" ? modified : applyToothPattern(
         modified, periodicSpacing(positionCount, topSpan, bottomSpan), 36
       );
       if (lowerHalf) wheel = lowerTeethInRange(wheel, Math.PI, TAU);
+      return { wheel, error: null };
+    } catch (error) {
       return {
-        modified: createWheelMesh(wheel),
-        modifiedContours: createWheelContourPaths(wheel),
-        error: null as string | null,
+        wheel: null,
+        error: error instanceof Error ? error.message : "Okänt konstruktionsfel",
+      };
+    }
+  }, [modified, mode, positionCount, topSpan, bottomSpan, lowerHalf]);
+
+  // Ett trianguleringsfel får inte hindra 2D-vyn.
+  const meshes = useMemo(() => {
+    if (!construction.wheel) {
+      return { modified: null, modifiedContours: null, error: null };
+    }
+    try {
+      return {
+        modified: createWheelMesh(construction.wheel),
+        modifiedContours: createWheelContourPaths(construction.wheel),
+        error: null,
       };
     } catch (error) {
       return {
@@ -181,14 +231,15 @@ export default function Odontograph() {
         error: error instanceof Error ? error.message : "Okänt geometrifel",
       };
     }
-  }, [modified, mode, positionCount, topSpan, bottomSpan, lowerHalf]);
+  }, [construction]);
 
-  // const updateProfile = (key: "tipOffsetMm" | "tipWidthMm" | "firstFlankCurvatureMm" | "secondFlankCurvatureMm", value: number) => {
-  //   setProfile((previous) => ({
-  //     ...previous,
-  //     [key]: value,
-  //   }));
-  // };
+  const updateProfile = (key: "tipOffsetMm" | "tipWidthMm" | "firstFlankCurvatureMm" | "secondFlankCurvatureMm", value: number) => {
+    setProfile((previous) => ({
+      ...previous,
+      [key]: value,
+    }));
+  };
+
 
   const changeFamily = (nextFamily: WheelFamily) => {
     setFamily(nextFamily);
@@ -226,8 +277,7 @@ export default function Odontograph() {
         </label>
       </div>
 
-      <section style={{ border: "1px solid #394553", padding: 16, borderRadius: 10, marginBottom: 20 }}>
-        <h3 style={{ marginTop: 0 }}>Konstruktionsverktyg</h3>
+      <CollapsibleSection title="Konstruktionsverktyg" defaultOpen>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
           <button type="button" onClick={() => { setMode("reference"); setLowerHalf(false); }}>
             Referenshjul – 36 taggar
@@ -253,53 +303,61 @@ export default function Odontograph() {
             <p>Referens: 36 · Toppvinkel: {(360 * topSpan / positionCount).toFixed(2)}°</p>
           </div>
         )}
-      </section>
+      </CollapsibleSection>
 
-      {/* <div style={{ display: "flex", gap: 20, flexWrap: "wrap", marginBottom: 22 }}>
-        <ProfileSlider
-          id="tip-offset"
-          label="Spetsförskjutning"
-          value={profile.tipOffsetMm}
-          min={-3}
-          max={3}
-          step={0.01}
-          onChange={(value) => updateProfile("tipOffsetMm", value)}
-        />
-        <ProfileSlider
-          id="tip-width"
-          label="Spetsbredd"
-          value={profile.tipWidthMm}
-          min={0}
-          max={1}
-          step={0.01}
-          onChange={(value) => updateProfile("tipWidthMm", value)}
-        />
-        <ProfileSlider
-          id="first-flank-curvature"
-          label="Första flankens kurvatur"
-          value={profile.firstFlankCurvatureMm}
-          min={0}
-          max={0.5}
-          step={0.01}
-          onChange={(value) => updateProfile("firstFlankCurvatureMm", value)}
-        />
-        <ProfileSlider
-          id="second-flank-curvature"
-          label="Andra flankens kurvatur"
-          value={profile.secondFlankCurvatureMm}
-          min={0}
-          max={0.5}
-          step={0.01}
-          onChange={(value) => updateProfile("secondFlankCurvatureMm", value)}
-        />
-        <button type="button" onClick={() => setProfile(createEditableProfile(family))}>
-          Återställ profil
-        </button>
-      </div> */}
+      <CollapsibleSection title="Taggens form">
+        <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+          <ProfileSlider
+            id="tip-offset"
+            label="Spetsförskjutning"
+            value={profile.tipOffsetMm}
+            min={-3}
+            max={3}
+            step={0.01}
+            onChange={(value) => updateProfile("tipOffsetMm", value)}
+          />
+          <ProfileSlider
+            id="tip-width"
+            label="Spetsbredd"
+            value={profile.tipWidthMm}
+            min={0}
+            max={1}
+            step={0.01}
+            onChange={(value) => updateProfile("tipWidthMm", value)}
+          />
+          <ProfileSlider
+            id="first-flank-curvature"
+            label="Första flankens kurvatur"
+            value={profile.firstFlankCurvatureMm}
+            min={0}
+            max={0.5}
+            step={0.01}
+            onChange={(value) => updateProfile("firstFlankCurvatureMm", value)}
+          />
+          <ProfileSlider
+            id="second-flank-curvature"
+            label="Andra flankens kurvatur"
+            value={profile.secondFlankCurvatureMm}
+            min={0}
+            max={0.5}
+            step={0.01}
+            onChange={(value) => updateProfile("secondFlankCurvatureMm", value)}
+          />
+          <button type="button" onClick={() => setProfile(createEditableProfile(family))}>
+            Återställ profil
+          </button>
+        </div>
+      </CollapsibleSection>
+
+      {construction.error && (
+        <p role="alert" style={{ color: "#ffb6a8" }}>
+          Konstruktionen är ogiltig: {construction.error}
+        </p>
+      )}
 
       {meshes.error && (
         <p role="alert" style={{ color: "#ffb6a8" }}>
-          Konturen kan inte genereras: {meshes.error}
+          3D-modellen kan inte genereras: {meshes.error}
         </p>
       )}
 
@@ -313,13 +371,14 @@ export default function Odontograph() {
         </div>
       )}
 
-      <div style={{ marginTop: 24 }}>
-        <WheelViewer2D wheel={styledOriginal} title="2D-profil – originalmönster" />
-      </div>
+      {construction.wheel && (
+        <div style={{ marginTop: 24 }}>
+          <WheelViewer2D wheel={construction.wheel} title="2D-profil – aktuell konstruktion" />
+        </div>
+      )}
 
       <p style={{ maxWidth: 820, opacity: 0.7, fontSize: 13 }}>
-        Reglagen påverkar taggformen i båda vyerna. 2D-vyn visar originalmönstret,
-        medan 3D-vyn visar den modifierade kopian.
+        Båda vyerna visar den aktuella konstruktionen.
         Förinställningarna är illustrativa, inte uppmätta historiska profiler.
       </p>
     </div>
