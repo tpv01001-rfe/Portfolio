@@ -1,0 +1,62 @@
+.button-control {
+    --button-accent: var(--input-accent, #6fb1ff);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 34px;
+    padding: 8px 14px;
+    background: var(--control-bg, #202d3a);
+    color: var(--control-text, #dce6ef);
+    border: 1px solid var(--control-border, #435363);
+    border-radius: var(--control-radius, 8px);
+    font: inherit;
+    font-size: .875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 120ms ease, border-color 120ms ease;
+}
+
+.button-control[data-variant="primary"] {
+    background: var(--button-accent);
+    border-color: var(--button-accent);
+    color: var(--control-on-accent, #101820);
+}
+
+.button-control[data-variant="toggle"][data-active="true"] {
+    background: color-mix(in srgb, var(--button-accent) 15%, transparent);
+    border-color: var(--button-accent);
+    color: var(--button-accent);
+}
+
+.button-control[data-variant="ghost"] {
+    background: transparent;
+    border-color: transparent;
+}
+
+.button-control:hover:not(:disabled) {
+    border-color: var(--button-accent);
+    background: var(--control-bg-hover, #2b3b4a);
+}
+
+.button-control[data-variant="primary"]:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--button-accent) 85%, white);
+}
+
+.button-control[data-variant="toggle"][data-active="true"]:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--button-accent) 23%, transparent);
+}
+
+.button-control:focus-visible {
+    outline: 2px solid var(--button-accent);
+    outline-offset: 2px;
+}
+
+.button-control:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .button-control { transition: none; }
+}

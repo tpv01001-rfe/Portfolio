@@ -42,13 +42,13 @@
 
 .trigger:hover {
   background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(120, 220, 255, 0.24);
-  box-shadow: 0 0 0 4px rgba(60, 180, 255, 0.06);
+  border-color: color-mix(in srgb, var(--input-accent, #78dcff) 40%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--input-accent, #3cb4ff) 10%, transparent);
 }
 
 .trigger:focus-visible,
 .option:focus-visible {
-  outline: 2px solid rgba(120, 220, 255, 0.75);
+  outline: 2px solid var(--input-accent, #78dcff);
   outline-offset: 2px;
 }
 
@@ -61,7 +61,7 @@
 
 .chevron {
   flex-shrink: 0;
-  color: rgba(170, 220, 255, 0.85);
+  color: var(--input-accent, #aadcff);
   font-size: 0.8rem;
 }
 
@@ -122,11 +122,11 @@
 
 .option:hover,
 .option:focus-visible {
-  background: rgba(77, 227, 195, 0.12);
+  background: color-mix(in srgb, var(--input-accent, #4de3c3) 12%, transparent);
   color: #fff;
 }
 
 .active {
-  background: rgba(77, 227, 195, 0.16);
+  background: color-mix(in srgb, var(--input-accent, #4de3c3) 16%, transparent);
   color: #fff;
 }

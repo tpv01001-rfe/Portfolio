@@ -1,3 +1,7 @@
+import ButtonControl from "../../../shared/ui/controls/ButtonControl";
+import SliderControl from "../../../shared/ui/controls/SliderControl";
+import CheckboxControl from "../../../shared/ui/controls/CheckboxControl";
+import { SelectControl } from "../../../shared/ui/controls/SelectControl";
 import { Workspace } from "../../../shared/ui/workspace/Workspace";
 import { ToolBar } from "../../../shared/ui/workspace/ToolBar";
 import { SplitView } from "../../../shared/ui/workspace/SplitView";
@@ -81,42 +85,6 @@ function WheelViewer({
     </Viewport>
   );
 }
-
-interface ProfileSliderProps {
-  readonly id: string;
-  readonly label: string;
-  readonly value: number;
-  readonly min: number;
-  readonly max: number;
-  readonly step: number;
-  readonly onChange: (value: number) => void;
-}
-
-function ProfileSlider({
-  id,
-  label,
-  value,
-  min,
-  max,
-  step,
-  onChange,
-}: ProfileSliderProps) {
-  return (
-    <label htmlFor={id} style={{ display: "grid", gap: 5, minWidth: 0 }}>
-      <span>{label}: <strong>{value.toFixed(2)} mm</strong></span>
-      <input
-        id={id}
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={value}
-        onChange={(event) => onChange(Number(event.target.value))}
-      />
-    </label>
-  );
-}
-
 
 export default function Odontograph() {
   const [activeTool, setActiveTool] = useState<string | null>(null);
@@ -220,27 +188,23 @@ export default function Odontograph() {
   return (
     <div className="odontograph-workspace">
       <h2>Odontograf – fria taggkonturer</h2>
-      <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 20, alignItems: "center" }}>
-        <label htmlFor="wheel-family">Taggprofil</label>
-        <select
-          id="wheel-family"
+      <div className="odontograph-settings">
+        <SelectControl<WheelFamily>
+          label="Taggprofil"
           value={family}
-          onChange={(event) => changeFamily(event.target.value as WheelFamily)}
-        >
-          <option value="richter">Richter – symmetrisk</option>
-          <option value="haff">Haff – rundad</option>
-          <option value="riefler">Riefler – bakåtlutad, moturs</option>
-          <option value="custom">Custom</option>
-        </select>
-
-        <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <input
-            type="checkbox"
-            checked={lowerHalf}
-            onChange={(event) => setLowerHalf(event.target.checked)}
-          />
-          Sänk upphöjda partier på halva hjulet
-        </label>
+          options={[
+            { value: "richter", label: "Richter – symmetrisk" },
+            { value: "haff", label: "Haff – rundad" },
+            { value: "riefler", label: "Riefler – bakåtlutad, moturs" },
+            { value: "custom", label: "Custom" },
+          ]}
+          onChange={changeFamily}
+        />
+        <CheckboxControl
+          label="Sänk upphöjda partier på halva hjulet"
+          checked={lowerHalf}
+          onChange={setLowerHalf}
+        />
       </div>
 
       <Workspace
@@ -249,82 +213,86 @@ export default function Odontograph() {
           <div className="odontograph-tool">
             <header>
               <strong>{activeTool === "construction" ? "Konstruktion" : "Taggens form"}</strong>
-              <button type="button" aria-label="Stäng verktyg" onClick={() => setActiveTool(null)}>×</button>
+              <ButtonControl variant="ghost" aria-label="Stäng verktyg" onClick={() => setActiveTool(null)}>×</ButtonControl>
             </header>
             {activeTool === "construction" ? (
               <div className="odontograph-tool__content">
 
-        <div style={{ display: "grid", gap: 12 }}>
-          <button type="button" onClick={() => { setMode("reference"); setLowerHalf(false); }}>
-            Referenshjul – 36 taggar
-          </button>
-          <button type="button" onClick={() => { setMode("periodic"); setLowerHalf(false); }}>
-            Periodic spacing
-          </button>
-        </div>
-        {mode === "periodic" && (
-          <div style={{ display: "grid", gap: 12, marginTop: 16 }}>
-            {([
-              ["Grundpositioner", positionCount, setPositionCount],
-              ["Topp", topSpan, setTopSpan],
-              ["Dal", bottomSpan, setBottomSpan],
-            ] as const).map(([label, value, setter]) => (
-              <label key={label} style={{ display: "grid", gap: 6 }}>
-                {label}: {value}
-                <input type="range" min={1} max={label === "Grundpositioner" ? 120 : 36}
-                  step={1} value={value} onChange={event => setter(Number(event.target.value))} />
-              </label>
-            ))}
-            <button type="button" onClick={() => setBottomSpan(topSpan)}>Equal spacing</button>
-            <p>Referens: 36 · Toppvinkel: {(360 * topSpan / positionCount).toFixed(2)}°</p>
-          </div>
-        )}
-                    </div>
+                <div style={{ display: "grid", gap: 12 }}>
+                  <ButtonControl variant="toggle" active={mode === "reference"} onClick={() => { setMode("reference"); setLowerHalf(false); }}>
+                    Referenshjul – 36 taggar
+                  </ButtonControl>
+                  <ButtonControl variant="toggle" active={mode === "periodic"} onClick={() => { setMode("periodic"); setLowerHalf(false); }}>
+                    Periodic spacing
+                  </ButtonControl>
+                </div>
+                {mode === "periodic" && (
+                  <div style={{ display: "grid", gap: 12, marginTop: 16 }}>
+                    {([
+                      ["Grundpositioner", positionCount, setPositionCount],
+                      ["Topp", topSpan, setTopSpan],
+                      ["Dal", bottomSpan, setBottomSpan],
+                    ] as const).map(([label, value, setter]) => (
+                      <SliderControl
+                        key={label}
+                        label={label}
+                        value={value}
+                        min={1}
+                        max={label === "Grundpositioner" ? 120 : 36}
+                        step={1}
+                        onChange={setter}
+                      />
+                    ))}
+                    <ButtonControl onClick={() => setBottomSpan(topSpan)}>Equal spacing</ButtonControl>
+                    <p>Referens: 36 · Toppvinkel: {(360 * topSpan / positionCount).toFixed(2)}°</p>
+                  </div>
+                )}
+              </div>
             ) : (
               <div className="odontograph-tool__content">
 
-        <div style={{ display: "grid", gap: 12 }}>
-          <ProfileSlider
-            id="tip-offset"
-            label="Spetsförskjutning"
-            value={profile.tipOffsetMm}
-            min={-3}
-            max={3}
-            step={0.01}
-            onChange={(value) => updateProfile("tipOffsetMm", value)}
-          />
-          <ProfileSlider
-            id="tip-width"
-            label="Spetsbredd"
-            value={profile.tipWidthMm}
-            min={0}
-            max={1}
-            step={0.01}
-            onChange={(value) => updateProfile("tipWidthMm", value)}
-          />
-          <ProfileSlider
-            id="first-flank-curvature"
-            label="Första flankens kurvatur"
-            value={profile.firstFlankCurvatureMm}
-            min={0}
-            max={0.5}
-            step={0.01}
-            onChange={(value) => updateProfile("firstFlankCurvatureMm", value)}
-          />
-          <ProfileSlider
-            id="second-flank-curvature"
-            label="Andra flankens kurvatur"
-            value={profile.secondFlankCurvatureMm}
-            min={0}
-            max={0.5}
-            step={0.01}
-            onChange={(value) => updateProfile("secondFlankCurvatureMm", value)}
-          />
-          <button type="button" onClick={() => setProfile(createEditableProfile(family))}>
-            Återställ profil
-          </button>
-        </div>
-                    </div>
+                <div style={{ display: "grid", gap: 12 }}>
+                  <SliderControl
+                    formatValue={(value) => `${value.toFixed(2)} mm`}
+                    label="Spetsförskjutning"
+                    value={profile.tipOffsetMm}
+                    min={-3}
+                    max={3}
+                    step={0.01}
+                    onChange={(value) => updateProfile("tipOffsetMm", value)}
+                  />
+                  <SliderControl
+                    formatValue={(value) => `${value.toFixed(2)} mm`}
+                    label="Spetsbredd"
+                    value={profile.tipWidthMm}
+                    min={0}
+                    max={1}
+                    step={0.01}
+                    onChange={(value) => updateProfile("tipWidthMm", value)}
+                  />
+                  <SliderControl
+                    formatValue={(value) => `${value.toFixed(2)} mm`}
+                    label="Första flankens kurvatur"
+                    value={profile.firstFlankCurvatureMm}
+                    min={0}
+                    max={0.5}
+                    step={0.01}
+                    onChange={(value) => updateProfile("firstFlankCurvatureMm", value)}
+                  />
+                  <SliderControl
+                    formatValue={(value) => `${value.toFixed(2)} mm`}
+                    label="Andra flankens kurvatur"
+                    value={profile.secondFlankCurvatureMm}
+                    min={0}
+                    max={0.5}
+                    step={0.01}
+                    onChange={(value) => updateProfile("secondFlankCurvatureMm", value)}
+                  />
+                  <ButtonControl onClick={() => setProfile(createEditableProfile(family))}>
+                    Återställ profil
+                  </ButtonControl>
+                </div>
+              </div>
             )}
           </div>
         )}

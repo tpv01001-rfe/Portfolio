@@ -1,3 +1,4 @@
+import CheckboxControl from "../../../shared/ui/controls/CheckboxControl";
 import { Viewport } from "../../../shared/ui/workspace/Viewport";
 import { useCallback, useMemo, useState } from "react";
 import { Canvas2D } from "../../../shared/graphics2d/Canvas2D";
@@ -73,11 +74,11 @@ export function WheelViewer2D({ wheel, title }: WheelViewer2DProps) {
     <Viewport
       title={title}
       actions={(
-        <label className="odontograph-points">
-          <input type="checkbox" checked={showPoints}
-            onChange={event => setShowPoints(event.target.checked)} />
-          Konturpunkter
-        </label>
+        <CheckboxControl
+          label="Konturpunkter"
+          checked={showPoints}
+          onChange={setShowPoints}
+        />
       )}
       footer="Panorera / zooma · mm"
     >

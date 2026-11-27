@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState, useRef, useEffect } from "react";
 import "./Nurbs.css";
+import ButtonControl from "../../../shared/ui/controls/ButtonControl";
 import { Canvas3D, type Canvas3DFrame } from "../../../shared/graphics3d/Canvas3D";
 import { createCamera3D } from "../../../shared/graphics3d/camera";
 import { createOrbitController } from "../../../shared/graphics3d/orbitController";
@@ -103,29 +104,22 @@ export default function Nurbs() {
     >
 
       <div style={{ display: "flex", gap: 8, padding: 12 }}>
-        <button
-          type="button"
+        <ButtonControl 
           onClick={() => setRenderMode("wireframe")}
-          aria-pressed={renderMode === "wireframe"}
-        >
+          aria-pressed={renderMode === "wireframe"}>
           Wireframe
-        </button>
-
-        <button
-          type="button"
+      </ButtonControl>        
+      <ButtonControl 
           onClick={() => setRenderMode("gouraud")}
-          aria-pressed={renderMode === "gouraud"}
-        >
+          aria-pressed={renderMode === "gouraud"}>
           Gouraud
-        </button>
-
-        <button
-          type="button"
+      </ButtonControl>        
+      <ButtonControl 
           onClick={() => setRenderMode("phong")}
-          aria-pressed={renderMode === "phong"}
-        >
+          aria-pressed={renderMode === "phong"}>
           Phong
-        </button>
+      </ButtonControl>
+
       </div>
 
 

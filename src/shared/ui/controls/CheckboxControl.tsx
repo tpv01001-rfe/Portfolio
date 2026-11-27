@@ -1,3 +1,5 @@
+import "./CheckboxControl.css";
+
 type CheckboxControlProps = {
   label: string;
   checked: boolean;

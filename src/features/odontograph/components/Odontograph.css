@@ -1,8 +1,48 @@
- .odontograph-workspace { padding: 12px; color: #e4edf3; background: #111923; min-width: 0; }
-.odontograph-workspace h2 { margin: 0 0 12px; font-size: 20px; }
-.odontograph-tool header { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
-.odontograph-tool__content input[type="range"] { width: 100%; min-width: 0; accent-color: var(--workspace-accent); }
+.odontograph-workspace {
+    padding: 12px;
+    color: #e4edf3;
+    background: #111923;
+    min-width: 0;
+
+    /* Lokalt tema: ärvs av alla gemensamma reglage. */
+    --input-accent: #c9a35e;
+    --workspace-accent: #c9a35e;
+    --button-active-border: #c9a35e;
+    --slider-fill-top: #e4c78c;
+    --slider-fill-bottom: #c9a35e;
+    --slider-thumb-border: #e4c78c;
+    --slider-thumb-highlight: #fff0cf;
+    --slider-thumb-core: #c9a35e;
+    --slider-thumb-shadow: rgba(201, 163, 94, .18);
+    --focus-ring: rgba(201, 163, 94, .3);
+    --focus-ring-soft: rgba(201, 163, 94, .12);
+    --checkbox-checked-top: #8d6d36;
+    --checkbox-checked-bottom: #594524;
+}
+
+.odontograph-workspace h2 {
+    margin: 0 0 12px;
+    font-size: 20px;
+}
+
+.odontograph-settings {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    align-items: end;
+    gap: 14px;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.odontograph-tool header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
 .odontograph-tool__content button { white-space: normal; }
-.odontograph-points { display: flex; align-items: center; gap: 4px; font-size: 12px; }
 .odontograph-note { opacity: .7; font-size: 12px; }
 .odontograph-empty { padding: 12px; }

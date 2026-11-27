@@ -1,3 +1,5 @@
+import "./SliderControl.css";
+
 import type { ChangeEvent, CSSProperties } from "react";
 import { useId } from "react";
 
