@@ -45,7 +45,7 @@ export const familyProfiles: Record<WheelFamily, FlankProfile> = {
     trailingFraction: 0.08,
     shape: "linear",
     rotationDirection: "ccw",
-    tipOffsetMm: -0.81,
+    tipOffsetMm: -0.52,
     tipWidthMm: 0.03,
     flankCurvatureMm: 0,
   },
